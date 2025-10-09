@@ -9,6 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@freesewing/aaron": "^4.3.1",
+    "@freesewing/brian": "^4.3.1",
+    "@freesewing/config": "^4.3.1",
+    "@freesewing/core": "^4.3.1",
+    "@freesewing/plugin-theme": "^4.3.1",
     "vue": "^3.5.22"
   },
   "devDependencies": {
