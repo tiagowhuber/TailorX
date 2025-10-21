@@ -240,7 +240,7 @@ import modelImg2 from '@/assets/model-images/img2.jpg'
 import modelImg3 from '@/assets/model-images/img3.jpg'
 import modelImg4 from '@/assets/model-images/img4.jpg'
 import modelImg5 from '@/assets/model-images/img5.jpg'
-import worldBg from '@/assets/backgrounds/world-bg.jpg'
+import worldBg from '@/assets/backgrounds/world-bg.png'
 
 const modelImages = [modelImg1, modelImg2, modelImg3, modelImg4, modelImg5]
 </script>
