@@ -59,12 +59,14 @@
             
             <!-- CTA Button -->
             <div class="pt-8">
-              <Button 
-                class="px-8 py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity orbitron-variable"
-                style="--orbitron-weight: 700; background-color: #E3F450; color: black;"
-              >
-                CREAR CUENTA
-              </Button>
+              <router-link to="/crear-cuenta">
+                <Button 
+                  class="px-8 py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity orbitron-variable"
+                  style="--orbitron-weight: 700; background-color: #E3F450; color: black;"
+                >
+                  CREAR CUENTA
+                </Button>
+              </router-link>
             </div>
           </div>
         </div>
@@ -143,12 +145,14 @@
 
       <!-- CTA Button -->
       <div class="text-left">
-        <Button 
-          class="px-8 py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity orbitron-variable"
-          style="--orbitron-weight: 700; background-color: #E3F450; color: black;"
-        >
-          CREAR CUENTA
-        </Button>
+        <router-link to="/crear-cuenta">
+          <Button 
+            class="px-8 py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity orbitron-variable"
+            style="--orbitron-weight: 700; background-color: #E3F450; color: black;"
+          >
+            CREAR CUENTA
+          </Button>
+        </router-link>
       </div>
     </div>
   </div>
