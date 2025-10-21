@@ -185,8 +185,34 @@
   </div>
 
   <!-- World Section -->
-  <div>
-    
+  <div 
+    class="min-h-screen bg-black text-white overflow-hidden relative flex items-center justify-center py-120 px-8" 
+    :style="{ backgroundImage: `url(${worldBg})`, backgroundSize: 'contain', backgroundPosition: 'right center', backgroundRepeat: 'no-repeat' }"
+  >
+    <div class="max-w-6xl mx-auto w-full text-center relative z-10">
+      <div class="max-w-2xl mx-auto">
+        <!-- Yellow Highlight Text -->
+        <div class="inline-block mb-6" style="background-color: #E3F450; color: black; padding: 0.5rem 1.5rem;">
+          <p class="text-lg md:text-xl font-bold uppercase orbitron-variable" style="--orbitron-weight: 600;">
+            CADA AÑO SE FABRICAN MÁS DE
+          </p>
+        </div>
+        
+        <!-- Main Statistic -->
+        <h2 class="text-6xl md:text-8xl font-black mb-8" style="font-family: 'Avenir Next', sans-serif; line-height: 1.1;">
+          100 MIL<br>
+          MILLONES DE<br>
+          PRENDAS
+        </h2>
+        
+        <!-- Black Box with Secondary Stat -->
+        <div class="inline-block" style="background-color: rgba(0, 0, 0, 0.8); padding: 1rem 2rem;">
+          <p class="text-xl md:text-2xl font-bold uppercase" style="color: #E3F450;">
+            EL 40% TERMINA EN VERTEDEROS
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -214,6 +240,7 @@ import modelImg2 from '@/assets/model-images/img2.jpg'
 import modelImg3 from '@/assets/model-images/img3.jpg'
 import modelImg4 from '@/assets/model-images/img4.jpg'
 import modelImg5 from '@/assets/model-images/img5.jpg'
+import worldBg from '@/assets/backgrounds/world-bg.jpg'
 
 const modelImages = [modelImg1, modelImg2, modelImg3, modelImg4, modelImg5]
 </script>
