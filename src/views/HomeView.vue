@@ -154,6 +154,37 @@
   </div>
 
   <!-- Models Carousel -->
+  <div class="bg-black text-black px-8 -mt-15">
+    <div class="max-w-7xl mx-auto">
+      <Carousel class="w-full">
+        <CarouselContent>
+          <CarouselItem v-for="(image, index) in modelImages" :key="index" class="md:basis-1/2 lg:basis-1/3">
+            <div class="p-1">
+              <div class="relative overflow-hidden rounded-lg aspect-[3/4]">
+                <img 
+                  :src="image" 
+                  :alt="`Model ${index + 1}`"
+                  class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+            </div>
+          </CarouselItem>
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
+      <div class="text-right py-6">
+        <Button 
+          class="px-8 py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity orbitron-variable"
+          style="--orbitron-weight: 700; background-color: #E3F450; color: black;"
+        >
+          VER CATÁLOGO
+        </Button>
+      </div>
+    </div>
+  </div>
+
+  <!-- World Section -->
   <div>
     
   </div>
@@ -161,6 +192,13 @@
 
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel'
 import TwitterIcon from '@/components/icons/TwitterIcon.vue'
 import FacebookIcon from '@/components/icons/FacebookIcon.vue'
 import PinterestIcon from '@/components/icons/PinterestIcon.vue'
@@ -171,4 +209,11 @@ import createAccountIcon from '@/assets/icons/create-account-icon.png'
 import giveMeasurementsIcon from '@/assets/icons/give-us-measurments-icon.png'
 import hangingShirtIcon from '@/assets/icons/hanging-shirt-icon.png'
 import shirtPriceTagIcon from '@/assets/icons/shirt-price-tag-icon.png'
+import modelImg1 from '@/assets/model-images/img1.jpg'
+import modelImg2 from '@/assets/model-images/img2.jpg'
+import modelImg3 from '@/assets/model-images/img3.jpg'
+import modelImg4 from '@/assets/model-images/img4.jpg'
+import modelImg5 from '@/assets/model-images/img5.jpg'
+
+const modelImages = [modelImg1, modelImg2, modelImg3, modelImg4, modelImg5]
 </script>
