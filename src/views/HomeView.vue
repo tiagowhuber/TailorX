@@ -17,28 +17,28 @@
       
       <!-- Navigation Menu -->
       <nav class="hidden md:flex space-x-12 text-lg font-semibold">
-        <a href="#" class="hover:text-lime-400 transition-colors">INICIO</a>
+        <a href="#" class="hover:text-[#E3F450] transition-colors">INICIO</a>
         <span class="text-gray-500">|</span>
-        <a href="#" class="hover:text-lime-400 transition-colors">TAILORX</a>
+        <a href="#" class="hover:text-[#E3F450] transition-colors">TAILORX</a>
         <span class="text-gray-500">|</span>
-        <a href="#" class="hover:text-lime-400 transition-colors">START NOW</a>
+        <a href="#" class="hover:text-[#E3F450] transition-colors">START NOW</a>
         <span class="text-gray-500">|</span>
-        <a href="#" class="hover:text-lime-400 transition-colors">CONTACTO</a>
+        <a href="#" class="hover:text-[#E3F450] transition-colors">CONTACTO</a>
       </nav>
       
       <!-- Social Media Icons -->
       <div class="flex space-x-3">
-        <a href="#" class="w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
-          <TwitterIcon />
+        <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+          <TwitterSmallIcon />
         </a>
-        <a href="#" class="w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
-          <FacebookIcon />
+        <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+          <FacebookSmallIcon />
         </a>
-        <a href="#" class="w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
-          <PinterestIcon />
+        <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+          <InstagramSmallIcon />
         </a>
-        <a href="#" class="w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
-          <WhatsAppIcon />
+        <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+          <WhatsAppSmallIcon />
         </a>
       </div>
     </header>
@@ -99,43 +99,43 @@
       </div>
 
       <!-- Icons Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12 orbitron-variable" style="--orbitron-weight: 400;">
         <!-- Icon 1: Create Account -->
-        <div class="flex flex-col items-center text-center">
+        <div class="flex flex-col items-center text-center orbitron-variable" style="--orbitron-weight: 400;">
           <div class="w-32 h-32 rounded-full flex items-center justify-center mb-4" style="background-color: #E3F450;">
             <img :src="createAccountIcon" alt="Crea tu cuenta" class="w-30 h-30" />
           </div>
-          <h3 class="text-lg font-bold uppercase" style="font-family: 'Avenir Next', sans-serif;">
+          <h3 class="text-lg font-bold uppercase">
             CREA TU<br>CUENTA
           </h3>
         </div>
 
         <!-- Icon 2: Provide Measurements -->
-        <div class="flex flex-col items-center text-center">
+        <div class="flex flex-col items-center text-center orbitron-variable" style="--orbitron-weight: 400;">
           <div class="w-32 h-32 rounded-full flex items-center justify-center mb-4" style="background-color: #E3F450;">
             <img :src="giveMeasurementsIcon" alt="Proporciona tus medidas" class="w-30 h-30" />
           </div>
-          <h3 class="text-lg font-bold uppercase" style="font-family: 'Avenir Next', sans-serif;">
+          <h3 class="text-lg font-bold uppercase">
             PROPORCIONA<br>TUS MEDIDAS
           </h3>
         </div>
 
         <!-- Icon 3: Select Garment -->
-        <div class="flex flex-col items-center text-center">
+        <div class="flex flex-col items-center text-center orbitron-variable" style="--orbitron-weight: 400;">
           <div class="w-32 h-32 rounded-full flex items-center justify-center mb-4" style="background-color: #E3F450;">
             <img :src="hangingShirtIcon" alt="Selecciona la prenda" class="w-30 h-30" />
           </div>
-          <h3 class="text-lg font-bold uppercase" style="font-family: 'Avenir Next', sans-serif;">
+          <h3 class="text-lg font-bold uppercase">
             SELECCIONA<br>LA PRENDA
           </h3>
         </div>
 
         <!-- Icon 4: See It On You -->
-        <div class="flex flex-col items-center text-center">
+        <div class="flex flex-col items-center text-center orbitron-variable" style="--orbitron-weight: 400;">
           <div class="w-32 h-32 rounded-full flex items-center justify-center mb-4" style="background-color: #E3F450;">
             <img :src="shirtPriceTagIcon" alt="Vístelo" class="w-30 h-30" />
           </div>
-          <h3 class="text-lg font-bold uppercase" style="font-family: 'Avenir Next', sans-serif;">
+          <h3 class="text-lg font-bold uppercase">
             VÍSTELO
           </h3>
         </div>
@@ -214,6 +214,62 @@
       </div>
     </div>
   </div>
+
+  <!-- Last Section -->
+  <div 
+    class="min-h-screen bg-black text-white overflow-hidden relative z-200 flex flex-col items-center justify-center py-20 px-8" 
+    :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'top 300px center', backgroundRepeat: 'no-repeat' }"
+  >
+    <!-- Gradient spotlight effect at bottom -->
+    <div class="absolute bottom-0 right-1/4 w-[800px] h-[600px] bg-gradient-radial from-lime-400/40 via-yellow-300/30 to-transparent rounded-full blur-3xl"></div>
+    
+    <div class="max-w-6xl mx-auto text-center relative z-200">
+      <!-- Main Heading -->
+      <h2 class="text-5xl md:text-7xl font-black mb-12 leading-tight relative top-[-140px]" style="font-family: 'Avenir Next', sans-serif;">
+        VISTE INTELIGENTE,<br>
+        VISTE
+      </h2>
+      
+      <!-- Logo Section -->
+      <div class="mb-16">
+        <h1 class="text-6xl md:text-8xl font-black tracking-widest mb-2 relative top-[-150px]">
+          TAILOR<span style="color: #E3F450;">X</span>
+        </h1>
+        <p class="text-sm md:text-base tracking-[0.3em] uppercase orbitron-variable relative top-[-150px]" style="--orbitron-weight: 400;">
+          DRESS WITHOUT WASTE
+        </p>
+      </div>
+      
+      <!-- Footer Navigation -->
+      <nav class="mb-8">
+        <div class="flex flex-wrap justify-center items-center gap-4 text-sm md:text-base orbitron-variable" style="--orbitron-weight: 400;">
+          <a href="#" class="hover:text-[#E3F450] transition-colors uppercase">POLÍTICAS DE ENTREGA</a>
+          <span class="text-gray-500">|</span>
+          <a href="#" class="hover:text-[#E3F450] transition-colors uppercase">AYUDA</a>
+          <span class="text-gray-500">|</span>
+          <a href="#" class="hover:text-[#E3F450] transition-colors uppercase">EXPERIENCIAS</a>
+          <span class="text-gray-500">|</span>
+          <a href="#" class="hover:text-[#E3F450] transition-colors uppercase">CONTACTO</a>
+        </div>
+      </nav>
+      
+      <!-- Social Media Icons -->
+      <div class="flex justify-center space-x-4">
+        <a href="#" class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+          <FacebookIcon />
+        </a>
+        <a href="#" class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+          <TwitterIcon />
+        </a>
+        <a href="#" class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+          <InstagramIcon />
+        </a>
+        <a href="#" class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+          <WhatsAppIcon />
+        </a>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -227,8 +283,12 @@ import {
 } from '@/components/ui/carousel'
 import TwitterIcon from '@/components/icons/TwitterIcon.vue'
 import FacebookIcon from '@/components/icons/FacebookIcon.vue'
-import PinterestIcon from '@/components/icons/PinterestIcon.vue'
 import WhatsAppIcon from '@/components/icons/WhatsAppIcon.vue'
+import InstagramIcon from '@/components/icons/InstagramIcon.vue'
+import TwitterSmallIcon from '@/components/icons/TwitterSmallIcon.vue'
+import FacebookSmallIcon from '@/components/icons/FacebookSmallIcon.vue'
+import WhatsAppSmallIcon from '@/components/icons/WhatsAppSmallIcon.vue'
+import InstagramSmallIcon from '@/components/icons/InstagramSmallIcon.vue'
 import bgImage from '@/assets/backgrounds/elemento-amarillo.png'
 import yellowDude from '@/assets/backgrounds/yellow-dude.jpg'
 import createAccountIcon from '@/assets/icons/create-account-icon.png'
@@ -244,3 +304,16 @@ import worldBg from '@/assets/backgrounds/world-bg.png'
 
 const modelImages = [modelImg1, modelImg2, modelImg3, modelImg4, modelImg5]
 </script>
+
+<style scoped>
+/* Add hover effect for buttons */
+button:hover {
+  background-color: #E3F450 !important;
+  color: black !important;
+}
+
+/* Add hover effect for social media icons */
+.w-6:hover, .w-12:hover {
+  background-color: #E3F450 !important;
+}
+</style>
