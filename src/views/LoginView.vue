@@ -121,10 +121,11 @@
           <!-- Submit Button -->
           <Button 
             type="submit"
-            class="w-full py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity"
+            :disabled="isSubmitting || authStore.loading"
+            class="w-full py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity disabled:opacity-50"
             style="background-color: #E3F450; color: black;"
           >
-            INICIAR SESIÓN
+            {{ isSubmitting || authStore.loading ? 'INICIANDO SESIÓN...' : 'INICIAR SESIÓN' }}
           </Button>
         </form>
 
@@ -144,6 +145,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -154,6 +157,9 @@ import InstagramSmallIcon from '@/components/icons/InstagramSmallIcon.vue'
 import GoogleIcon from '@/components/icons/GoogleIcon.vue'
 import bgImage from '@/assets/backgrounds/elemento-amarillo.png'
 
+const router = useRouter()
+const authStore = useAuthStore()
+
 const form = ref({
   email: '',
   password: '',
@@ -161,8 +167,9 @@ const form = ref({
 })
 
 const errorMessage = ref('')
+const isSubmitting = ref(false)
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   errorMessage.value = ''
   
   // Validate form
@@ -171,23 +178,32 @@ const handleSubmit = () => {
     return
   }
 
-  // Here you would typically make an API call to authenticate
-  console.log('Logging in with:', {
+  isSubmitting.value = true
+
+  const result = await authStore.login({
     email: form.value.email,
-    password: form.value.password,
-    rememberMe: form.value.rememberMe
+    password: form.value.password
   })
 
-  // For now, just redirect to home or dashboard
-  // router.push('/')
+  isSubmitting.value = false
+
+  if (result.success) {
+    // Redirect to home or dashboard
+    router.push('/')
+  } else {
+    errorMessage.value = result.message || 'Error al iniciar sesión'
+  }
 }
 
-const signInWithGoogle = () => {
-  // Here you would typically integrate with Google OAuth
-  console.log('Sign in with Google clicked')
+const signInWithGoogle = async () => {
+  errorMessage.value = ''
+  const result = await authStore.signInWithGoogle()
   
-  // Example: Redirect to Google OAuth
-  // window.location.href = 'YOUR_GOOGLE_OAUTH_URL'
+  if (result.success) {
+    router.push('/')
+  } else {
+    errorMessage.value = result.message || 'Error al iniciar sesión con Google'
+  }
 }
 </script>
 

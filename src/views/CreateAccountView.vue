@@ -137,10 +137,11 @@
           <!-- Submit Button -->
           <Button 
             type="submit"
-            class="w-full py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity"
+            :disabled="isSubmitting || authStore.loading"
+            class="w-full py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity disabled:opacity-50"
             style="background-color: #E3F450; color: black;"
           >
-            CREAR CUENTA
+            {{ isSubmitting || authStore.loading ? 'CREANDO CUENTA...' : 'CREAR CUENTA' }}
           </Button>
         </form>
 
@@ -160,6 +161,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -170,6 +173,9 @@ import InstagramSmallIcon from '@/components/icons/InstagramSmallIcon.vue'
 import GoogleIcon from '@/components/icons/GoogleIcon.vue'
 import bgImage from '@/assets/backgrounds/elemento-amarillo.png'
 
+const router = useRouter()
+const authStore = useAuthStore()
+
 const form = ref({
   name: '',
   email: '',
@@ -178,8 +184,9 @@ const form = ref({
 })
 
 const errorMessage = ref('')
+const isSubmitting = ref(false)
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   errorMessage.value = ''
   
   // Validate passwords match
@@ -194,23 +201,39 @@ const handleSubmit = () => {
     return
   }
 
-  // Here you would typically make an API call to create the account
-  console.log('Creating account with:', {
-    name: form.value.name,
+  isSubmitting.value = true
+
+  // Split name into first_name and last_name
+  const nameParts = form.value.name.trim().split(' ')
+  const first_name = nameParts[0] || ''
+  const last_name = nameParts.slice(1).join(' ') || ''
+
+  const result = await authStore.register({
     email: form.value.email,
-    password: form.value.password
+    password: form.value.password,
+    first_name,
+    last_name
   })
 
-  // For now, just redirect to home or a success page
-  // router.push('/')
+  isSubmitting.value = false
+
+  if (result.success) {
+    // Redirect to home or dashboard
+    router.push('/')
+  } else {
+    errorMessage.value = result.message || 'Error al crear la cuenta'
+  }
 }
 
-const signInWithGoogle = () => {
-  // Here you would typically integrate with Google OAuth
-  console.log('Sign in with Google clicked')
+const signInWithGoogle = async () => {
+  errorMessage.value = ''
+  const result = await authStore.signInWithGoogle()
   
-  // Example: Redirect to Google OAuth
-  // window.location.href = 'YOUR_GOOGLE_OAUTH_URL'
+  if (result.success) {
+    router.push('/')
+  } else {
+    errorMessage.value = result.message || 'Error al iniciar sesión con Google'
+  }
 }
 </script>
 
