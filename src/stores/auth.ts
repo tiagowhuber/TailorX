@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import api from '@/lib/api'
-import type { User, LoginCredentials, RegisterCredentials } from './types/auth.types'
+import type { User, LoginCredentials, RegisterCredentials } from '@/types/auth.types'
 
 export const useAuthStore = defineStore('auth', () => {
   // State
@@ -136,33 +136,31 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = async (credential: string) => {
     loading.value = true
     error.value = null
     
     try {
-      // Initialize Google OAuth
-      const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
-      
-      if (!clientId || clientId === 'your-google-client-id-here') {
-        error.value = 'Google Sign-In no está configurado. Por favor configura VITE_GOOGLE_CLIENT_ID en el archivo .env'
+      // Send the credential to our backend
+      const result = await api.post('/auth/google', {
+        credential: credential
+      })
+
+      if (result.data.success) {
+        token.value = result.data.data.token
+        user.value = result.data.data.user
+        
+        // Store in localStorage
+        localStorage.setItem('authToken', result.data.data.token)
+        localStorage.setItem('user', JSON.stringify(result.data.data.user))
+        
+        return { success: true }
+      } else {
+        error.value = result.data.message || 'Error al iniciar sesión con Google'
         return { success: false, message: error.value }
       }
-
-      // For now, return a message that Google Sign-In needs to be configured
-      // In a real implementation, you would use the Google OAuth library
-      error.value = 'Google Sign-In está en desarrollo. Por favor usa el registro por email.'
-      return { success: false, message: error.value }
-      
-      // TODO: Implement Google OAuth flow
-      // 1. Initialize Google client
-      // 2. Get Google token
-      // 3. Send token to backend for verification
-      // 4. Backend creates/finds user and returns JWT token
-      
-    } catch (err: unknown) {
-      console.error('Google Sign-In error:', err)
-      const message = 'Error al iniciar sesión con Google'
+    } catch (err: any) {
+      const message = err.response?.data?.message || 'Error de conexión con el servidor'
       error.value = message
       return { success: false, message }
     } finally {

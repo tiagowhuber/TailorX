@@ -46,7 +46,11 @@
         </div>
 
         <!-- Google Sign In Button -->
+        <div id="google-signin-button" class="w-full flex justify-center"></div>
+        
+        <!-- Fallback button if Google library doesn't load -->
         <Button 
+          v-if="!isGoogleLoaded"
           @click="signInWithGoogle"
           class="w-full mb-6 bg-white hover:bg-gray-100 text-black font-semibold py-6 flex items-center justify-center gap-3"
         >
@@ -160,9 +164,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useGoogleSignIn } from '@/composables/useGoogleSignIn'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -175,6 +180,7 @@ import bgImage from '@/assets/backgrounds/elemento-amarillo.png'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const { isGoogleLoaded, renderGoogleButton } = useGoogleSignIn()
 
 const form = ref({
   name: '',
@@ -185,6 +191,43 @@ const form = ref({
 
 const errorMessage = ref('')
 const isSubmitting = ref(false)
+
+onMounted(() => {
+  // Render Google button when library is loaded
+  const checkInterval = setInterval(() => {
+    if (isGoogleLoaded.value) {
+      renderGoogleButton('google-signin-button', handleGoogleSignIn, {
+        type: 'standard',
+        theme: 'outline',
+        size: 'large',
+        text: 'continue_with',
+        shape: 'rectangular',
+      })
+      clearInterval(checkInterval)
+    }
+  }, 100)
+
+  setTimeout(() => clearInterval(checkInterval), 5000)
+})
+
+const handleGoogleSignIn = async (credential: string) => {
+  errorMessage.value = ''
+  isSubmitting.value = true
+
+  try {
+    const result = await authStore.signInWithGoogle(credential) as { success: boolean; message?: string }
+    
+    if (result.success) {
+      router.push('/')
+    } else {
+      errorMessage.value = result.message || 'Error al iniciar sesión con Google'
+    }
+  } catch (err) {
+    errorMessage.value = 'Error al procesar Google Sign-In'
+  } finally {
+    isSubmitting.value = false
+  }
+}
 
 const handleSubmit = async () => {
   errorMessage.value = ''
@@ -227,13 +270,8 @@ const handleSubmit = async () => {
 
 const signInWithGoogle = async () => {
   errorMessage.value = ''
-  const result = await authStore.signInWithGoogle()
-  
-  if (result.success) {
-    router.push('/')
-  } else {
-    errorMessage.value = result.message || 'Error al iniciar sesión con Google'
-  }
+  // This fallback shouldn't be needed if Google button renders properly
+  errorMessage.value = 'Por favor usa el botón de Google que aparece arriba'
 }
 </script>
 

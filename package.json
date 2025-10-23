@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.12.2",
     "@tailwindcss/vite": "^4.1.14",
     "@vueuse/core": "^13.9.0",
     "axios": "^1.12.2",
