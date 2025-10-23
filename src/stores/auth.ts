@@ -168,6 +168,103 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const updateProfile = async (data: { first_name?: string; last_name?: string }) => {
+    if (!user.value) {
+      return { success: false, message: 'Usuario no autenticado' }
+    }
+
+    loading.value = true
+    error.value = null
+
+    try {
+      const response = await api.put(`/users/${user.value.id}`, data)
+
+      if (response.data.success) {
+        user.value = response.data.data
+        localStorage.setItem('user', JSON.stringify(response.data.data))
+        return { success: true }
+      } else {
+        error.value = response.data.message || 'Error al actualizar perfil'
+        return { success: false, message: error.value }
+      }
+    } catch (err: any) {
+      const message = err.response?.data?.message || 'Error de conexión con el servidor'
+      error.value = message
+      return { success: false, message }
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const uploadProfilePicture = async (file: File) => {
+    if (!user.value) {
+      return { success: false, message: 'Usuario no autenticado' }
+    }
+
+    loading.value = true
+    error.value = null
+
+    try {
+      const formData = new FormData()
+      formData.append('profile_picture', file)
+
+      const response = await api.post(`/users/${user.value.id}/profile-picture`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+
+      if (response.data.success) {
+        // Update user with new profile picture URL
+        if (user.value) {
+          user.value.profile_picture_url = response.data.data.profile_picture_url
+          localStorage.setItem('user', JSON.stringify(user.value))
+        }
+        return { success: true, data: response.data.data }
+      } else {
+        error.value = response.data.message || 'Error al subir imagen'
+        return { success: false, message: error.value }
+      }
+    } catch (err: any) {
+      const message = err.response?.data?.message || 'Error de conexión con el servidor'
+      error.value = message
+      return { success: false, message }
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const deleteProfilePicture = async () => {
+    if (!user.value) {
+      return { success: false, message: 'Usuario no autenticado' }
+    }
+
+    loading.value = true
+    error.value = null
+
+    try {
+      const response = await api.delete(`/users/${user.value.id}/profile-picture`)
+
+      if (response.data.success) {
+        // Update user to remove profile picture URL
+        if (user.value) {
+          user.value.profile_picture_url = undefined
+          localStorage.setItem('user', JSON.stringify(user.value))
+        }
+        return { success: true }
+      } else {
+        error.value = response.data.message || 'Error al eliminar imagen'
+        return { success: false, message: error.value }
+      }
+    } catch (err: any) {
+      const message = err.response?.data?.message || 'Error de conexión con el servidor'
+      error.value = message
+      return { success: false, message }
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     // State
     user,
@@ -184,5 +281,8 @@ export const useAuthStore = defineStore('auth', () => {
     getCurrentUser,
     initializeAuth,
     signInWithGoogle,
+    updateProfile,
+    uploadProfilePicture,
+    deleteProfilePicture,
   }
 })
