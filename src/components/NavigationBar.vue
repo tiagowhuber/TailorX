@@ -2,8 +2,7 @@
   <header class="relative z-10 flex justify-between items-center px-8 py-6">
     <!-- Logo -->
     <router-link to="/" class="flex items-center">
-      <h1 class="text-2xl font-bold tracking-widest">TAILORX</h1>
-      <p class="text-xs text-gray-400 ml-4 tracking-wide">DRESS WITHOUT WASTE</p>
+      <img src="@/assets/elements/logo-blanco.png" alt="TailorX Logo" class="h-16 md:h-18" />
     </router-link>
     
     <!-- Navigation Menu -->

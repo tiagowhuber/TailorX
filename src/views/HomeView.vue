@@ -17,7 +17,8 @@
         <div class="space-y-8">
           
           <!-- Main Heading -->
-          <div class="space-y-4">
+          <div class="space-y-4 flex items-center gap-8">
+            <img :src="elementoImg" alt="Elemento" class="w-32 h-32 md:w-40 md:h-40" />
             <h2 class="text-5xl md:text-7xl font-black leading-tight" style="font-family: 'Avenir Next', sans-serif;">
               DRESS<br>
               WITHOUT<br>
@@ -205,12 +206,7 @@
       
       <!-- Logo Section -->
       <div class="mb-16">
-        <h1 class="text-6xl md:text-8xl font-black tracking-widest mb-2 relative top-[-150px]">
-          TAILOR<span style="color: #E3F450;">X</span>
-        </h1>
-        <p class="text-sm md:text-base tracking-[0.3em] uppercase orbitron-variable relative top-[-150px]" style="--orbitron-weight: 400;">
-          DRESS WITHOUT WASTE
-        </p>
+        <img :src="logoWhiteYellow" alt="TailorX Logo" class="mx-auto w-64 md:w-80 relative top-[-150px]" />
       </div>
       
       <!-- Footer Navigation -->
@@ -262,10 +258,12 @@ import WhatsAppIcon from '@/components/icons/WhatsAppIcon.vue'
 import InstagramIcon from '@/components/icons/InstagramIcon.vue'
 import bgImage from '@/assets/backgrounds/elemento-amarillo.png'
 import yellowDude from '@/assets/backgrounds/yellow-dude.jpg'
-import createAccountIcon from '@/assets/icons/create-account-icon.png'
-import giveMeasurementsIcon from '@/assets/icons/give-us-measurments-icon.png'
-import hangingShirtIcon from '@/assets/icons/hanging-shirt-icon.png'
-import shirtPriceTagIcon from '@/assets/icons/shirt-price-tag-icon.png'
+import elementoImg from '@/assets/elements/elemento.png'
+import createAccountIcon from '@/assets/icons/4.svg'
+import giveMeasurementsIcon from '@/assets/icons/2.svg'
+import hangingShirtIcon from '@/assets/icons/1.svg'
+import shirtPriceTagIcon from '@/assets/icons/3.svg'
+import logoWhiteYellow from '@/assets/elements/logo-blanco-amarillo.png'
 import modelImg1 from '@/assets/model-images/img1.jpg'
 import modelImg2 from '@/assets/model-images/img2.jpg'
 import modelImg3 from '@/assets/model-images/img3.jpg'
