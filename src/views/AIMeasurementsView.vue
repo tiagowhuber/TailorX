@@ -23,7 +23,7 @@
             <Button 
               @click="router.push({ name: 'measurements' })"
               variant="outline"
-              class="border-white/20 text-white hover:bg-white/10"
+              class="border-white/20 text-black hover:bg-white/10"
             >
               <ArrowLeft class="mr-2 h-5 w-5" />
               Volver
@@ -54,6 +54,7 @@
               <div>
                 <Label class="text-white font-medium mb-2 block">Foto Frontal</Label>
                 <div 
+                  v-if="!frontPhotoPreview"
                   @click="() => frontPhotoInput?.click()"
                   @dragover.prevent="handleDragOver"
                   @dragleave.prevent="handleDragLeave"
@@ -65,6 +66,17 @@
                   <p class="text-white mb-2">Click para subir o arrastra la imagen</p>
                   <p class="text-gray-400 text-sm">JPEG, PNG o WebP</p>
                 </div>
+                <div v-else class="relative">
+                  <img :src="frontPhotoPreview" alt="Vista previa frontal" class="w-full h-64 object-contain rounded-lg bg-white/5 border border-white/20" />
+                  <Button
+                    @click="removeFrontPhoto"
+                    variant="destructive"
+                    size="icon"
+                    class="absolute top-2 right-2 h-10 w-10 bg-red-500 hover:bg-red-600"
+                  >
+                    <Trash2 class="h-5 w-5" />
+                  </Button>
+                </div>
                 <input
                   ref="frontPhotoInput"
                   type="file"
@@ -72,15 +84,13 @@
                   @change="(e) => handleFileSelect(e, 'front')"
                   class="hidden"
                 />
-                <div v-if="frontPhotoPreview" class="mt-4">
-                  <img :src="frontPhotoPreview" alt="Vista previa frontal" class="w-full h-48 object-cover rounded-lg" />
-                </div>
               </div>
 
               <!-- Side Photo -->
               <div>
                 <Label class="text-white font-medium mb-2 block">Foto Lateral</Label>
                 <div 
+                  v-if="!sidePhotoPreview"
                   @click="() => sidePhotoInput?.click()"
                   @dragover.prevent="handleDragOver"
                   @dragleave.prevent="handleDragLeave"
@@ -92,6 +102,17 @@
                   <p class="text-white mb-2">Click para subir o arrastra la imagen</p>
                   <p class="text-gray-400 text-sm">JPEG, PNG o WebP</p>
                 </div>
+                <div v-else class="relative">
+                  <img :src="sidePhotoPreview" alt="Vista previa lateral" class="w-full h-64 object-contain rounded-lg bg-white/5 border border-white/20" />
+                  <Button
+                    @click="removeSidePhoto"
+                    variant="destructive"
+                    size="icon"
+                    class="absolute top-2 right-2 h-10 w-10 bg-red-500 hover:bg-red-600"
+                  >
+                    <Trash2 class="h-5 w-5" />
+                  </Button>
+                </div>
                 <input
                   ref="sidePhotoInput"
                   type="file"
@@ -99,9 +120,6 @@
                   @change="(e) => handleFileSelect(e, 'side')"
                   class="hidden"
                 />
-                <div v-if="sidePhotoPreview" class="mt-4">
-                  <img :src="sidePhotoPreview" alt="Vista previa lateral" class="w-full h-48 object-cover rounded-lg" />
-                </div>
               </div>
             </div>
 
@@ -174,7 +192,7 @@
               <Button 
                 @click="resetAnalysis"
                 variant="outline"
-                class="border-white/20 text-white hover:bg-white/10"
+                class="border-white/20 text-black hover:bg-white/10"
               >
                 <RotateCcw class="mr-2 h-4 w-4" />
                 Analizar de Nuevo
@@ -261,6 +279,14 @@
                 <strong>Nota:</strong> Puedes editar estas medidas más tarde desde la sección "Mis Medidas" si necesitas hacer ajustes.
               </p>
             </div>
+
+            <!-- Precision Warning -->
+            <div class="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+              <p class="text-sm text-gray-300">
+                <strong>Precisión del sistema:</strong> Este sistema tiene un margen de error de aproximadamente ±3 cm. 
+                Para patrones de costura profesionales, se recomienda validar con medidas manuales.
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -273,7 +299,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useMeasurementsStore } from '@/stores/measurements'
-import { Camera, Sparkles, AlertCircle, CheckCircle, Save, ArrowLeft, RotateCcw } from 'lucide-vue-next'
+import { Camera, Sparkles, AlertCircle, CheckCircle, Save, ArrowLeft, RotateCcw, Trash2 } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -387,6 +413,20 @@ const processFile = (file: File, type: 'front' | 'side') => {
     }
   }
   reader.readAsDataURL(file)
+}
+
+const removeFrontPhoto = () => {
+  frontPhotoPreview.value = null
+  if (frontPhotoInput.value) {
+    frontPhotoInput.value.value = ''
+  }
+}
+
+const removeSidePhoto = () => {
+  sidePhotoPreview.value = null
+  if (sidePhotoInput.value) {
+    sidePhotoInput.value.value = ''
+  }
 }
 
 const analyzePhotos = async () => {

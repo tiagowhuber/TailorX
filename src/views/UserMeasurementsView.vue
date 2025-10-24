@@ -25,6 +25,14 @@
             </div>
             <div class="flex gap-3">
               <Button 
+                @click="router.push({ name: 'ai-measurements' })"
+                variant="outline"
+                class="px-6 py-3 border-white/20 text-black hover:bg-white/10"
+              >
+                <Sparkles class="mr-2 h-5 w-5" />
+                Obtener con IA
+              </Button>
+              <Button 
                 v-if="!isEditMode"
                 @click="enterEditMode"
                 class="px-6 py-3 bg-[#E3F450] hover:opacity-90 text-black font-semibold uppercase"
@@ -86,6 +94,19 @@
               </div>
             </div>
 
+            <!-- Empty State / No Measurements Yet -->
+            <div v-if="measurementsStore.userMeasurementsCount === 0 && measurementsStore.measurementTypesCount > 0" class="mb-6 text-center py-8 bg-white/5 border border-white/10 rounded-lg">
+              <Ruler class="h-12 w-12 text-gray-600 mx-auto mb-3" />
+              <p class="text-gray-400 text-base mb-4">Aún no tienes medidas guardadas</p>
+              <Button 
+                @click="router.push({ name: 'ai-measurements' })"
+                class="px-8 py-3 bg-[#E3F450] hover:opacity-90 text-black font-semibold uppercase"
+              >
+                <Sparkles class="mr-2 h-5 w-5" />
+                Obtener con IA
+              </Button>
+            </div>
+
             <!-- Success/Error Messages -->
             <div v-if="successMessage" class="mb-4 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
               <div class="flex items-center gap-3">
@@ -102,7 +123,7 @@
             </div>
 
             <!-- Measurements Stats -->
-            <div class="mb-6 flex items-center justify-between">
+            <div v-if="measurementsStore.userMeasurementsCount > 0" class="mb-6 flex items-center justify-between">
               <p class="text-gray-400">
                 {{ measurementsStore.userMeasurementsCount }} de {{ measurementsStore.measurementTypesCount }} medidas guardadas
               </p>
@@ -113,7 +134,7 @@
             </div>
 
             <!-- Measurements Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div v-if="measurementsStore.userMeasurementsCount > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <Card 
                 v-for="type in measurementsStore.measurementTypes" 
                 :key="type.id"
@@ -177,29 +198,6 @@
                   </div>
                 </CardContent>
               </Card>
-            </div>
-
-            <!-- Empty State / No Measurements Yet -->
-            <div v-if="measurementsStore.userMeasurementsCount === 0 && measurementsStore.measurementTypesCount > 0" class="text-center py-12">
-              <Ruler class="h-16 w-16 text-gray-600 mx-auto mb-4" />
-              <p class="text-gray-400 text-lg mb-6">Aún no tienes medidas guardadas</p>
-              <div class="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
-                <Button 
-                  @click="router.push({ name: 'ai-measurements' })"
-                  class="px-8 py-4 bg-[#E3F450] hover:opacity-90 text-black font-semibold uppercase"
-                >
-                  <Sparkles class="mr-2 h-5 w-5" />
-                  Obtener con IA
-                </Button>
-                <Button 
-                  @click="enterEditMode"
-                  variant="outline"
-                  class="px-8 py-4 border-white/20 text-white hover:bg-white/10"
-                >
-                  <Edit class="mr-2 h-5 w-5" />
-                  Ingresar Manual
-                </Button>
-              </div>
             </div>
 
             <!-- Empty State - No Measurement Types -->
