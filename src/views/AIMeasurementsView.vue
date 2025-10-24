@@ -534,7 +534,7 @@ const analyzeFemaleBodyType = (chest: number, waist: number, hip: number, ratio:
   } else if (chest > hip + 5) {
     return {
       type: 'Triángulo Invertido',
-      icon: '🔺',
+      icon: '🏋️',
       waistHipRatio: ratio,
       build: 'Hombros Anchos',
       recommendations: [
@@ -577,7 +577,7 @@ const analyzeMaleBodyType = (chest: number, waist: number, hip: number, ratio: s
   if (diffShoulderHip >= 8 && (chest - waist) >= 10) {
     return {
       type: 'Triángulo Invertido',
-      icon: '🔺',
+      icon: '🏋️',
       waistHipRatio: ratio,
       build: 'Atlética',
       recommendations: [
