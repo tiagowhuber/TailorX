@@ -179,7 +179,30 @@
               </Card>
             </div>
 
-            <!-- Empty State -->
+            <!-- Empty State / No Measurements Yet -->
+            <div v-if="measurementsStore.userMeasurementsCount === 0 && measurementsStore.measurementTypesCount > 0" class="text-center py-12">
+              <Ruler class="h-16 w-16 text-gray-600 mx-auto mb-4" />
+              <p class="text-gray-400 text-lg mb-6">Aún no tienes medidas guardadas</p>
+              <div class="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
+                <Button 
+                  @click="router.push({ name: 'ai-measurements' })"
+                  class="px-8 py-4 bg-[#E3F450] hover:opacity-90 text-black font-semibold uppercase"
+                >
+                  <Sparkles class="mr-2 h-5 w-5" />
+                  Obtener con IA
+                </Button>
+                <Button 
+                  @click="enterEditMode"
+                  variant="outline"
+                  class="px-8 py-4 border-white/20 text-white hover:bg-white/10"
+                >
+                  <Edit class="mr-2 h-5 w-5" />
+                  Ingresar Manual
+                </Button>
+              </div>
+            </div>
+
+            <!-- Empty State - No Measurement Types -->
             <div v-if="measurementsStore.measurementTypesCount === 0" class="text-center py-12">
               <Ruler class="h-16 w-16 text-gray-600 mx-auto mb-4" />
               <p class="text-gray-400 text-lg">No hay tipos de medidas disponibles</p>
@@ -227,7 +250,7 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useMeasurementsStore } from '@/stores/measurements'
 import type { MeasurementType } from '@/types/measurements.types'
-import { Edit, Save, X, Trash2, Ruler, Info, CheckCircle, AlertCircle } from 'lucide-vue-next'
+import { Edit, Save, X, Trash2, Ruler, Info, CheckCircle, AlertCircle, Sparkles } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'

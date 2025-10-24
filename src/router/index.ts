@@ -5,6 +5,7 @@ import CreateAccountView from '@/views/CreateAccountView.vue'
 import LoginView from '@/views/LoginView.vue'
 import AccountView from '@/views/AccountView.vue'
 import UserMeasurementsView from '@/views/UserMeasurementsView.vue'
+import AIMeasurementsView from '@/views/AIMeasurementsView.vue'
 import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
@@ -40,6 +41,12 @@ const router = createRouter({
       path: '/medidas',
       name: 'measurements',
       component: UserMeasurementsView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/medidas/ia',
+      name: 'ai-measurements',
+      component: AIMeasurementsView,
       meta: { requiresAuth: true }
     }
   ]
