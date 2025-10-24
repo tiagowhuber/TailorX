@@ -3,40 +3,7 @@
   
     :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'top 600px center', backgroundRepeat: 'no-repeat' }">
     <!-- Navigation Header -->
-    <header class="relative z-10 flex justify-between items-center px-8 py-6">
-      <!-- Logo -->
-      <div class="flex items-center">
-        <h1 class="text-2xl font-bold tracking-widest">TAILORX</h1>
-        <p class="text-xs text-gray-400 ml-4 tracking-wide">DRESS WITHOUT WASTE</p>
-      </div>
-      
-      <!-- Navigation Menu -->
-      <nav class="hidden md:flex space-x-12 text-lg font-semibold">
-        <router-link to="/" class="hover:text-[#E3F450] transition-colors">INICIO</router-link>
-        <span class="text-gray-500">|</span>
-        <a href="#" class="hover:text-[#E3F450] transition-colors">TAILORX</a>
-        <span class="text-gray-500">|</span>
-        <a href="#" class="hover:text-[#E3F450] transition-colors">START NOW</a>
-        <span class="text-gray-500">|</span>
-        <a href="#" class="hover:text-[#E3F450] transition-colors">CONTACTO</a>
-      </nav>
-      
-      <!-- Social Media Icons -->
-      <div class="flex space-x-3">
-        <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
-          <TwitterSmallIcon />
-        </a>
-        <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
-          <FacebookSmallIcon />
-        </a>
-        <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
-          <InstagramSmallIcon />
-        </a>
-        <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
-          <WhatsAppSmallIcon />
-        </a>
-      </div>
-    </header>
+    <NavigationBar />
 
     <!-- Main Content -->
     <main class="px-8 py-12 max-w-7xl mx-auto">
@@ -163,10 +130,7 @@
 </template>
 
 <script setup lang="ts">
-import TwitterSmallIcon from '@/components/icons/TwitterSmallIcon.vue'
-import FacebookSmallIcon from '@/components/icons/FacebookSmallIcon.vue'
-import WhatsAppSmallIcon from '@/components/icons/WhatsAppSmallIcon.vue'
-import InstagramSmallIcon from '@/components/icons/InstagramSmallIcon.vue'
+import NavigationBar from '@/components/NavigationBar.vue'
 import bgImage from '@/assets/backgrounds/elemento-amarillo.png'
 
 // Placeholder images - replace with actual product images
