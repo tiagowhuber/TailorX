@@ -18,7 +18,7 @@
           
           <!-- Main Heading -->
           <div class="space-y-4 flex items-center gap-8">
-            <img :src="elementoImg" alt="Elemento" class="w-32 h-32 md:w-40 md:h-40" />
+            <img :src="elementoImg" alt="Elemento" class="w-32 h-32 md:w-45 md:h-60" />
             <h2 class="text-5xl md:text-7xl font-black leading-tight" style="font-family: 'Avenir Next', sans-serif;">
               DRESS<br>
               WITHOUT<br>
@@ -26,8 +26,16 @@
             </h2>
             
             <!-- CTA Button -->
-            <div v-if="!authStore.isAuthenticated" class="pt-8">
-              <router-link to="/crear-cuenta">
+            <div class="pt-8">
+              <router-link v-if="authStore.isAuthenticated" to="/catalogo">
+                <Button 
+                  class="px-8 py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity orbitron-variable"
+                  style="--orbitron-weight: 700; background-color: #E3F450; color: black;"
+                >
+                  VER CATÁLOGO
+                </Button>
+              </router-link>
+              <router-link v-else to="/crear-cuenta">
                 <Button 
                   class="px-8 py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity orbitron-variable"
                   style="--orbitron-weight: 700; background-color: #E3F450; color: black;"
@@ -112,8 +120,16 @@
       </div>
 
       <!-- CTA Button -->
-      <div v-if="!authStore.isAuthenticated" class="text-left">
-        <router-link to="/crear-cuenta">
+      <div class="text-left">
+        <router-link v-if="authStore.isAuthenticated" to="/catalogo">
+          <Button 
+            class="px-8 py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity orbitron-variable"
+            style="--orbitron-weight: 700; background-color: #E3F450; color: black;"
+          >
+            VER CATÁLOGO
+          </Button>
+        </router-link>
+        <router-link v-else to="/crear-cuenta">
           <Button 
             class="px-8 py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity orbitron-variable"
             style="--orbitron-weight: 700; background-color: #E3F450; color: black;"

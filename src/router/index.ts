@@ -4,6 +4,7 @@ import CatalogoView from '@/views/CatalogoView.vue'
 import CreateAccountView from '@/views/CreateAccountView.vue'
 import LoginView from '@/views/LoginView.vue'
 import AccountView from '@/views/AccountView.vue'
+import UserMeasurementsView from '@/views/UserMeasurementsView.vue'
 import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
@@ -33,6 +34,12 @@ const router = createRouter({
       path: '/cuenta',
       name: 'account',
       component: AccountView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/medidas',
+      name: 'measurements',
+      component: UserMeasurementsView,
       meta: { requiresAuth: true }
     }
   ]

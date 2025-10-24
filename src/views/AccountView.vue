@@ -119,7 +119,10 @@
                 </CardHeader>
               </Card>
               
-              <Card class="bg-white/10 border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
+              <Card 
+                class="bg-white/10 border-white/20 hover:bg-white/20 transition-colors cursor-pointer"
+                @click="router.push({ name: 'measurements' })"
+              >
                 <CardHeader class="text-center">
                   <CardTitle class="text-xl font-bold text-white">Mis Medidas</CardTitle>
                   <CardDescription class="text-gray-400 text-sm">Gestionar medidas</CardDescription>

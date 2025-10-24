@@ -1,4 +1,10 @@
 import axios from 'axios'
+import type { 
+  MeasurementType, 
+  UserMeasurement, 
+  BatchMeasurementRequest,
+  BatchMeasurementResponse 
+} from '@/types/measurements.types'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api',
@@ -34,5 +40,32 @@ api.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+// Measurement API functions
+export const measurementsApi = {
+  // Get all measurement types (public endpoint)
+  getMeasurementTypes: async () => {
+    const response = await api.get<{ success: boolean; data: MeasurementType[]; count: number }>('/measurement-types')
+    return response.data
+  },
+
+  // Get user measurements
+  getUserMeasurements: async (userId: number) => {
+    const response = await api.get<{ success: boolean; data: UserMeasurement[]; count: number }>(`/user-measurements/user/${userId}`)
+    return response.data
+  },
+
+  // Batch save measurements
+  batchSaveMeasurements: async (data: BatchMeasurementRequest) => {
+    const response = await api.post<BatchMeasurementResponse>('/user-measurements/batch', data)
+    return response.data
+  },
+
+  // Delete single measurement
+  deleteMeasurement: async (id: number) => {
+    const response = await api.delete<{ success: boolean }>(`/user-measurements/${id}`)
+    return response.data
+  },
+}
 
 export default api
