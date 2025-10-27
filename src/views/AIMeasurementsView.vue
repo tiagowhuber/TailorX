@@ -163,15 +163,15 @@
                 </div>
               </div>
 
-              <Button 
+                <Button 
                 @click="analyzePhotos"
                 :disabled="isAnalyzing || !canAnalyze"
                 class="w-full py-4 bg-[#E3F450] hover:opacity-90 text-black font-semibold uppercase text-lg"
-              >
-                <Sparkles v-if="!isAnalyzing" class="mr-2 h-5 w-5" />
+                >
+                <div v-if="!isAnalyzing" class="mr-2 h-5 w-5"></div>
                 <div v-else class="inline-block h-5 w-5 mr-2 animate-spin rounded-full border-2 border-solid border-black border-r-transparent"></div>
-                {{ isAnalyzing ? 'Analizando...' : 'Analizar Medidas con IA' }}
-              </Button>
+                {{ isAnalyzing ? 'Analizando...' : 'Analizar Medidas' }}
+                </Button>
 
               <!-- Info Note -->
               <div class="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">

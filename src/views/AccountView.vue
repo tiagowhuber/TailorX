@@ -1,149 +1,180 @@
 <template>
-  <div 
-    class="min-h-screen bg-black text-white overflow-hidden relative" 
-    :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'top 600px center', backgroundRepeat: 'no-repeat' }"
-  >
-    <!-- Background spotlight effect -->
-    <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-lime-400/30 via-yellow-300/20 to-transparent rounded-full blur-3xl transform translate-x-32 -translate-y-32"></div>
-    <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-radial from-lime-400/20 via-yellow-300/10 to-transparent rounded-full blur-3xl transform -translate-x-32 translate-y-32"></div>
-    
+  <div class="min-h-screen bg-black text-white">
     <!-- Navigation Header -->
     <NavigationBar />
 
-    <!-- Main Content - Account Dashboard -->
-    <div class="relative z-10 w-full max-w-6xl mx-auto px-8 pt-32 pb-16">
-      <Card class="bg-white/5 backdrop-blur-md border-white/10 shadow-2xl">
-        <CardHeader class="pb-4">
-          <div class="flex justify-between items-center">
-            <div class="flex items-center space-x-4">
-              <Avatar class="h-16 w-16 border-2 border-[#E3F450]">
-                <AvatarImage v-if="getProfilePictureUrl()" :src="getProfilePictureUrl()!" :alt="authStore.user?.first_name || 'User'" />
-                <AvatarFallback class="bg-[#E3F450] text-black text-xl font-bold">
-                  {{ getInitials() }}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <CardTitle class="text-4xl font-black text-white mb-1">
-                  MI CUENTA
-                </CardTitle>
-                <CardDescription class="text-gray-400 font-normal text-base">
-                  Bienvenido, {{ authStore.user?.first_name }}
-                </CardDescription>
+    <!-- Main Content - Account Dashboard with Sidebar -->
+    <div class="relative pt-20 min-h-screen">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Mobile Navigation Bar (horizontal) -->
+        <div class="lg:hidden mb-6 overflow-x-auto">
+          <div class="flex gap-2 min-w-max pb-2">
+            <button
+              @click="activeSection = 'general'"
+              :class="[
+                'px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap',
+                activeSection === 'general' 
+                  ? 'bg-white/10 text-white' 
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+              ]"
+            >
+              General
+            </button>
+            <button
+              @click="router.push({ name: 'catalogo' })"
+              class="px-4 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors whitespace-nowrap"
+            >
+              Ver Catálogo
+            </button>
+            <button
+              @click="router.push({ name: 'measurements' })"
+              class="px-4 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors whitespace-nowrap"
+            >
+              Mis Medidas
+            </button>
+            <button
+              class="px-4 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors whitespace-nowrap"
+            >
+              Mis Pedidos
+            </button>
+            <button
+              @click="showEditProfile = true"
+              class="px-4 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors whitespace-nowrap"
+            >
+              Editar Perfil
+            </button>
+          </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+          <!-- Sidebar (Desktop) -->
+          <aside class="hidden lg:block w-64 flex-shrink-0">
+            <nav class="space-y-1">
+              <button
+                @click="activeSection = 'general'"
+                :class="[
+                  'w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                  activeSection === 'general' 
+                    ? 'bg-white/10 text-white' 
+                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                ]"
+              >
+                General
+              </button>
+              
+              <Separator class="bg-white/10 my-4" />
+              
+              <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                Acciones Rápidas
+              </div>
+              
+              <button
+                @click="router.push({ name: 'catalogo' })"
+                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+              >
+                Ver Catálogo
+              </button>
+              
+              <button
+                @click="router.push({ name: 'measurements' })"
+                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+              >
+                Mis Medidas
+              </button>
+              
+              <button
+                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+              >
+                Mis Pedidos
+              </button>
+              
+              <Separator class="bg-white/10 my-4" />
+              
+              <button
+                @click="showEditProfile = true"
+                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+              >
+                <Settings class="inline-block mr-2 h-4 w-4" />
+                Editar Perfil
+              </button>
+              
+              <button
+                @click="handleLogout"
+                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+              >
+                <LogOut class="inline-block mr-2 h-4 w-4" />
+                Cerrar Sesión
+              </button>
+            </nav>
+          </aside>
+
+          <!-- Main Content Area -->
+          <main class="flex-1 min-w-0">
+            <!-- Header with Avatar -->
+            <div class="mb-8">
+              <div class="flex items-center gap-4 mb-2">
+                <Avatar class="h-16 w-16 border-2 border-white/20">
+                  <AvatarImage v-if="getProfilePictureUrl()" :src="getProfilePictureUrl()!" :alt="authStore.user?.first_name || 'User'" />
+                  <AvatarFallback class="bg-white/10 text-white text-xl font-bold">
+                    {{ getInitials() }}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h1 class="text-3xl font-bold text-white">Configuración de Cuenta</h1>
+                  <p class="text-gray-400 text-sm">Administra tu información personal</p>
+                </div>
               </div>
             </div>
-            <Button 
-              @click="handleLogout"
-              class="px-6 py-3 bg-red-500 hover:bg-red-600 text-white font-semibold uppercase"
-            >
-              <LogOut class="mr-2 h-5 w-5" />
-              Cerrar Sesión
-            </Button>
-          </div>
-        </CardHeader>
 
-        <Separator class="bg-white/20 mb-8" />
-
-        <CardContent class="space-y-8">
-          <!-- Account Info -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- User Information -->
-            <Card class="bg-white/10 border-white/20">
+            <!-- Account Information Card -->
+            <Card class="bg-white/5 border-white/10">
               <CardHeader>
-                <CardTitle class="text-2xl font-bold text-[#E3F450]">
-                  Información Personal
-                </CardTitle>
+                <CardTitle class="text-xl font-semibold text-white">Información Personal</CardTitle>
+                <CardDescription class="text-gray-400 text-sm">
+                  Tu información personal y detalles de cuenta
+                </CardDescription>
               </CardHeader>
-              <CardContent class="space-y-3">
+              <CardContent class="space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <Label class="text-gray-400 text-xs uppercase tracking-wider">Email</Label>
+                    <p class="text-white text-base mt-1">{{ authStore.user?.email }}</p>
+                  </div>
+                  <div v-if="authStore.user?.first_name">
+                    <Label class="text-gray-400 text-xs uppercase tracking-wider">Nombre Completo</Label>
+                    <p class="text-white text-base mt-1">{{ authStore.user.first_name }} {{ authStore.user.last_name }}</p>
+                  </div>
+                </div>
+                
+                <Separator class="bg-white/10" />
+                
                 <div>
-                  <Label class="text-gray-400 text-sm">Email</Label>
-                  <p class="text-white text-lg">{{ authStore.user?.email }}</p>
+                  <Label class="text-gray-400 text-xs uppercase tracking-wider">Miembro Desde</Label>
+                  <p class="text-white text-base mt-1">{{ formatDate(authStore.user?.created_at) }}</p>
                 </div>
-                <div v-if="authStore.user?.first_name">
-                  <Label class="text-gray-400 text-sm">Nombre</Label>
-                  <p class="text-white text-lg">{{ authStore.user.first_name }} {{ authStore.user.last_name }}</p>
-                </div>
-                <div>
-                  <Label class="text-gray-400 text-sm">Miembro desde</Label>
-                  <p class="text-white text-lg">{{ formatDate(authStore.user?.created_at) }}</p>
-                </div>
-                <Separator class="bg-white/20 my-4" />
-                <Button 
-                  @click="showEditProfile = true"
-                  class="w-full py-3 bg-[#E3F450] hover:opacity-90 text-black font-semibold uppercase"
-                >
-                  <Settings class="mr-2 h-4 w-4" />
-                  Editar Perfil
-                </Button>
               </CardContent>
             </Card>
 
-            <!-- Quick Stats -->
-            <Card class="bg-white/10 border-white/20">
-              <CardHeader>
-                <CardTitle class="text-2xl font-bold text-[#E3F450]">
-                  Estadísticas
-                </CardTitle>
-              </CardHeader>
-              <CardContent class="space-y-4">
-                <div class="flex justify-between items-center">
-                  <span class="text-gray-400">Pedidos realizados</span>
-                  <span class="text-2xl font-bold text-white">0</span>
-                </div>
-                <Separator class="bg-white/20" />
-                <div class="flex justify-between items-center">
-                  <span class="text-gray-400">Prendas creadas</span>
-                  <span class="text-2xl font-bold text-white">0</span>
-                </div>
-                <Separator class="bg-white/20" />
-                <div class="flex justify-between items-center">
-                  <span class="text-gray-400">Medidas guardadas</span>
-                  <span class="text-2xl font-bold text-white">0</span>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Separator class="bg-white/20" />
-
-          <!-- Quick Actions -->
-          <div>
-            <h3 class="text-2xl font-bold text-white mb-4">Acciones Rápidas</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card 
-                class="bg-white/10 border-white/20 hover:bg-white/20 transition-colors cursor-pointer"
-                @click="router.push({ name: 'catalogo' })"
+            <!-- Logout Button Mobile -->
+            <div class="lg:hidden mt-6">
+              <Button 
+                @click="handleLogout"
+                variant="outline"
+                class="w-full border-white/20 text-white hover:bg-white/5"
               >
-                <CardHeader class="text-center">
-                  <CardTitle class="text-xl font-bold text-white">Ver Catálogo</CardTitle>
-                  <CardDescription class="text-gray-400 text-sm">Explora nuestras prendas</CardDescription>
-                </CardHeader>
-              </Card>
-              
-              <Card 
-                class="bg-white/10 border-white/20 hover:bg-white/20 transition-colors cursor-pointer"
-                @click="router.push({ name: 'measurements' })"
-              >
-                <CardHeader class="text-center">
-                  <CardTitle class="text-xl font-bold text-white">Mis Medidas</CardTitle>
-                  <CardDescription class="text-gray-400 text-sm">Gestionar medidas</CardDescription>
-                </CardHeader>
-              </Card>
-              
-              <Card class="bg-white/10 border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
-                <CardHeader class="text-center">
-                  <CardTitle class="text-xl font-bold text-white">Mis Pedidos</CardTitle>
-                  <CardDescription class="text-gray-400 text-sm">Ver historial</CardDescription>
-                </CardHeader>
-              </Card>
+                <LogOut class="mr-2 h-4 w-4" />
+                Cerrar Sesión
+              </Button>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </main>
+        </div>
+      </div>
     </div>
 
     <!-- Edit Profile Modal -->
-    <div v-if="showEditProfile" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-      <div class="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/10 max-w-md w-full mx-4">
+    <div v-if="showEditProfile" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+      <div class="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10 max-w-md w-full">
         <h3 class="text-2xl font-bold mb-6">Editar Perfil</h3>
         
         <form @submit.prevent="handleUpdateProfile" class="space-y-4">
@@ -151,13 +182,13 @@
           <div class="space-y-3">
             <Label class="text-white font-medium">Foto de Perfil</Label>
             <div class="flex items-center gap-4">
-              <Avatar class="h-20 w-20 border-2 border-[#E3F450]">
+              <Avatar class="h-20 w-20 border-2 border-white/20">
                 <AvatarImage 
                   v-if="previewUrl || getProfilePictureUrl()" 
                   :src="previewUrl || getProfilePictureUrl()!" 
                   :alt="authStore.user?.first_name || 'User'" 
                 />
-                <AvatarFallback class="bg-[#E3F450] text-black text-xl font-bold">
+                <AvatarFallback class="bg-white/10 text-white text-xl font-bold">
                   {{ getInitials() }}
                 </AvatarFallback>
               </Avatar>
@@ -165,8 +196,9 @@
                 <div class="flex gap-2">
                   <Button
                     type="button"
+                    variant="outline"
                     @click="() => ($refs.fileInput as HTMLInputElement)?.click()"
-                    class="flex-1 py-2 bg-[#E3F450] hover:opacity-90 text-black font-semibold uppercase text-sm"
+                    class="flex-1 py-2 border-white/20 text-white hover:bg-white/5 text-sm"
                   >
                     <Upload class="mr-2 h-4 w-4" />
                     Subir
@@ -174,9 +206,10 @@
                   <Button
                     v-if="authStore.user?.profile_picture_url"
                     type="button"
+                    variant="outline"
                     @click="handleDeleteProfilePicture"
                     :disabled="isUploading"
-                    class="py-2 px-3 bg-red-500 hover:bg-red-600 text-white font-semibold"
+                    class="py-2 px-3 border-white/20 text-white hover:bg-red-500/10 hover:border-red-500/50"
                   >
                     <Trash2 class="h-4 w-4" />
                   </Button>
@@ -194,7 +227,7 @@
             <p v-if="uploadError" class="text-red-400 text-sm">{{ uploadError }}</p>
           </div>
 
-          <Separator class="bg-white/20" />
+          <Separator class="bg-white/10" />
 
           <div class="space-y-2">
             <Label for="firstName" class="text-white font-medium">
@@ -224,18 +257,20 @@
             {{ editError }}
           </div>
 
-          <div class="flex gap-4">
+          <div class="flex gap-4 pt-4">
             <Button 
               type="button"
+              variant="outline"
               @click="() => { showEditProfile = false; resetEditModal() }"
-              class="flex-1 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold uppercase"
+              class="flex-1 py-3 border-white/20 text-white hover:bg-white/5"
             >
               Cancelar
             </Button>
             <Button 
               type="submit"
+              variant="outline"
               :disabled="isUpdating"
-              class="flex-1 py-3 bg-[#E3F450] hover:opacity-90 text-black font-semibold uppercase"
+              class="flex-1 py-3 border-white/20 text-white hover:bg-white/10"
             >
               {{ isUpdating ? 'Guardando...' : 'Guardar' }}
             </Button>
@@ -264,11 +299,11 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import NavigationBar from '@/components/NavigationBar.vue'
-import bgImage from '@/assets/backgrounds/elemento-amarillo.png'
 
 const router = useRouter()
 const authStore = useAuthStore()
 
+const activeSection = ref('general')
 const showEditProfile = ref(false)
 const editError = ref('')
 const isUpdating = ref(false)
@@ -408,18 +443,36 @@ if (!authStore.isAuthenticated) {
 </script>
 
 <style scoped>
-/* Gradient radial utility */
-.bg-gradient-radial {
-  background: radial-gradient(circle, var(--tw-gradient-stops));
-}
-
 /* Custom input styles */
 :deep(.bg-white\/10) {
   backdrop-filter: blur(8px);
 }
 
+:deep(.bg-white\/5) {
+  backdrop-filter: blur(8px);
+}
+
 :deep(input:focus) {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(227, 244, 80, 0.2);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+/* Smooth scrollbar for mobile horizontal nav */
+.overflow-x-auto::-webkit-scrollbar {
+  height: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 </style>
