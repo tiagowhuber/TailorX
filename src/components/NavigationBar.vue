@@ -1,19 +1,30 @@
 <template>
   <header 
-    :class="[
-      'flex justify-between items-center px-8 bg-black border-b border-white/10 transition-all duration-300',
-      isScrolled ? 'fixed top-0 left-0 right-0 z-50 py-2 shadow-lg' : 'relative z-10 py-4'
-    ]"
+    ref="headerRef"
+    class="flex justify-between items-center px-8 bg-black border-b border-white/10"
+    :style="{
+      position: scrollProgress > 0.1 ? 'fixed' : 'relative',
+      top: scrollProgress > 0.1 ? '0' : 'auto',
+      left: scrollProgress > 0.1 ? '0' : 'auto',
+      right: scrollProgress > 0.1 ? '0' : 'auto',
+      zIndex: scrollProgress > 0.1 ? '50' : '10',
+      paddingTop: `${1 - scrollProgress * 0.5}rem`,
+      paddingBottom: `${1 - scrollProgress * 0.5}rem`,
+      backgroundColor: `rgba(0, 0, 0, ${0.95 + scrollProgress * 0.05})`,
+      backdropFilter: scrollProgress > 0.1 ? `blur(${scrollProgress * 12}px)` : 'none',
+      boxShadow: scrollProgress > 0.1 ? `0 10px 30px rgba(0, 0, 0, ${scrollProgress * 0.3})` : 'none',
+      transition: 'position 0s'
+    }"
   >
     <!-- Logo -->
     <router-link to="/" class="flex items-center">
       <img 
         src="@/assets/elements/logo-blanco.png" 
-        alt="TailorX Logo" 
-        :class="[
-          'transition-all duration-300',
-          isScrolled ? 'h-8 md:h-10' : 'h-10 md:h-12'
-        ]"
+        alt="TailorX Logo"
+        :style="{
+          height: `${2.5 - scrollProgress * 0.5}rem`,
+          transition: 'height 0.1s ease-out'
+        }"
       />
     </router-link>
     
@@ -132,14 +143,34 @@ import InstagramSmallIcon from '@/components/icons/InstagramSmallIcon.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
-const isScrolled = ref(false)
+const headerRef = ref<HTMLElement | null>(null)
+const scrollProgress = ref(0)
+
+let ticking = false
+
+const updateScrollProgress = () => {
+  const scrollY = window.scrollY
+  const maxScroll = 100 // Maximum scroll distance for full effect
+  
+  // Calculate progress from 0 to 1
+  const progress = Math.min(scrollY / maxScroll, 1)
+  
+  // Apply easing function for smoother transition (ease-out cubic)
+  scrollProgress.value = 1 - Math.pow(1 - progress, 3)
+  
+  ticking = false
+}
 
 const handleScroll = () => {
-  isScrolled.value = window.scrollY > 50
+  if (!ticking) {
+    window.requestAnimationFrame(updateScrollProgress)
+    ticking = true
+  }
 }
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  updateScrollProgress() // Initial calculation
 })
 
 onUnmounted(() => {
