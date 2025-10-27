@@ -1,19 +1,50 @@
 <template>
-  <header class="relative z-10 flex justify-between items-center px-8 py-6">
+  <header 
+    :class="[
+      'flex justify-between items-center px-8 bg-black border-b border-white/10 transition-all duration-300',
+      isScrolled ? 'fixed top-0 left-0 right-0 z-50 py-2 shadow-lg' : 'relative z-10 py-4'
+    ]"
+  >
     <!-- Logo -->
     <router-link to="/" class="flex items-center">
-      <img src="@/assets/elements/logo-blanco.png" alt="TailorX Logo" class="h-16 md:h-18" />
+      <img 
+        src="@/assets/elements/logo-blanco.png" 
+        alt="TailorX Logo" 
+        :class="[
+          'transition-all duration-300',
+          isScrolled ? 'h-8 md:h-10' : 'h-10 md:h-12'
+        ]"
+      />
     </router-link>
     
     <!-- Navigation Menu -->
-    <nav class="hidden md:flex space-x-12 text-lg font-semibold">
-      <router-link to="/" class="hover:text-[#E3F450] transition-colors">INICIO</router-link>
-      <span class="text-gray-500">|</span>
-      <a href="#" class="hover:text-[#E3F450] transition-colors">TAILORX</a>
-      <span class="text-gray-500">|</span>
-      <router-link to="/catalogo" class="hover:text-[#E3F450] transition-colors">CATÁLOGO</router-link>
-      <span class="text-gray-500">|</span>
-      <a href="#" class="hover:text-[#E3F450] transition-colors">CONTACTO</a>
+    <nav class="hidden md:flex space-x-8 text-base font-medium items-end">
+      <router-link 
+        to="/" 
+        class="nav-link"
+        :class="{ 'active': $route.path === '/' }"
+      >
+        Inicio
+      </router-link>
+      <a 
+        href="#" 
+        class="nav-link"
+      >
+        TailorX
+      </a>
+      <router-link 
+        to="/catalogo" 
+        class="nav-link"
+        :class="{ 'active': $route.path === '/catalogo' }"
+      >
+        Catálogo
+      </router-link>
+      <a 
+        href="#" 
+        class="nav-link"
+      >
+        Contacto
+      </a>
     </nav>
     
     <!-- Social Media Icons & Profile -->
@@ -79,9 +110,10 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { User as UserIcon, LogOut, ShoppingBag, Ruler } from 'lucide-vue-next'
+import { User as UserIcon, LogOut, Ruler } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
@@ -100,6 +132,19 @@ import InstagramSmallIcon from '@/components/icons/InstagramSmallIcon.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const isScrolled = ref(false)
+
+const handleScroll = () => {
+  isScrolled.value = window.scrollY > 50
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 
 const getInitials = () => {
   const firstName = authStore.user?.first_name || '';
@@ -123,5 +168,30 @@ const handleLogout = async () => {
 </script>
 
 <style scoped>
-/* Ensure consistent styling */
+.nav-link {
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.2s;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  position: relative;
+  display: inline-block;
+}
+
+.nav-link:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+.nav-link.active {
+  color: rgba(255, 255, 255, 1);
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #E3F450;
+}
 </style>
