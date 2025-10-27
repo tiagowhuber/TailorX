@@ -1,17 +1,91 @@
 <template>
-  <div 
-    class="min-h-screen bg-black text-white overflow-hidden relative" 
-    :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'top 600px center', backgroundRepeat: 'no-repeat' }"
-  >
-    <!-- Background spotlight effect -->
-    <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-lime-400/30 via-yellow-300/20 to-transparent rounded-full blur-3xl transform translate-x-32 -translate-y-32"></div>
-    <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-radial from-lime-400/20 via-yellow-300/10 to-transparent rounded-full blur-3xl transform -translate-x-32 translate-y-32"></div>
-    
+  <div class="min-h-screen bg-black text-white">
     <!-- Navigation Header -->
     <NavigationBar />
 
     <!-- Main Content -->
-    <div class="relative z-10 w-full max-w-6xl mx-auto px-8 pt-32 pb-16">
+    <div class="relative pt-20 min-h-screen">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Mobile Navigation Bar (horizontal) -->
+        <div class="lg:hidden mb-6 overflow-x-auto">
+          <div class="flex gap-2 min-w-max pb-2">
+            <button
+              @click="router.push({ name: 'account' })"
+              class="px-4 py-2 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors whitespace-nowrap"
+            >
+              General
+            </button>
+            <button
+              @click="router.push({ name: 'catalogo' })"
+              class="px-4 py-2 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors whitespace-nowrap"
+            >
+              Ver Catálogo
+            </button>
+            <button
+              :class="[
+                'px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap border',
+                'bg-white text-black border-white'
+              ]"
+            >
+              Mis Medidas
+            </button>
+            <button
+              class="px-4 py-2 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors whitespace-nowrap"
+            >
+              Mis Pedidos
+            </button>
+          </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-10">
+          <!-- Sidebar (Desktop) -->
+          <aside class="hidden lg:block w-50 flex-shrink-0 lg:mt-5">
+            <nav class="space-y-1">
+              <button
+                @click="router.push({ name: 'account' })"
+                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors cursor-pointer"
+              >
+                General
+              </button>
+              
+              <Separator class="bg-white/10 my-4" />
+              
+              <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                Acciones Rápidas
+              </div>
+              
+              <button
+                :class="[
+                  'w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors border cursor-pointer',
+                  'bg-white text-black border-white'
+                ]"
+              >
+                <Ruler class="inline-block mr-2 h-4 w-4 text-black" />
+                Mis Medidas
+              </button>
+              
+              <button
+                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors cursor-pointer"
+              >
+                <ShoppingBag class="inline-block mr-2 h-4 w-4 text-[#E3F450]" />
+                Mis Pedidos
+              </button>
+              
+              <Separator class="bg-white/10 my-4" />
+              
+              <button
+                @click="handleLogout"
+                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors cursor-pointer"
+              >
+                <LogOut class="inline-block mr-2 h-4 w-4 text-[#E3F450]" />
+                Cerrar Sesión
+              </button>
+            </nav>
+          </aside>
+
+          <!-- Main Content Area -->
+          <main class="flex-1 min-w-0">
       <Card class="bg-white/5 backdrop-blur-md border-white/10 shadow-2xl">
         <CardHeader class="pb-4">
           <div class="flex justify-between items-center flex-wrap gap-4">
@@ -27,7 +101,7 @@
               <Button 
                 @click="router.push({ name: 'ai-measurements' })"
                 variant="outline"
-                class="px-6 py-3 border-white/20 text-black hover:bg-white/10"
+                class="px-6 py-3 border-yellow-500/20 text-black hover:bg-white/30"
               >
                 <Sparkles class="mr-2 h-5 w-5" />
                 Obtener con IA
@@ -35,7 +109,8 @@
               <Button 
                 v-if="!isEditMode"
                 @click="enterEditMode"
-                class="px-6 py-3 bg-[#E3F450] hover:opacity-90 text-black font-semibold uppercase"
+                variant="outline"
+                class="px-6 py-3 border-white/20 text-black hover:bg-white/30"
               >
                 <Edit class="mr-2 h-5 w-5" />
                 Editar
@@ -43,7 +118,8 @@
               <template v-else>
                 <Button 
                   @click="cancelEdit"
-                  class="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold uppercase"
+                  variant="outline"
+                  class="px-6 py-3 border-white/20 text-black hover:bg-white/30"
                 >
                   <X class="mr-2 h-5 w-5" />
                   Cancelar
@@ -51,7 +127,8 @@
                 <Button 
                   @click="handleSaveMeasurements"
                   :disabled="measurementsStore.loading || !hasChanges"
-                  class="px-6 py-3 bg-[#E3F450] hover:opacity-90 text-black font-semibold uppercase"
+                  variant="outline"
+                  class="px-6 py-3 border-white/20 text-black hover:bg-white/30"
                 >
                   <Save class="mr-2 h-5 w-5" />
                   {{ measurementsStore.loading ? 'Guardando...' : 'Guardar Todo' }}
@@ -66,7 +143,7 @@
         <CardContent>
           <!-- Loading State -->
           <div v-if="measurementsStore.loading && !measurementsStore.measurementTypes.length" class="text-center py-12">
-            <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#E3F450] border-r-transparent"></div>
+            <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-white border-r-transparent"></div>
             <p class="mt-4 text-gray-400">Cargando medidas...</p>
           </div>
 
@@ -75,7 +152,8 @@
             <p class="text-red-400">{{ measurementsStore.error }}</p>
             <Button 
               @click="loadData"
-              class="mt-4 px-6 py-3 bg-[#E3F450] hover:opacity-90 text-black font-semibold uppercase"
+              variant="outline"
+              class="mt-4 px-6 py-3 border-white/20 text-white hover:bg-white/10"
             >
               Reintentar
             </Button>
@@ -84,9 +162,9 @@
           <!-- Measurements Grid -->
           <div v-else>
             <!-- Info Banner -->
-            <div class="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+            <div class="mb-6 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
               <div class="flex items-start gap-3">
-                <Info class="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                <AlertCircle class="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
                 <div class="text-sm text-gray-300">
                   <p class="font-semibold mb-1">Todas las medidas deben ingresarse en centímetros (cm)</p>
                   <p>Tus medidas son utilizadas para generar patrones personalizados de confección.</p>
@@ -100,7 +178,8 @@
               <p class="text-gray-400 text-base mb-4">Aún no tienes medidas guardadas</p>
               <Button 
                 @click="router.push({ name: 'ai-measurements' })"
-                class="px-8 py-3 bg-[#E3F450] hover:opacity-90 text-black font-semibold uppercase"
+                variant="outline"
+                class="px-8 py-3 border-white/20 text-white hover:bg-white/10"
               >
                 <Sparkles class="mr-2 h-5 w-5" />
                 Obtener con IA
@@ -139,7 +218,7 @@
                 v-for="type in measurementsStore.measurementTypes" 
                 :key="type.id"
                 class="bg-white/10 border-white/20 transition-all"
-                :class="{ 'ring-2 ring-[#E3F450]': editedMeasurements[type.id] !== undefined && hasValueChanged(type.id) }"
+                :class="{ 'ring-2 ring-white': editedMeasurements[type.id] !== undefined && hasValueChanged(type.id) }"
               >
                 <CardHeader class="pb-3">
                   <CardTitle class="text-lg font-bold text-white flex items-center justify-between">
@@ -208,6 +287,9 @@
           </div>
         </CardContent>
       </Card>
+          </main>
+        </div>
+      </div>
     </div>
 
     <!-- Delete Confirmation Dialog -->
@@ -224,14 +306,15 @@
           <Button
             @click="showDeleteDialog = false"
             variant="outline"
-            class="border-white/20 text-black hover:bg-white/10"
+            class="border-white/20 text-white hover:bg-white/5"
           >
             Cancelar
           </Button>
           <Button
             @click="confirmDelete"
             :disabled="measurementsStore.loading"
-            class="bg-red-500 hover:bg-red-600 text-white"
+            variant="outline"
+            class="border-red-500/50 text-red-400 hover:bg-red-500/10 hover:border-red-500"
           >
             <Trash2 class="mr-2 h-4 w-4" />
             {{ measurementsStore.loading ? 'Eliminando...' : 'Eliminar' }}
@@ -248,7 +331,7 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useMeasurementsStore } from '@/stores/measurements'
 import type { MeasurementType } from '@/types/measurements.types'
-import { Edit, Save, X, Trash2, Ruler, Info, CheckCircle, AlertCircle, Sparkles } from 'lucide-vue-next'
+import { Edit, Save, X, Trash2, Ruler, CheckCircle, AlertCircle, Sparkles, ShoppingBag, LogOut } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -269,7 +352,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import NavigationBar from '@/components/NavigationBar.vue'
-import bgImage from '@/assets/backgrounds/elemento-amarillo.png'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -485,6 +567,11 @@ const confirmDelete = async () => {
   }
 }
 
+const handleLogout = async () => {
+  await authStore.logout()
+  router.push('/login')
+}
+
 // Lifecycle
 onMounted(() => {
   if (!authStore.isAuthenticated) {
@@ -496,17 +583,17 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.bg-gradient-radial {
-  background: radial-gradient(circle, var(--tw-gradient-stops));
+:deep(.bg-white\/10) {
+  backdrop-filter: blur(8px);
 }
 
-:deep(.bg-white\/10) {
+:deep(.bg-white\/5) {
   backdrop-filter: blur(8px);
 }
 
 :deep(input:focus) {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(227, 244, 80, 0.2);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
 }
 
 /* Hide number input spinners in Chrome/Safari */

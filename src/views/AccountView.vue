@@ -13,51 +13,51 @@
             <button
               @click="activeSection = 'general'"
               :class="[
-                'px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap',
+                'px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap border',
                 activeSection === 'general' 
-                  ? 'bg-white/10 text-white' 
-                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  ? 'bg-white text-black border-white' 
+                  : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
               ]"
             >
               General
             </button>
             <button
               @click="router.push({ name: 'catalogo' })"
-              class="px-4 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors whitespace-nowrap"
+              class="px-4 py-2 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors whitespace-nowrap"
             >
               Ver Catálogo
             </button>
             <button
               @click="router.push({ name: 'measurements' })"
-              class="px-4 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors whitespace-nowrap"
+              class="px-4 py-2 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors whitespace-nowrap"
             >
               Mis Medidas
             </button>
             <button
-              class="px-4 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors whitespace-nowrap"
+              class="px-4 py-2 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors whitespace-nowrap"
             >
               Mis Pedidos
             </button>
             <button
               @click="showEditProfile = true"
-              class="px-4 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors whitespace-nowrap"
+              class="px-4 py-2 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors whitespace-nowrap"
             >
               Editar Perfil
             </button>
           </div>
         </div>
 
-        <div class="flex flex-col lg:flex-row gap-8">
+        <div class="flex flex-col lg:flex-row gap-10">
           <!-- Sidebar (Desktop) -->
-          <aside class="hidden lg:block w-64 flex-shrink-0">
+            <aside class="hidden lg:block w-50 flex-shrink-0 lg:mt-5">
             <nav class="space-y-1">
               <button
                 @click="activeSection = 'general'"
                 :class="[
-                  'w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                  'w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors border cursor-pointer',
                   activeSection === 'general' 
-                    ? 'bg-white/10 text-white' 
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    ? 'bg-white text-black border-white' 
+                    : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
                 ]"
               >
                 General
@@ -69,23 +69,19 @@
                 Acciones Rápidas
               </div>
               
-              <button
-                @click="router.push({ name: 'catalogo' })"
-                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
-              >
-                Ver Catálogo
-              </button>
               
               <button
                 @click="router.push({ name: 'measurements' })"
-                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors cursor-pointer"
               >
+                <Ruler class="inline-block mr-2 h-4 w-4 text-[#E3F450]" />
                 Mis Medidas
               </button>
               
               <button
-                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors cursor-pointer"
               >
+                <ShoppingBag class="inline-block mr-2 h-4 w-4 text-[#E3F450]" />
                 Mis Pedidos
               </button>
               
@@ -93,17 +89,17 @@
               
               <button
                 @click="showEditProfile = true"
-                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors cursor-pointer"
               >
-                <Settings class="inline-block mr-2 h-4 w-4" />
+                <Settings class="inline-block mr-2 h-4 w-4 text-[#E3F450]" />
                 Editar Perfil
               </button>
               
               <button
                 @click="handleLogout"
-                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors cursor-pointer"
               >
-                <LogOut class="inline-block mr-2 h-4 w-4" />
+                <LogOut class="inline-block mr-2 h-4 w-4 text-[#E3F450]" />
                 Cerrar Sesión
               </button>
             </nav>
@@ -114,7 +110,7 @@
             <!-- Header with Avatar -->
             <div class="mb-8">
               <div class="flex items-center gap-4 mb-2">
-                <Avatar class="h-16 w-16 border-2 border-white/20">
+                <Avatar class="h-16 w-16 border-2 border-[#E3F450]">
                   <AvatarImage v-if="getProfilePictureUrl()" :src="getProfilePictureUrl()!" :alt="authStore.user?.first_name || 'User'" />
                   <AvatarFallback class="bg-white/10 text-white text-xl font-bold">
                     {{ getInitials() }}
@@ -198,7 +194,7 @@
                     type="button"
                     variant="outline"
                     @click="() => ($refs.fileInput as HTMLInputElement)?.click()"
-                    class="flex-1 py-2 border-white/20 text-white hover:bg-white/5 text-sm"
+                    class="flex-1 py-2 border-white/20 text-black hover:bg-white/30 text-sm"
                   >
                     <Upload class="mr-2 h-4 w-4" />
                     Subir
@@ -209,7 +205,7 @@
                     variant="outline"
                     @click="handleDeleteProfilePicture"
                     :disabled="isUploading"
-                    class="py-2 px-3 border-white/20 text-white hover:bg-red-500/10 hover:border-red-500/50"
+                    class="py-2 px-3 border-white/20 text-black hover:bg-red-500/30 hover:border-red-500/50"
                   >
                     <Trash2 class="h-4 w-4" />
                   </Button>
@@ -262,7 +258,7 @@
               type="button"
               variant="outline"
               @click="() => { showEditProfile = false; resetEditModal() }"
-              class="flex-1 py-3 border-white/20 text-white hover:bg-white/5"
+              class="flex-1 py-3 border-white/20 text-black hover:bg-white/30"
             >
               Cancelar
             </Button>
@@ -270,7 +266,7 @@
               type="submit"
               variant="outline"
               :disabled="isUpdating"
-              class="flex-1 py-3 border-white/20 text-white hover:bg-white/10"
+              class="flex-1 py-3 border-white/20 text-black hover:bg-white/30"
             >
               {{ isUpdating ? 'Guardando...' : 'Guardar' }}
             </Button>
@@ -285,7 +281,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { LogOut, Settings, Upload, Trash2 } from 'lucide-vue-next'
+import { LogOut, Settings, Upload, Trash2, Ruler, ShoppingBag } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'

@@ -58,10 +58,14 @@
               <UserIcon class="mr-2 h-4 w-4" />
               <span>Mi Cuenta</span>
             </DropdownMenuItem>
-            <DropdownMenuItem @click="router.push({ name: 'catalogo' })" class="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer">
+            <DropdownMenuItem @click="router.push({ name: 'measurements' })" class="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer">
+              <Ruler class="mr-2 h-4 w-4" />
+              <span>Mis Medidas</span>
+            </DropdownMenuItem>
+            <!-- <DropdownMenuItem @click="router.push({ name: 'catalogo' })" class="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer">
               <ShoppingBag class="mr-2 h-4 w-4" />
               <span>Catálogo</span>
-            </DropdownMenuItem>
+            </DropdownMenuItem> -->
             <DropdownMenuSeparator class="bg-white/20" />
             <DropdownMenuItem @click="handleLogout" class="text-red-400 hover:bg-red-500/10 focus:bg-red-500/10 focus:text-red-400 cursor-pointer">
               <LogOut class="mr-2 h-4 w-4" />
@@ -77,7 +81,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { User as UserIcon, LogOut, ShoppingBag } from 'lucide-vue-next'
+import { User as UserIcon, LogOut, ShoppingBag, Ruler } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'

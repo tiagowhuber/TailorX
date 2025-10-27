@@ -23,7 +23,7 @@
             <Button 
               @click="router.push({ name: 'measurements' })"
               variant="outline"
-              class="border-white/20 text-black hover:bg-white/10"
+              class="border-white/20 text-black hover:bg-white/15"
             >
               <ArrowLeft class="mr-2 h-5 w-5" />
               Volver
@@ -151,8 +151,8 @@
                   v-model="gender"
                   class="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white"
                 >
-                  <option value="male">Masculino</option>
-                  <option value="female">Femenino</option>
+                    <option value="male" class="text-black">Masculino</option>
+                    <option value="female" class="text-black">Femenino</option>
                 </select>
               </div>
 
@@ -166,7 +166,7 @@
                 <Button 
                 @click="analyzePhotos"
                 :disabled="isAnalyzing || !canAnalyze"
-                class="w-full py-4 bg-[#E3F450] hover:opacity-90 text-black font-semibold uppercase text-lg"
+                class="w-full py-4 bg-white hover:opacity-90 text-black text-lg"
                 >
                 <div v-if="!isAnalyzing" class="mr-2 h-5 w-5"></div>
                 <div v-else class="inline-block h-5 w-5 mr-2 animate-spin rounded-full border-2 border-solid border-black border-r-transparent"></div>
@@ -174,7 +174,7 @@
                 </Button>
 
               <!-- Info Note -->
-              <div class="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+              <div class="mb-6 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
                 <p class="text-sm text-gray-300">
                   <strong>Precisión del sistema:</strong> Este sistema tiene un margen de error de aproximadamente ±3 cm. 
                   Para resultados óptimos, siga las recomendaciones de fotografía.
@@ -233,7 +233,7 @@
                   <p class="text-white font-semibold">Recomendaciones de Prendas:</p>
                   <ul class="space-y-1">
                     <li v-for="(rec, index) in bodyTypeData.recommendations" :key="index" class="text-gray-300 text-sm flex items-start gap-2">
-                      <CheckCircle class="h-4 w-4 text-green-400 flex-shrink-0 mt-0.5" />
+                      <CheckCircle class="h-4 w-4 text-[#E3F450] flex-shrink-0 mt-0.5" />
                       <span>{{ rec }}</span>
                     </li>
                   </ul>
@@ -263,13 +263,13 @@
             <!-- Action Buttons -->
             <div class="flex gap-4">
               <Button 
-                @click="confirmAndSave"
-                :disabled="isSaving"
-                class="flex-1 py-4 bg-[#E3F450] hover:opacity-90 text-black font-semibold uppercase text-lg"
+              @click="confirmAndSave"
+              :disabled="isSaving"
+              class="flex-1 py-4 bg-[#E3F450] text-black text-lg hover:bg-[#E3F450]/80"
               >
-                <Save v-if="!isSaving" class="mr-2 h-5 w-5" />
-                <div v-else class="inline-block h-5 w-5 mr-2 animate-spin rounded-full border-2 border-solid border-black border-r-transparent"></div>
-                {{ isSaving ? 'Guardando...' : 'Confirmar y Guardar Medidas' }}
+              <Save v-if="!isSaving" class="mr-2 h-5 w-5" />
+              <div v-else class="inline-block h-5 w-5 mr-2 animate-spin rounded-full border-2 border-solid border-black border-r-transparent"></div>
+              {{ isSaving ? 'Guardando...' : 'Confirmar y Guardar Medidas' }}
               </Button>
             </div>
 
