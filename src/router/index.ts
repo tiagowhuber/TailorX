@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import CatalogoView from '@/views/CatalogoView.vue'
+import DesignDetailView from '@/views/DesignDetailView.vue'
 import CreateAccountView from '@/views/CreateAccountView.vue'
 import LoginView from '@/views/LoginView.vue'
 import AccountView from '@/views/AccountView.vue'
@@ -20,6 +21,11 @@ const router = createRouter({
       path: '/catalogo',
       name: 'catalogo',
       component: CatalogoView
+    },
+    {
+      path: '/catalogo/:id',
+      name: 'design-detail',
+      component: DesignDetailView
     },
     {
       path: '/crear-cuenta',

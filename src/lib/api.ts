@@ -5,6 +5,12 @@ import type {
   BatchMeasurementRequest,
   BatchMeasurementResponse 
 } from '@/types/measurements.types'
+import type {
+  //Design,
+  DesignsResponse,
+  DesignResponse,
+  DesignMeasurementsResponse
+} from '@/types/design.types'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api',
@@ -64,6 +70,33 @@ export const measurementsApi = {
   // Delete single measurement
   deleteMeasurement: async (id: number) => {
     const response = await api.delete<{ success: boolean }>(`/user-measurements/${id}`)
+    return response.data
+  },
+}
+
+// Design API functions
+export const designsApi = {
+  // Get all designs (public endpoint)
+  getDesigns: async () => {
+    const response = await api.get<DesignsResponse>('/designs')
+    return response.data
+  },
+
+  // Get only active designs (public endpoint)
+  getActiveDesigns: async () => {
+    const response = await api.get<DesignsResponse>('/designs/active')
+    return response.data
+  },
+
+  // Get design by ID (public endpoint)
+  getDesignById: async (id: number) => {
+    const response = await api.get<DesignResponse>(`/designs/${id}`)
+    return response.data
+  },
+
+  // Get required measurements for a design (public endpoint)
+  getDesignMeasurements: async (id: number) => {
+    const response = await api.get<DesignMeasurementsResponse>(`/designs/${id}/measurements`)
     return response.data
   },
 }

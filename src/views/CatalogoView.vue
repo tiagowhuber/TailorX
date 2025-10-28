@@ -17,107 +17,89 @@
         </p>
       </div>
 
+      <!-- Filter Toggle -->
+      <div class="mb-8 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <button
+            @click="catalogStore.toggleActiveFilter()"
+            class="px-4 py-2 rounded-lg border-2 transition-all orbitron-variable"
+            :class="catalogStore.showOnlyActive 
+              ? 'border-lime-400 bg-lime-400/10 text-lime-400' 
+              : 'border-gray-600 text-gray-400 hover:border-gray-400'"
+            style="--orbitron-weight: 500;"
+          >
+            {{ catalogStore.showOnlyActive ? 'Solo Activos' : 'Todos los Diseños' }}
+          </button>
+          <p class="text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
+            {{ catalogStore.filteredDesigns.length }} diseño{{ catalogStore.filteredDesigns.length !== 1 ? 's' : '' }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div v-if="catalogStore.loading" class="flex justify-center items-center py-20">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-lime-400"></div>
+      </div>
+
+      <!-- Error State -->
+      <div v-else-if="catalogStore.error" class="text-center py-20">
+        <p class="text-red-400 text-xl mb-4">{{ catalogStore.error }}</p>
+        <button
+          @click="loadDesigns"
+          class="px-6 py-3 bg-lime-400 text-black rounded-lg font-bold hover:bg-lime-300 transition-colors orbitron-variable"
+          style="--orbitron-weight: 600;"
+        >
+          Reintentar
+        </button>
+      </div>
+
+      <!-- Empty State -->
+      <div v-else-if="catalogStore.filteredDesigns.length === 0" class="text-center py-20">
+        <p class="text-gray-400 text-xl orbitron-variable" style="--orbitron-weight: 400;">
+          No hay diseños disponibles
+        </p>
+      </div>
+
       <!-- Products Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Product Card 1 -->
-        <div class="group cursor-pointer">
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Product Card -->
+        <div 
+          v-for="design in catalogStore.filteredDesigns" 
+          :key="design.id"
+          class="group cursor-pointer"
+          @click="goToDesign(design.id)"
+        >
           <div class="relative overflow-hidden rounded-lg aspect-[3/4] mb-4 bg-gray-800">
             <img 
-              :src="productImages[0]" 
-              alt="Pantalón oversize"
+              v-if="design.image_url"
+              :src="design.image_url" 
+              :alt="design.name"
               class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
             />
+            <!-- Fallback for missing image -->
+            <div v-else class="w-full h-full flex items-center justify-center">
+              <span class="text-gray-500 text-6xl orbitron-variable" style="--orbitron-weight: 300;">?</span>
+            </div>
             <!-- Plus Icon Overlay -->
             <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/30">
               <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
                 <span class="text-white text-4xl font-light">+</span>
               </div>
             </div>
-          </div>
-          <div class="space-y-2">
-            <h3 class="text-xl font-bold orbitron-variable" style="--orbitron-weight: 600;">
-              Pantalón oversize
-            </h3>
-            <p class="text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
-              3 colores
-            </p>
-            <!-- Color Options -->
-            <div class="flex gap-2">
-              <div class="w-6 h-6 rounded-full bg-gray-300 border-2 border-white"></div>
-              <div class="w-6 h-6 rounded-full bg-amber-700 border-2 border-transparent"></div>
-              <div class="w-6 h-6 rounded-full bg-orange-400 border-2 border-transparent"></div>
-            </div>
-            <p class="text-lg font-bold orbitron-variable" style="--orbitron-weight: 600;">
-              $24.990
-            </p>
-          </div>
-        </div>
-
-        <!-- Product Card 2 -->
-        <div class="group cursor-pointer">
-          <div class="relative overflow-hidden rounded-lg aspect-[3/4] mb-4 bg-gray-800">
-            <img 
-              :src="productImages[1]" 
-              alt="Camisa Aplicaciones"
-              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-            />
-            <!-- Plus Icon Overlay -->
-            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/30">
-              <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                <span class="text-white text-4xl font-light">+</span>
-              </div>
+            <!-- Inactive Badge -->
+            <div v-if="!design.is_active" class="absolute top-4 right-4 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">
+              INACTIVO
             </div>
           </div>
           <div class="space-y-2">
             <h3 class="text-xl font-bold orbitron-variable" style="--orbitron-weight: 600;">
-              Camisa Aplicaciones
+              {{ design.name }}
             </h3>
-            <p class="text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
-              5 colores
+            <p v-if="design.description" class="text-sm text-gray-400 orbitron-variable line-clamp-2" style="--orbitron-weight: 400;">
+              {{ design.description }}
             </p>
-            <!-- Color Options -->
-            <div class="flex gap-2">
-              <div class="w-6 h-6 rounded-full bg-cyan-300 border-2 border-white"></div>
-              <div class="w-6 h-6 rounded-full bg-green-300 border-2 border-transparent"></div>
-              <div class="w-6 h-6 rounded-full bg-emerald-600 border-2 border-transparent"></div>
-              <div class="w-6 h-6 rounded-full bg-gray-800 border-2 border-transparent"></div>
-              <div class="w-6 h-6 rounded-full bg-purple-300 border-2 border-transparent"></div>
-            </div>
             <p class="text-lg font-bold orbitron-variable" style="--orbitron-weight: 600;">
-              $24.990
-            </p>
-          </div>
-        </div>
-
-        <!-- Product Card 3 -->
-        <div class="group cursor-pointer">
-          <div class="relative overflow-hidden rounded-lg aspect-[3/4] mb-4 bg-gray-800">
-            <img 
-              :src="productImages[2]" 
-              alt="Blazer XX"
-              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-            />
-            <!-- Plus Icon Overlay -->
-            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/30">
-              <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                <span class="text-white text-4xl font-light">+</span>
-              </div>
-            </div>
-          </div>
-          <div class="space-y-2">
-            <h3 class="text-xl font-bold orbitron-variable" style="--orbitron-weight: 600;">
-              Blazer XX
-            </h3>
-            <p class="text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
-              5 colores
-            </p>
-            <!-- Color Options -->
-            <div class="flex gap-2">
-              <div class="w-6 h-6 rounded-full bg-gray-300 border-2 border-white"></div>
-              <div class="w-6 h-6 rounded-full bg-gray-700 border-2 border-transparent"></div>
-            </div>
-            <p class="text-lg font-bold orbitron-variable" style="--orbitron-weight: 600;">
-              $24.990
+              {{ formatPrice(design.base_price) }}
             </p>
           </div>
         </div>
@@ -130,15 +112,36 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import NavigationBar from '@/components/NavigationBar.vue'
+import { useCatalogStore } from '@/stores/catalog'
 import bgImage from '@/assets/backgrounds/elemento-amarillo.png'
 
-// Placeholder images - replace with actual product images
-const productImages = [
-  new URL('@/assets/model-images/img1.jpg', import.meta.url).href,
-  new URL('@/assets/model-images/img2.jpg', import.meta.url).href,
-  new URL('@/assets/model-images/img3.jpg', import.meta.url).href,
-]
+const catalogStore = useCatalogStore()
+const router = useRouter()
+
+// Load designs on component mount
+onMounted(async () => {
+  await loadDesigns()
+})
+
+const loadDesigns = async () => {
+  await catalogStore.fetchDesigns()
+}
+
+const goToDesign = (id: number) => {
+  router.push(`/catalogo/${id}`)
+}
+
+// Format price as Chilean Peso
+const formatPrice = (price: number): string => {
+  return new Intl.NumberFormat('es-CL', {
+    style: 'currency',
+    currency: 'CLP',
+    minimumFractionDigits: 0
+  }).format(price)
+}
 </script>
 
 <style scoped>
