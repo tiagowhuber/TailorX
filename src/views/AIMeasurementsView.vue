@@ -129,15 +129,15 @@
               
               <div class="space-y-2">
                 <Label for="height" class="text-white font-medium">
-                  Altura (cm)
+                  Altura (mm)
                 </Label>
                 <Input 
                   id="height"
                   v-model.number="height"
                   type="number"
-                  placeholder="Ej: 170"
-                  min="100"
-                  max="250"
+                  placeholder="Ej: 1700"
+                  min="1000"
+                  max="2500"
                   class="bg-white/10 border-white/20 text-white placeholder:text-gray-500"
                 />
               </div>
@@ -176,7 +176,7 @@
               <!-- Info Note -->
               <div class="mb-6 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
                 <p class="text-sm text-gray-300">
-                  <strong>Precisión del sistema:</strong> Este sistema tiene un margen de error de aproximadamente ±3 cm. 
+                  <strong>Precisión del sistema:</strong> Este sistema tiene un margen de error de aproximadamente ±30 mm. 
                   Para resultados óptimos, siga las recomendaciones de fotografía.
                 </p>
               </div>
@@ -254,7 +254,7 @@
                     <CardTitle class="text-base text-white">{{ measurement.name }}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p class="text-3xl font-bold text-[#E3F450]">{{ measurement.value }} <span class="text-xl text-gray-400">cm</span></p>
+                    <p class="text-3xl font-bold text-[#E3F450]">{{ measurement.value }} <span class="text-xl text-gray-400">mm</span></p>
                   </CardContent>
                 </Card>
               </div>
@@ -283,7 +283,7 @@
             <!-- Precision Warning -->
             <div class="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
               <p class="text-sm text-gray-300">
-                <strong>Precisión del sistema:</strong> Este sistema tiene un margen de error de aproximadamente ±3 cm. 
+                <strong>Precisión del sistema:</strong> Este sistema tiene un margen de error de aproximadamente ±30 mm. 
                 Para patrones de costura profesionales, se recomienda validar con medidas manuales.
               </p>
             </div>
@@ -474,17 +474,18 @@ const calculateMeasurements = (heightValue: number, genderValue: string): Array<
     ? Math.round(heightValue * 0.50) 
     : Math.round(heightValue * 0.55)
 
+  // All values are already in mm (user inputs height in mm)
   return [
-    { name: 'Contorno de pecho/tórax', value: baseChest + getRealisticVariation(3) },
-    { name: 'Contorno de cintura', value: baseWaist + getRealisticVariation(3) },
-    { name: 'Contorno de cadera', value: baseHip + getRealisticVariation(3) },
-    { name: 'Ancho de hombros', value: Math.round(heightValue * 0.26) + getRealisticVariation(2) },
-    { name: 'Largo de torso', value: Math.round(heightValue * 0.30) + getRealisticVariation(2) },
-    { name: 'Alto de sisa', value: Math.round(heightValue * 0.18) + getRealisticVariation(2) },
-    { name: 'Largo de brazo', value: Math.round(heightValue * 0.35) + getRealisticVariation(2) },
-    { name: 'Contorno de brazo', value: Math.round(heightValue * 0.16) + getRealisticVariation(2) },
-    { name: 'Largo lateral', value: Math.round(heightValue * 0.40) + getRealisticVariation(2) },
-    { name: 'Largo total de prenda', value: Math.round(heightValue * 0.60) + getRealisticVariation(3) }
+    { name: 'Contorno de pecho/tórax', value: baseChest + getRealisticVariation(30) },
+    { name: 'Contorno de cintura', value: baseWaist + getRealisticVariation(30) },
+    { name: 'Contorno de cadera', value: baseHip + getRealisticVariation(30) },
+    { name: 'Ancho de hombros', value: Math.round(heightValue * 0.26) + getRealisticVariation(20) },
+    { name: 'Largo de torso', value: Math.round(heightValue * 0.30) + getRealisticVariation(20) },
+    { name: 'Alto de sisa', value: Math.round(heightValue * 0.18) + getRealisticVariation(20) },
+    { name: 'Largo de brazo', value: Math.round(heightValue * 0.35) + getRealisticVariation(20) },
+    { name: 'Contorno de brazo', value: Math.round(heightValue * 0.16) + getRealisticVariation(20) },
+    { name: 'Largo lateral', value: Math.round(heightValue * 0.40) + getRealisticVariation(20) },
+    { name: 'Largo total de prenda', value: Math.round(heightValue * 0.60) + getRealisticVariation(30) }
   ]
 }
 

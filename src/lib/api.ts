@@ -11,6 +11,13 @@ import type {
   DesignResponse,
   DesignMeasurementsResponse
 } from '@/types/design.types'
+import type {
+  Pattern,
+  GeneratePatternRequest,
+  PatternsResponse,
+  PatternResponse,
+  UpdatePatternRequest
+} from '@/types/pattern.types'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api',
@@ -97,6 +104,59 @@ export const designsApi = {
   // Get required measurements for a design (public endpoint)
   getDesignMeasurements: async (id: number) => {
     const response = await api.get<DesignMeasurementsResponse>(`/designs/${id}/measurements`)
+    return response.data
+  },
+}
+
+// Pattern API functions
+export const patternsApi = {
+  // Generate a new pattern
+  generatePattern: async (data: GeneratePatternRequest) => {
+    const response = await api.post<PatternResponse>('/patterns/generate', data)
+    return response.data
+  },
+
+  // Get user's patterns
+  getUserPatterns: async (userId: number) => {
+    const response = await api.get<PatternsResponse>(`/patterns/user/${userId}`)
+    return response.data
+  },
+
+  // Get pattern by ID
+  getPatternById: async (id: number) => {
+    const response = await api.get<PatternResponse>(`/patterns/${id}`)
+    return response.data
+  },
+
+  // Get pattern SVG
+  getPatternSvg: async (id: number) => {
+    const response = await api.get<string>(`/patterns/${id}/svg`, {
+      headers: { 'Accept': 'image/svg+xml' }
+    })
+    return response.data
+  },
+
+  // Update pattern
+  updatePattern: async (id: number, data: UpdatePatternRequest) => {
+    const response = await api.put<PatternResponse>(`/patterns/${id}`, data)
+    return response.data
+  },
+
+  // Finalize pattern
+  finalizePattern: async (id: number) => {
+    const response = await api.put<PatternResponse>(`/patterns/${id}/finalize`)
+    return response.data
+  },
+
+  // Archive pattern
+  archivePattern: async (id: number) => {
+    const response = await api.put<PatternResponse>(`/patterns/${id}/archive`)
+    return response.data
+  },
+
+  // Delete pattern
+  deletePattern: async (id: number) => {
+    const response = await api.delete<{ success: boolean }>(`/patterns/${id}`)
     return response.data
   },
 }

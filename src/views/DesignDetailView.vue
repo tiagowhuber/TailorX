@@ -105,7 +105,7 @@
                   {{ measurement.measurementType.description }}
                 </p>
                 <p class="text-xs text-lime-400 mt-1">
-                  {{ measurement.measurementType?.unit }}
+                  mm
                 </p>
               </div>
             </div>
@@ -192,6 +192,19 @@
 
     <!-- Gradient Spotlight Effect -->
     <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-[1200px] h-[400px] bg-gradient-radial from-lime-400/20 via-yellow-300/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+
+    <!-- Pattern Generation Modal -->
+    <PatternGenerationModal
+      :is-open="modalOpen"
+      :state="modalState"
+      :message="modalMessage"
+      :missing-measurements="modalMissingMeasurements"
+      :on-close="handleModalClose"
+      :on-view-pattern="handleViewPattern"
+      :on-retry="handleRetryGeneration"
+      :on-add-measurements="handleAddMeasurements"
+      :allow-backdrop-close="false"
+    />
   </div>
 </template>
 
@@ -199,17 +212,32 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import NavigationBar from '@/components/NavigationBar.vue'
+import PatternGenerationModal from '@/components/PatternGenerationModal.vue'
 import { useCatalogStore } from '@/stores/catalog'
 import { useAuthStore } from '@/stores/auth'
+import { usePatternsStore } from '@/stores/patterns'
 import type { DesignMeasurement } from '@/types/design.types'
 import bgImage from '@/assets/backgrounds/elemento-amarillo.png'
 
 const catalogStore = useCatalogStore()
 const authStore = useAuthStore()
+const patternsStore = usePatternsStore()
 const router = useRouter()
 const route = useRoute()
 
 const measurements = ref<DesignMeasurement[]>([])
+
+// Modal state
+const modalOpen = ref(false)
+const modalState = ref<'generating' | 'success' | 'error' | 'missing-measurements'>('generating')
+const modalMessage = ref('')
+const modalMissingMeasurements = ref<Array<{
+  id: number
+  name: string
+  freesewing_key: string
+  unit: string
+}>>([])
+const generatedPatternId = ref<number | null>(null)
 
 // Get design from store
 const design = computed(() => catalogStore.selectedDesign)
@@ -240,18 +268,71 @@ const goBack = () => {
   router.push('/catalogo')
 }
 
-const customizeDesign = () => {
+const customizeDesign = async () => {
   if (!design.value?.is_active) return
   
   // Check if user is logged in
   if (!authStore.user) {
     // Redirect to login with return URL
-    router.push({ path: '/login', query: { redirect: `/catalogo/${design.value.id}/customize` } })
+    router.push({ path: '/login', query: { redirect: `/catalogo/${design.value.id}` } })
     return
   }
 
-  // TODO: Navigate to customization page (to be implemented)
-  router.push(`/catalogo/${design.value.id}/customize`)
+  // Open modal and start generation
+  modalOpen.value = true
+  modalState.value = 'generating'
+  modalMessage.value = 'Generando tu patrón personalizado...'
+
+  // Generate the pattern
+  const result = await patternsStore.generatePattern(authStore.user.id, design.value.id)
+
+  if (result.success && result.data) {
+    // Success!
+    generatedPatternId.value = result.data.id
+    modalState.value = 'success'
+    modalMessage.value = `Tu patrón "${result.data.name}" ha sido generado exitosamente.`
+  } else if (result.missing_measurements) {
+    // Missing measurements
+    modalState.value = 'missing-measurements'
+    modalMessage.value = result.message || 'Faltan medidas requeridas para este diseño.'
+    modalMissingMeasurements.value = result.missing_measurements
+  } else {
+    // Error
+    modalState.value = 'error'
+    modalMessage.value = result.message || 'Ocurrió un error al generar el patrón.'
+  }
+}
+
+const handleModalClose = () => {
+  modalOpen.value = false
+  // Reset modal state after animation
+  setTimeout(() => {
+    modalState.value = 'generating'
+    modalMessage.value = ''
+    modalMissingMeasurements.value = []
+    generatedPatternId.value = null
+  }, 300)
+}
+
+const handleViewPattern = () => {
+  if (generatedPatternId.value) {
+    router.push(`/patrones/${generatedPatternId.value}`)
+  }
+  handleModalClose()
+}
+
+const handleRetryGeneration = () => {
+  handleModalClose()
+  // Retry after modal closes
+  setTimeout(() => {
+    customizeDesign()
+  }, 400)
+}
+
+const handleAddMeasurements = () => {
+  handleModalClose()
+  // Navigate to measurements page
+  router.push('/medidas')
 }
 
 const viewMeasurements = () => {

@@ -166,7 +166,7 @@
               <div class="flex items-start gap-3">
                 <AlertCircle class="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
                 <div class="text-sm text-gray-300">
-                  <p class="font-semibold mb-1">Todas las medidas deben ingresarse en centímetros (cm)</p>
+                  <p class="font-semibold mb-1">Todas las medidas deben ingresarse en milímetros (mm)</p>
                   <p>Tus medidas son utilizadas para generar patrones personalizados de confección.</p>
                 </div>
               </div>
@@ -240,7 +240,7 @@
                 <CardContent class="space-y-2">
                   <div class="space-y-2">
                     <Label :for="`measure-${type.id}`" class="text-gray-300 text-sm">
-                      Valor (cm)
+                      Valor (mm)
                     </Label>
                     <div class="relative">
                       <Input 
@@ -260,7 +260,7 @@
                         @input="() => validateMeasurement(type.id)"
                       />
                       <span v-if="getMeasurementValue(type.id) !== null && !isEditMode" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
-                        cm
+                        mm
                       </span>
                     </div>
                     

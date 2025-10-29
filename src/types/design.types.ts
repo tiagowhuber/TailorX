@@ -4,7 +4,6 @@ export interface MeasurementType {
   id: number
   name: string
   description?: string
-  unit: string
   created_at?: string
   updated_at?: string
 }
