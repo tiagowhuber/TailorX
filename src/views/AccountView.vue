@@ -7,103 +7,12 @@
     <div class="relative pt-20 min-h-screen">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        <!-- Mobile Navigation Bar (horizontal) -->
-        <div class="lg:hidden mb-6 overflow-x-auto">
-          <div class="flex gap-2 min-w-max pb-2">
-            <button
-              @click="activeSection = 'general'"
-              :class="[
-                'px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap border',
-                activeSection === 'general' 
-                  ? 'bg-white text-black border-white' 
-                  : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
-              ]"
-            >
-              General
-            </button>
-            <button
-              @click="router.push({ name: 'catalogo' })"
-              class="px-4 py-2 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors whitespace-nowrap"
-            >
-              Ver Catálogo
-            </button>
-            <button
-              @click="router.push({ name: 'measurements' })"
-              class="px-4 py-2 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors whitespace-nowrap"
-            >
-              Mis Medidas
-            </button>
-            <button
-              class="px-4 py-2 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors whitespace-nowrap"
-            >
-              Mis Pedidos
-            </button>
-            <button
-              @click="showEditProfile = true"
-              class="px-4 py-2 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors whitespace-nowrap"
-            >
-              Editar Perfil
-            </button>
-          </div>
-        </div>
-
         <div class="flex flex-col lg:flex-row gap-10">
-          <!-- Sidebar (Desktop) -->
-            <aside class="hidden lg:block w-50 flex-shrink-0 lg:mt-5">
-            <nav class="space-y-1">
-              <button
-                @click="activeSection = 'general'"
-                :class="[
-                  'w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors border cursor-pointer',
-                  activeSection === 'general' 
-                    ? 'bg-white text-black border-white' 
-                    : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
-                ]"
-              >
-                General
-              </button>
-              
-              <Separator class="bg-white/10 my-4" />
-              
-              <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Acciones Rápidas
-              </div>
-              
-              
-              <button
-                @click="router.push({ name: 'measurements' })"
-                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors cursor-pointer"
-              >
-                <Ruler class="inline-block mr-2 h-4 w-4 text-[#E3F450]" />
-                Mis Medidas
-              </button>
-              
-              <button
-                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors cursor-pointer"
-              >
-                <ShoppingBag class="inline-block mr-2 h-4 w-4 text-[#E3F450]" />
-                Mis Pedidos
-              </button>
-              
-              <Separator class="bg-white/10 my-4" />
-              
-              <button
-                @click="showEditProfile = true"
-                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors cursor-pointer"
-              >
-                <Settings class="inline-block mr-2 h-4 w-4 text-[#E3F450]" />
-                Editar Perfil
-              </button>
-              
-              <button
-                @click="handleLogout"
-                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors cursor-pointer"
-              >
-                <LogOut class="inline-block mr-2 h-4 w-4 text-[#E3F450]" />
-                Cerrar Sesión
-              </button>
-            </nav>
-          </aside>
+          <!-- Sidebar -->
+          <AccountSidebar 
+            active-section="account" 
+            @edit-profile="showEditProfile = true"
+          />
 
           <!-- Main Content Area -->
           <main class="flex-1 min-w-0">
@@ -151,18 +60,6 @@
                 </div>
               </CardContent>
             </Card>
-
-            <!-- Logout Button Mobile -->
-            <div class="lg:hidden mt-6">
-              <Button 
-                @click="handleLogout"
-                variant="outline"
-                class="w-full border-white/20 text-white hover:bg-white/5"
-              >
-                <LogOut class="mr-2 h-4 w-4" />
-                Cerrar Sesión
-              </Button>
-            </div>
           </main>
         </div>
       </div>
@@ -281,7 +178,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { LogOut, Settings, Upload, Trash2, Ruler, ShoppingBag } from 'lucide-vue-next'
+import { Upload, Trash2 } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -295,11 +192,11 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import NavigationBar from '@/components/NavigationBar.vue'
+import AccountSidebar from '@/components/AccountSidebar.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
 
-const activeSection = ref('general')
 const showEditProfile = ref(false)
 const editError = ref('')
 const isUpdating = ref(false)
@@ -336,11 +233,6 @@ const formatDate = (dateString?: string) => {
     month: 'long', 
     day: 'numeric' 
   })
-}
-
-const handleLogout = async () => {
-  await authStore.logout()
-  router.push('/login')
 }
 
 const handleUpdateProfile = async () => {

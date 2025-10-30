@@ -3,6 +3,7 @@ import HomeView from '@/views/HomeView.vue'
 import CatalogoView from '@/views/CatalogoView.vue'
 import DesignDetailView from '@/views/DesignDetailView.vue'
 import PatternView from '@/views/PatternView.vue'
+import PatternListView from '@/views/PatternListView.vue'
 import CreateAccountView from '@/views/CreateAccountView.vue'
 import LoginView from '@/views/LoginView.vue'
 import AccountView from '@/views/AccountView.vue'
@@ -32,6 +33,12 @@ const router = createRouter({
       path: '/patrones/:id',
       name: 'pattern-view',
       component: PatternView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/patrones',
+      name: 'patterns',
+      component: PatternListView,
       meta: { requiresAuth: true }
     },
     {
