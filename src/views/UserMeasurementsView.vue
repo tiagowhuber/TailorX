@@ -106,7 +106,7 @@
                     <Button 
                       @click="router.push({ name: 'ai-measurements' })"
                       variant="outline"
-                      class="px-8 py-3 border-white/20 text-white hover:bg-white/10"
+                      class="px-8 py-3 border-white/20 text-black hover:bg-white/10"
                     >
                       <Sparkles class="mr-2 h-5 w-5" />
                       Obtener con IA

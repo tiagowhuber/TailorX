@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+  <div class="min-h-screen bg-black">
     <div class="container mx-auto px-4 py-8">
       <!-- Loading State -->
       <div v-if="loading" class="flex items-center justify-center min-h-[60vh]">

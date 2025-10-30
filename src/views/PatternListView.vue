@@ -90,7 +90,7 @@
               <Button
                 @click="router.push({ name: 'catalogo' })"
                 variant="outline"
-                class="border-[#E3F450] text-[#E3F450] hover:bg-[#E3F450]/10"
+                class="text-black hover:bg-white/80"
               >
                 <Plus class="mr-2 h-4 w-4" />
                 Generar mi Primer Patrón
@@ -191,7 +191,7 @@
             v-if="selectedPatternForMenu.status === 'draft'"
             @click="finalizeSelectedPattern"
             variant="outline"
-            class="w-full justify-start border-white/20 text-white hover:bg-white/5"
+            class="w-full justify-start border-white/20 text-black hover:bg-white/75"
           >
             <Check class="mr-2 h-4 w-4" />
             Finalizar Patrón
@@ -201,7 +201,7 @@
             v-if="selectedPatternForMenu.status !== 'archived'"
             @click="archiveSelectedPattern"
             variant="outline"
-            class="w-full justify-start border-white/20 text-white hover:bg-white/5"
+            class="w-full justify-start border-white/20 text-black hover:bg-white/75"
           >
             <Archive class="mr-2 h-4 w-4" />
             Archivar Patrón
@@ -210,7 +210,7 @@
           <Button
             @click="downloadPattern(selectedPatternForMenu)"
             variant="outline"
-            class="w-full justify-start border-white/20 text-white hover:bg-white/5"
+            class="w-full justify-start border-white/20 text-black hover:bg-white/75"
           >
             <Download class="mr-2 h-4 w-4" />
             Descargar Patrón
@@ -221,7 +221,7 @@
           <Button
             @click="deleteSelectedPattern"
             variant="outline"
-            class="w-full justify-start border-red-500/50 text-red-400 hover:bg-red-500/10"
+            class="w-full justify-start border-red-500/50 text-red-400 hover:bg-red-500/40"
           >
             <Trash2 class="mr-2 h-4 w-4" />
             Eliminar Patrón
@@ -230,7 +230,7 @@
           <Button
             @click="closePatternMenu"
             variant="outline"
-            class="w-full justify-start border-white/20 text-white hover:bg-white/5 mt-4"
+            class="w-full justify-start border-white/20 text-black hover:bg-white/75 mt-4"
           >
             Cancelar
           </Button>

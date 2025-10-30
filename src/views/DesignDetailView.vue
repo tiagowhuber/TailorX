@@ -1,6 +1,5 @@
 <template>
-  <div class="min-h-screen bg-black text-white"
-    :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'top 600px center', backgroundRepeat: 'no-repeat' }">
+  <div class="min-h-screen bg-black text-white">
     <!-- Navigation Header -->
     <NavigationBar />
 
@@ -217,7 +216,6 @@ import { useCatalogStore } from '@/stores/catalog'
 import { useAuthStore } from '@/stores/auth'
 import { usePatternsStore } from '@/stores/patterns'
 import type { DesignMeasurement } from '@/types/design.types'
-import bgImage from '@/assets/backgrounds/elemento-amarillo.png'
 
 const catalogStore = useCatalogStore()
 const authStore = useAuthStore()
