@@ -12,7 +12,7 @@ import type {
   DesignMeasurementsResponse
 } from '@/types/design.types'
 import type {
-  Pattern,
+  //Pattern,
   GeneratePatternRequest,
   PatternsResponse,
   PatternResponse,
