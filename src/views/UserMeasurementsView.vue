@@ -150,15 +150,26 @@
                       <CardHeader class="pb-3">
                         <CardTitle class="text-lg font-bold text-white flex items-center justify-between">
                           {{ type.name }}
-                          <Button
-                            v-if="!isEditMode && getMeasurementValue(type.id) !== null"
-                            @click="() => openDeleteDialog(type)"
-                            variant="ghost"
-                            size="icon"
-                            class="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-red-500/10"
-                          >
-                            <Trash2 class="h-4 w-4" />
-                          </Button>
+                          <div class="flex items-center gap-1">
+                            <Button
+                              v-if="hasGuideImage(type.id)"
+                              @click="() => openImageDialog(type)"
+                              variant="ghost"
+                              size="icon"
+                              class="h-8 w-8 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10"
+                            >
+                              <HelpCircle class="h-4 w-4" />
+                            </Button>
+                            <Button
+                              v-if="!isEditMode && getMeasurementValue(type.id) !== null"
+                              @click="() => openDeleteDialog(type)"
+                              variant="ghost"
+                              size="icon"
+                              class="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                            >
+                              <Trash2 class="h-4 w-4" />
+                            </Button>
+                          </div>
                         </CardTitle>
                         <CardDescription v-if="type.description" class="text-gray-400 text-sm">
                           {{ type.description }}
@@ -219,6 +230,35 @@
       </div>
     </div>
 
+    <!-- Measurement Guide Image Dialog -->
+    <Dialog v-model:open="showImageDialog">
+      <DialogContent class="bg-gray-900 border-white/20 text-white max-w-3xl">
+        <DialogHeader>
+          <DialogTitle class="text-2xl font-bold">{{ selectedMeasurementType?.name }}</DialogTitle>
+          <DialogDescription v-if="selectedMeasurementType?.description" class="text-gray-400">
+            {{ selectedMeasurementType.description }}
+          </DialogDescription>
+        </DialogHeader>
+        <div class="mt-4">
+          <img 
+            v-if="selectedMeasurementType"
+            :src="getGuideImagePath(selectedMeasurementType.id)" 
+            :alt="`Guía de medición para ${selectedMeasurementType.name}`"
+            class="w-full h-auto rounded-lg border border-white/10"
+          />
+        </div>
+        <DialogFooter>
+          <Button
+            @click="showImageDialog = false"
+            variant="outline"
+            class="border-white/20 text-black hover:bg-white/10"
+          >
+            Cerrar
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+
     <!-- Delete Confirmation Dialog -->
     <Dialog v-model:open="showDeleteDialog">
       <DialogContent class="bg-gray-900 border-white/20 text-white">
@@ -258,7 +298,7 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useMeasurementsStore } from '@/stores/measurements'
 import type { MeasurementType } from '@/types/measurements.types'
-import { Edit, Save, X, Trash2, Ruler, CheckCircle, AlertCircle, Sparkles } from 'lucide-vue-next'
+import { Edit, Save, X, Trash2, Ruler, CheckCircle, AlertCircle, Sparkles, HelpCircle } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -292,6 +332,8 @@ const validationErrors = reactive<Record<number, string>>({})
 const successMessage = ref('')
 const showDeleteDialog = ref(false)
 const measurementToDelete = ref<MeasurementType | null>(null)
+const showImageDialog = ref(false)
+const selectedMeasurementType = ref<MeasurementType | null>(null)
 
 // Computed
 const hasChanges = computed(() => {
@@ -307,6 +349,22 @@ const hasChanges = computed(() => {
     return editedValue !== originalValue
   })
 })
+
+// Helper functions for measurement guide images
+const availableGuideImages = [1, 2, 3, 4, 5, 6, 7, 8, 10] // Image 9 is missing
+
+const hasGuideImage = (measurementTypeId: number): boolean => {
+  return availableGuideImages.includes(measurementTypeId)
+}
+
+const getGuideImagePath = (measurementTypeId: number): string => {
+  return new URL(`../assets/measurement-guides/${measurementTypeId}.png`, import.meta.url).href
+}
+
+const openImageDialog = (type: MeasurementType) => {
+  selectedMeasurementType.value = type
+  showImageDialog.value = true
+}
 
 // Methods
 const loadData = async () => {
