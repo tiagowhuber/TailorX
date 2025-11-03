@@ -86,8 +86,61 @@
             </p>
           </div>
 
+          <!-- User Patterns Section -->
+          <div v-if="authStore.user && userPatternsForDesign.length > 0" class="border-t border-gray-800 pt-12 mt-12">
+            <h2 class="text-2xl font-black mb-8 orbitron-variable" style="--orbitron-weight: 600;">
+              Tus Patrones Para Este Diseño
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6">
+              <div 
+                v-for="pattern in userPatternsForDesign" 
+                :key="pattern.id"
+                @click="router.push(`/patrones/${pattern.id}`)"
+                class="bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-lime-400/50 transition-all cursor-pointer group"
+              >
+                <div class="space-y-4">
+                  <!-- Pattern Name -->
+                  <h3 class="text-xl font-bold orbitron-variable group-hover:text-lime-400 transition-colors" style="--orbitron-weight: 600;">
+                    {{ pattern.name || `Patrón #${pattern.id}` }}
+                  </h3>
+                  
+                  <!-- Status Badge -->
+                  <div class="flex items-center gap-2">
+                    <span 
+                      :class="{
+                        'bg-yellow-500/20 text-yellow-400': pattern.status === 'draft',
+                        'bg-green-500/20 text-green-400': pattern.status === 'finalized'
+                      }"
+                      class="px-3 py-1 rounded-full text-xs font-bold orbitron-variable"
+                      style="--orbitron-weight: 600;"
+                    >
+                      {{ pattern.status === 'draft' ? 'BORRADOR' : 'FINALIZADO' }}
+                    </span>
+                  </div>
+
+                  <!-- Date -->
+                  <p class="text-sm text-gray-500 orbitron-variable" style="--orbitron-weight: 400;">
+                    Creado: {{ formatDate(pattern.created_at) }}
+                  </p>
+
+                  <!-- SVG Size -->
+                  <p v-if="pattern.svg_size_kb && typeof pattern.svg_size_kb === 'number'" class="text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
+                    Tamaño: {{ pattern.svg_size_kb.toFixed(2) }} KB
+                  </p>
+
+                  <!-- View Button -->
+                  <div class="pt-2">
+                    <span class="text-lime-400 text-sm font-bold orbitron-variable group-hover:underline" style="--orbitron-weight: 600;">
+                      Ver patrón →
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      
           <!-- Required Measurements -->
-          <div v-if="measurements.length > 0" class="space-y-4">
+          <div v-if="measurements.length > 0" class="space-y-4 border-t border-gray-800 pt-12 mt-12">
             <h2 class="text-xl font-bold orbitron-variable" style="--orbitron-weight: 600;">
               Medidas Requeridas
             </h2>
@@ -140,7 +193,7 @@
           </div>
         </div>
       </div>
-
+      
       <!-- Additional Information Section -->
       <div class="border-t border-gray-800 pt-12">
         <h2 class="text-3xl font-black mb-8" style="font-family: 'Avenir Next', sans-serif;">
@@ -187,6 +240,7 @@
           </div>
         </div>
       </div>
+
     </main>
 
     <!-- Gradient Spotlight Effect -->
@@ -224,6 +278,7 @@ const router = useRouter()
 const route = useRoute()
 
 const measurements = ref<DesignMeasurement[]>([])
+const userPatternsForDesign = ref<any[]>([])
 
 // Modal state
 const modalOpen = ref(false)
@@ -242,6 +297,7 @@ const design = computed(() => catalogStore.selectedDesign)
 
 onMounted(async () => {
   await loadDesign()
+  await loadUserPatterns()
 })
 
 const loadDesign = async () => {
@@ -260,6 +316,21 @@ const loadDesign = async () => {
       measurements.value = measurementsResult.data || []
     }
   }
+}
+
+const loadUserPatterns = async () => {
+  if (!authStore.user) return
+  
+  const designId = parseInt(route.params.id as string)
+  if (!designId) return
+
+  // Fetch all user patterns
+  await patternsStore.fetchUserPatterns(authStore.user.id)
+  
+  // Filter patterns for this design
+  userPatternsForDesign.value = patternsStore.patterns.filter(
+    pattern => pattern.design_id === designId && pattern.status !== 'archived'
+  )
 }
 
 const goBack = () => {
@@ -289,6 +360,8 @@ const customizeDesign = async () => {
     generatedPatternId.value = result.data.id
     modalState.value = 'success'
     modalMessage.value = `Tu patrón "${result.data.name}" ha sido generado exitosamente.`
+    // Refresh the patterns list
+    await loadUserPatterns()
   } else if (result.missing_measurements) {
     // Missing measurements
     modalState.value = 'missing-measurements'
@@ -350,6 +423,17 @@ const formatPrice = (price: number): string => {
     currency: 'CLP',
     minimumFractionDigits: 0
   }).format(price)
+}
+
+// Format date
+const formatDate = (dateString?: string): string => {
+  if (!dateString) return 'N/A'
+  const date = new Date(dateString)
+  return new Intl.DateTimeFormat('es-CL', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(date)
 }
 </script>
 
