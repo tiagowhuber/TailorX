@@ -232,7 +232,7 @@
 
     <!-- Measurement Guide Image Dialog -->
     <Dialog v-model:open="showImageDialog">
-      <DialogContent class="bg-gray-900 border-white/20 text-white max-w-3xl">
+      <DialogContent class="bg-black/90 border-white/20 text-white max-w-3xl">
         <DialogHeader>
           <DialogTitle class="text-2xl font-bold">{{ selectedMeasurementType?.name }}</DialogTitle>
           <DialogDescription v-if="selectedMeasurementType?.description" class="text-gray-400">
@@ -261,7 +261,7 @@
 
     <!-- Delete Confirmation Dialog -->
     <Dialog v-model:open="showDeleteDialog">
-      <DialogContent class="bg-gray-900 border-white/20 text-white">
+      <DialogContent class="bg-black border-white/20 text-white">
         <DialogHeader>
           <DialogTitle class="text-xl font-bold">Eliminar Medida</DialogTitle>
           <DialogDescription class="text-gray-400">
@@ -273,7 +273,7 @@
           <Button
             @click="showDeleteDialog = false"
             variant="outline"
-            class="border-white/20 text-white hover:bg-white/5"
+            class="border-white/20 text-black hover:bg-white/50"
           >
             Cancelar
           </Button>
@@ -281,7 +281,7 @@
             @click="confirmDelete"
             :disabled="measurementsStore.loading"
             variant="outline"
-            class="border-red-500/50 text-red-400 hover:bg-red-500/10 hover:border-red-500"
+            class="border-red-500/50 text-red-400 hover:bg-red-500/50 hover:border-red-500"
           >
             <Trash2 class="mr-2 h-4 w-4" />
             {{ measurementsStore.loading ? 'Eliminando...' : 'Eliminar' }}

@@ -1,14 +1,14 @@
 <template>
+  <!-- Navigation Header - Outside scrollable content -->
+  <NavigationBar />
+  
   <div 
-    class="min-h-screen bg-black text-white overflow-hidden relative" 
+    class="min-h-screen bg-black text-white relative" 
     :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }"
   >
     <!-- Background spotlight effect -->
     <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-lime-400/30 via-yellow-300/20 to-transparent rounded-full blur-3xl transform translate-x-32 -translate-y-32"></div>
     <div class="absolute top-32 right-16 w-64 h-64 bg-gradient-radial from-lime-300/40 via-yellow-200/30 to-transparent rounded-full blur-2xl"></div>
-    
-    <!-- Navigation Header -->
-    <NavigationBar />
     
     <!-- Main Content -->
     <main class="relative z-10 flex items-center justify-center min-h-[calc(100vh-120px)] px-8">
@@ -55,7 +55,7 @@
 
   <!-- Yellow Dude Section -->
   <div 
-    class="h-200 bg-black text-white overflow-hidden relative" 
+    class="h-200 bg-black text-white relative" 
     :style="{ backgroundImage: `url(${yellowDude})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }"
   >
     <div class="absolute inset-0 flex items-center justify-center">
@@ -176,7 +176,7 @@
 
   <!-- World Section -->
   <div 
-    class="min-h-screen bg-black text-white overflow-hidden relative flex items-center justify-center py-120 px-8" 
+    class="min-h-screen bg-black text-white relative flex items-center justify-center py-120 px-8" 
     :style="{ backgroundImage: `url(${worldBg})`, backgroundSize: 'contain', backgroundPosition: 'right center', backgroundRepeat: 'no-repeat' }"
   >
     <div class="max-w-6xl mx-auto w-full text-center relative z-10">
@@ -207,7 +207,7 @@
 
   <!-- Last Section -->
   <div 
-    class="min-h-screen bg-black text-white overflow-hidden relative z-200 flex flex-col items-center justify-center py-20 px-8" 
+    class="min-h-screen bg-black text-white relative z-200 flex flex-col items-center justify-center py-20 px-8" 
     :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'top 300px center', backgroundRepeat: 'no-repeat' }"
   >
     <!-- Gradient spotlight effect at bottom -->

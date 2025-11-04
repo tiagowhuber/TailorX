@@ -1,20 +1,9 @@
 <template>
-  <header 
+  <motion.header
     ref="headerRef"
-    class="flex justify-between items-center px-8 bg-black border-b border-white/10"
-    :style="{
-      position: scrollProgress > 0.1 ? 'fixed' : 'relative',
-      top: scrollProgress > 0.1 ? '0' : 'auto',
-      left: scrollProgress > 0.1 ? '0' : 'auto',
-      right: scrollProgress > 0.1 ? '0' : 'auto',
-      zIndex: scrollProgress > 0.1 ? '50' : '10',
-      paddingTop: `${1 - scrollProgress * 0.5}rem`,
-      paddingBottom: `${1 - scrollProgress * 0.5}rem`,
-      backgroundColor: `rgba(0, 0, 0, ${0.95 + scrollProgress * 0.05})`,
-      backdropFilter: scrollProgress > 0.1 ? `blur(${scrollProgress * 12}px)` : 'none',
-      boxShadow: scrollProgress > 0.1 ? `0 10px 30px rgba(0, 0, 0, ${scrollProgress * 0.3})` : 'none',
-      transition: 'position 0s'
-    }"
+    class="sticky top-0 left-0 right-0 z-50 flex justify-between items-center px-8 bg-black border-b border-white/10"
+    :animate="headerAnimate"
+    :transition="headerTransition"
   >
     <!-- Logo -->
     <router-link to="/" class="flex items-center">
@@ -29,33 +18,26 @@
     </router-link>
     
     <!-- Navigation Menu -->
-    <nav class="hidden md:flex space-x-8 text-base font-medium items-end">
-      <router-link 
-        to="/" 
-        class="nav-link"
-        :class="{ 'active': $route.path === '/' }"
-      >
-        Inicio
-      </router-link>
-      <a 
-        href="#" 
-        class="nav-link"
-      >
-        TailorX
-      </a>
-      <router-link 
-        to="/catalogo" 
-        class="nav-link"
-        :class="{ 'active': $route.path === '/catalogo' }"
-      >
-        Catálogo
-      </router-link>
-      <a 
-        href="#" 
-        class="nav-link"
-      >
-        Contacto
-      </a>
+    <nav class="hidden md:flex text-base font-medium items-end">
+      <div class="flex space-x-8">
+        <RouterLink
+          v-for="tab in tabs"
+          :key="tab.id"
+          :to="tab.to"
+          class="nav-link"
+          :class="{ active: activeTabId === tab.id }"
+        >
+          <span class="relative px-2 py-1 inline-block">
+            {{ tab.title }}
+            <motion.div
+              v-if="activeTabId === tab.id"
+              layout-id="nav-underline"
+              class="absolute left-0 right-0 -bottom-1 h-0.5 bg-[#E3F450] rounded"
+              :transition="underlineTransition"
+            />
+          </span>
+        </RouterLink>
+      </div>
     </nav>
     
     <!-- Social Media Icons & Profile -->
@@ -121,17 +103,18 @@
         </DropdownMenu>
       </template>
     </div>
-  </header>
+  </motion.header>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { User as UserIcon, LogOut, Ruler, FileText } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
+import { motion } from 'motion-v'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -181,6 +164,32 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
 
+// Tabs config for the nav underline animation
+const tabs = [
+  { id: 'home', title: 'Inicio', to: '/' },
+  { id: 'tailorx', title: 'TailorX', to: '/#tailorx' },
+  { id: 'catalogo', title: 'Catálogo', to: '/catalogo' },
+  { id: 'contacto', title: 'Contacto', to: '/#contacto' },
+]
+
+const activeTabId = computed(() => {
+  const path = router.currentRoute.value.path
+  if (path === '/catalogo') return 'catalogo'
+  if (path === '/') return 'home'
+  return tabs.find(t => t.to === path)?.id || 'home'
+})
+
+// motion-v animation configs
+const headerAnimate = computed(() => ({
+  paddingTop: `${1 - scrollProgress.value * 0.5}rem`,
+  paddingBottom: `${1 - scrollProgress.value * 0.5}rem`,
+  backdropFilter: scrollProgress.value > 0.1 ? `blur(${scrollProgress.value * 12}px)` : 'none',
+  boxShadow: scrollProgress.value > 0.1 ? `0 10px 30px rgba(0, 0, 0, ${scrollProgress.value * 0.3})` : 'none',
+}))
+
+const headerTransition = { type: 'spring' as const, stiffness: 500, damping: 40 }
+const underlineTransition = { type: 'spring' as const, stiffness: 700, damping: 35 }
+
 const getInitials = () => {
   const firstName = authStore.user?.first_name || '';
   const lastName = authStore.user?.last_name || '';
@@ -218,15 +227,5 @@ const handleLogout = async () => {
 
 .nav-link.active {
   color: rgba(255, 255, 255, 1);
-}
-
-.nav-link.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background-color: #E3F450;
 }
 </style>

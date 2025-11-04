@@ -71,7 +71,7 @@
             <h2 class="text-xl font-bold orbitron-variable" style="--orbitron-weight: 600;">
               Descripción
             </h2>
-            <p class="text-gray-300 leading-relaxed orbitron-variable" style="--orbitron-weight: 400;">
+            <p class="text-gray-300 leading-relaxed" style="font-family: 'Poppins', sans-serif;">
               {{ design.description }}
             </p>
           </div>
@@ -100,9 +100,9 @@
               >
                 <div class="space-y-4">
                   <!-- Pattern Name -->
-                  <h3 class="text-xl font-bold orbitron-variable group-hover:text-lime-400 transition-colors" style="--orbitron-weight: 600;">
-                    {{ pattern.name || `Patrón #${pattern.id}` }}
-                  </h3>
+                    <h3 class="text-xl font-bold group-hover:text-lime-400 transition-colors" style="font-family: 'Poppins', sans-serif;">
+                      {{ pattern.name ? pattern.name : `Patrón #${pattern.id}` }}
+                    </h3>
                   
                   <!-- Status Badge -->
                   <div class="flex items-center gap-2">
@@ -119,7 +119,7 @@
                   </div>
 
                   <!-- Date -->
-                  <p class="text-sm text-gray-500 orbitron-variable" style="--orbitron-weight: 400;">
+                  <p class="text-sm text-gray-500" style="--orbitron-weight: 400;">
                     Creado: {{ formatDate(pattern.created_at) }}
                   </p>
 
