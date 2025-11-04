@@ -178,17 +178,17 @@
                   
                     <div class="flex justify-center gap-2">
                       <Button
-                      v-if="pattern.status === 'finalized' && !cartStore.isInCart(pattern.id)"
+                      v-if="!cartStore.isInCart(pattern.id)"
                       variant="outline"
                       size="sm"
                       @click.stop="addToCart(pattern)"
                       class="flex-1 bg-[#E3F450] border-[#E3F450] text-black hover:bg-[#E3F450]/80"
                       >
                       <ShoppingCart class="mr-2 h-3 w-3" />
-                      Carrito
+                      Agregar al Carrito
                       </Button>
                       <Button
-                      v-else-if="pattern.status === 'finalized' && cartStore.isInCart(pattern.id)"
+                      v-else-if="cartStore.isInCart(pattern.id)"
                       variant="outline"
                       size="sm"
                       @click.stop="viewCart"
@@ -230,6 +230,16 @@
           >
             <Archive class="mr-2 h-4 w-4" />
             Archivar Patrón
+          </Button>
+          
+          <Button
+            v-if="selectedPatternForMenu.status === 'archived'"
+            @click="unarchiveSelectedPattern"
+            variant="outline"
+            class="w-full justify-start border-white/20 text-black hover:bg-white/75"
+          >
+            <ArchiveRestore class="mr-2 h-4 w-4" />
+            Desarchivar Patrón
           </Button>
           
           <Button
@@ -278,6 +288,7 @@ import {
   MoreVertical, 
   Check, 
   Archive, 
+  ArchiveRestore,
   Trash2,
   ShoppingCart
 } from 'lucide-vue-next'
@@ -364,7 +375,7 @@ const getStatusLabel = (status: string) => {
 }
 
 const viewPattern = (patternId: number) => {
-  router.push({ name: 'pattern', params: { id: patternId } })
+  router.push({ name: 'pattern-view', params: { id: patternId } })
 }
 
 const downloadPattern = (pattern: Pattern) => {
@@ -411,6 +422,17 @@ const archiveSelectedPattern = async () => {
     closePatternMenu()
   } else {
     alert(result.message || 'Error al archivar el patrón')
+  }
+}
+
+const unarchiveSelectedPattern = async () => {
+  if (!selectedPatternForMenu.value) return
+  
+  const result = await patternsStore.unarchivePattern(selectedPatternForMenu.value.id)
+  if (result.success) {
+    closePatternMenu()
+  } else {
+    alert(result.message || 'Error al desarchivar el patrón')
   }
 }
 

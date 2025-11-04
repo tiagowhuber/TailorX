@@ -177,6 +177,29 @@ export const usePatternsStore = defineStore('patterns', () => {
     }
   }
 
+  const unarchivePattern = async (id: number) => {
+    try {
+      const response = await patternsApi.unarchivePattern(id)
+      if (response.success) {
+        // Update in the list
+        const index = patterns.value.findIndex(p => p.id === id)
+        if (index !== -1 && response.data) {
+          patterns.value[index] = response.data
+        }
+        // Update selected if it's the same
+        if (selectedPattern.value?.id === id && response.data) {
+          selectedPattern.value = response.data
+        }
+        return { success: true, data: response.data }
+      } else {
+        return { success: false, message: 'Error al desarchivar el patrón' }
+      }
+    } catch (err: any) {
+      const message = err.response?.data?.message || 'Error de conexión'
+      return { success: false, message }
+    }
+  }
+
   const deletePattern = async (id: number) => {
     try {
       const response = await patternsApi.deletePattern(id)
@@ -226,6 +249,7 @@ export const usePatternsStore = defineStore('patterns', () => {
     updatePattern,
     finalizePattern,
     archivePattern,
+    unarchivePattern,
     deletePattern,
     clearError,
     clearSelectedPattern,

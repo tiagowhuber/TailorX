@@ -58,13 +58,6 @@ export const useCartStore = defineStore('cart', () => {
   // Actions
   const addToCart = async (pattern: Pattern): Promise<{ success: boolean; message: string }> => {
     try {
-      // Validate pattern status
-      if (pattern.status !== 'finalized') {
-        return {
-          success: false,
-          message: 'Solo puedes agregar patrones finalizados al carrito',
-        }
-      }
 
       // Resolve design info (may be missing on pattern)
       let designId = pattern.design_id

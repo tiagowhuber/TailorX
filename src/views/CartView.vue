@@ -26,7 +26,7 @@
                   v-if="cartStore.itemCount > 0"
                   @click="clearCartConfirm"
                   variant="outline"
-                  class="text-red-400 border-red-400/50 hover:bg-red-500/10"
+                  class="text-red-400 border-red-400/50 hover:bg-red-500/50"
                 >
                   <Trash2 class="mr-2 h-4 w-4" />
                   Vaciar Carrito

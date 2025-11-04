@@ -137,7 +137,7 @@
                       Ver patrón →
                     </button>
                     <button
-                      v-if="pattern.status === 'finalized' && !cartStore.isInCart(pattern.id)"
+                      v-if="!cartStore.isInCart(pattern.id)"
                       @click.stop="addToCart(pattern)"
                       class="flex items-center gap-2 px-3 py-2 bg-[#E3F450] text-black rounded-md font-bold hover:bg-[#E3F450]/80 transition-colors orbitron-variable text-sm"
                       style="--orbitron-weight: 600;"
@@ -146,7 +146,7 @@
                       Agregar
                     </button>
                     <button
-                      v-else-if="pattern.status === 'finalized' && cartStore.isInCart(pattern.id)"
+                      v-else-if="cartStore.isInCart(pattern.id)"
                       @click.stop="viewCart"
                       class="flex items-center gap-2 px-3 py-2 bg-[#E3F450] text-black rounded-md font-bold hover:bg-[#E3F450]/80 transition-colors orbitron-variable text-sm"
                       style="--orbitron-weight: 600;"

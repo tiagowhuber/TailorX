@@ -154,6 +154,12 @@ export const patternsApi = {
     return response.data
   },
 
+  // Unarchive pattern
+  unarchivePattern: async (id: number) => {
+    const response = await api.put<PatternResponse>(`/patterns/${id}/unarchive`)
+    return response.data
+  },
+
   // Delete pattern
   deletePattern: async (id: number) => {
     const response = await api.delete<{ success: boolean }>(`/patterns/${id}`)

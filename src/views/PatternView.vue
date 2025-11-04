@@ -57,7 +57,7 @@
           </div>
           <div class="flex gap-2">
             <button
-              v-if="pattern.status === 'finalized' && !cartStore.isInCart(pattern.id)"
+              v-if="!cartStore.isInCart(pattern.id)"
               @click="addToCart"
               class="px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F450]/80 transition-colors orbitron-variable flex items-center gap-2"
               style="--orbitron-weight: 600;"
@@ -66,7 +66,7 @@
               Agregar al Carrito
             </button>
             <button
-              v-else-if="pattern.status === 'finalized' && cartStore.isInCart(pattern.id)"
+              v-else-if="cartStore.isInCart(pattern.id)"
               @click="viewCart"
               class="px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F450]/80 transition-colors orbitron-variable flex items-center gap-2"
               style="--orbitron-weight: 600;"
