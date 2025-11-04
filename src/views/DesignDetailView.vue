@@ -95,8 +95,7 @@
               <div 
                 v-for="pattern in userPatternsForDesign" 
                 :key="pattern.id"
-                @click="router.push(`/patrones/${pattern.id}`)"
-                class="bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-lime-400/50 transition-all cursor-pointer group"
+                class="bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-lime-400/50 transition-all group"
               >
                 <div class="space-y-4">
                   <!-- Pattern Name -->
@@ -128,11 +127,33 @@
                     Tamaño: {{ pattern.svg_size_kb.toFixed(2) }} KB
                   </p>
 
-                  <!-- View Button -->
-                  <div class="pt-2">
-                    <span class="text-lime-400 text-sm font-bold orbitron-variable group-hover:underline" style="--orbitron-weight: 600;">
+                  <!-- Action Buttons -->
+                  <div class="pt-2 flex gap-2">
+                    <button
+                      @click="router.push(`/patrones/${pattern.id}`)"
+                      class="flex-1 text-lime-400 text-sm font-bold orbitron-variable hover:underline text-left"
+                      style="--orbitron-weight: 600;"
+                    >
                       Ver patrón →
-                    </span>
+                    </button>
+                    <button
+                      v-if="pattern.status === 'finalized' && !cartStore.isInCart(pattern.id)"
+                      @click.stop="addToCart(pattern)"
+                      class="flex items-center gap-2 px-3 py-2 bg-[#E3F450] text-black rounded-md font-bold hover:bg-[#E3F450]/80 transition-colors orbitron-variable text-sm"
+                      style="--orbitron-weight: 600;"
+                    >
+                      <ShoppingCart class="w-4 h-4" />
+                      Agregar
+                    </button>
+                    <button
+                      v-else-if="pattern.status === 'finalized' && cartStore.isInCart(pattern.id)"
+                      @click.stop="viewCart"
+                      class="flex items-center gap-2 px-3 py-2 bg-[#E3F450] text-black rounded-md font-bold hover:bg-[#E3F450]/80 transition-colors orbitron-variable text-sm"
+                      style="--orbitron-weight: 600;"
+                    >
+                      <ShoppingCart class="w-4 h-4" />
+                      Ver Carrito
+                    </button>
                   </div>
                 </div>
               </div>
@@ -269,11 +290,14 @@ import PatternGenerationModal from '@/components/PatternGenerationModal.vue'
 import { useCatalogStore } from '@/stores/catalog'
 import { useAuthStore } from '@/stores/auth'
 import { usePatternsStore } from '@/stores/patterns'
+import { useCartStore } from '@/stores/cart'
+import { ShoppingCart } from 'lucide-vue-next'
 import type { DesignMeasurement } from '@/types/design.types'
 
 const catalogStore = useCatalogStore()
 const authStore = useAuthStore()
 const patternsStore = usePatternsStore()
+const cartStore = useCartStore()
 const router = useRouter()
 const route = useRoute()
 
@@ -434,6 +458,20 @@ const formatDate = (dateString?: string): string => {
     month: 'long',
     day: 'numeric'
   }).format(date)
+}
+
+const addToCart = async (pattern: any) => {
+  const result = await cartStore.addToCart(pattern)
+  if (result.success) {
+    // Success feedback
+    console.log(result.message)
+  } else {
+    alert(result.message)
+  }
+}
+
+const viewCart = () => {
+  router.push('/carrito')
 }
 </script>
 

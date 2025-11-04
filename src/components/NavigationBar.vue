@@ -42,18 +42,36 @@
     
     <!-- Social Media Icons & Profile -->
     <div class="flex items-center space-x-3">
-      <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+      <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-[#E3F450] transition-colors">
         <TwitterSmallIcon />
       </a>
-      <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+      <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-[#E3F450] transition-colors">
         <FacebookSmallIcon />
       </a>
-      <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+      <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-[#E3F450] transition-colors">
         <InstagramSmallIcon />
       </a>
-      <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+      <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-[#E3F450] transition-colors">
         <WhatsAppSmallIcon />
       </a>
+
+      <!-- Cart Icon (only when authenticated and has items OR authenticated) -->
+      <template v-if="authStore.isAuthenticated && cartStore.itemCount > 0">
+        <Separator orientation="vertical" class="h-6 bg-white/30 mx-2" />
+        
+        <router-link 
+          to="/carrito" 
+          class="relative w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors"
+        >
+          <ShoppingCart class="w-5 h-5 text-white" />
+          <Badge 
+            v-if="cartStore.itemCount > 0" 
+            class="absolute -top-1 -right-1 min-w-[1.25rem] h-5 flex items-center justify-center px-1 bg-black text-white hover:bg-white/5"
+          >
+            {{ cartStore.itemCount > 99 ? '99+' : cartStore.itemCount }}
+          </Badge>
+        </router-link>
+      </template>
 
       <!-- Separator & Profile Dropdown (only when authenticated) -->
       <template v-if="authStore.isAuthenticated">
@@ -110,10 +128,12 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { User as UserIcon, LogOut, Ruler, FileText } from 'lucide-vue-next'
+import { useCartStore } from '@/stores/cart'
+import { User as UserIcon, LogOut, Ruler, FileText, ShoppingCart } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
+import { Badge } from '@/components/ui/badge'
 import { motion } from 'motion-v'
 import {
   DropdownMenu,
@@ -130,6 +150,7 @@ import InstagramSmallIcon from '@/components/icons/InstagramSmallIcon.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const cartStore = useCartStore()
 const headerRef = ref<HTMLElement | null>(null)
 const scrollProgress = ref(0)
 

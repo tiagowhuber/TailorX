@@ -159,7 +159,8 @@
                       variant="outline"
                       size="sm"
                       @click.stop="downloadPattern(pattern)"
-                      class="flex-1 bg-black border-white/20 text-white hover:bg-black/90"
+                      :class="pattern.status === 'finalized' ? 'flex-1' : 'flex-1'"
+                      class="bg-black border-white/20 text-white hover:bg-black/90"
                     >
                       <Download class="mr-2 h-3 w-3" />
                       Descargar
@@ -168,11 +169,35 @@
                       variant="outline"
                       size="sm"
                       @click.stop="viewPattern(pattern.id)"
-                      class="flex-1 border-[#E3F450] bg-black text-white hover:bg-black/90"
+                      :class="pattern.status === 'finalized' ? 'flex-1' : 'flex-1'"
+                      class="border-[#E3F450] bg-black text-white hover:bg-black/90"
                     >
                       Ver Detalles
                     </Button>
                   </div>
+                  
+                    <div class="flex justify-center gap-2">
+                      <Button
+                      v-if="pattern.status === 'finalized' && !cartStore.isInCart(pattern.id)"
+                      variant="outline"
+                      size="sm"
+                      @click.stop="addToCart(pattern)"
+                      class="flex-1 bg-[#E3F450] border-[#E3F450] text-black hover:bg-[#E3F450]/80"
+                      >
+                      <ShoppingCart class="mr-2 h-3 w-3" />
+                      Carrito
+                      </Button>
+                      <Button
+                      v-else-if="pattern.status === 'finalized' && cartStore.isInCart(pattern.id)"
+                      variant="outline"
+                      size="sm"
+                      @click.stop="viewCart"
+                      class="flex-1 bg-[#E3F450] border-lime-400 text-black hover:bg-[#E3F450]/80"
+                      >
+                      <ShoppingCart class="mr-2 h-3 w-3" />
+                      Ver Carrito
+                      </Button>
+                    </div>
                 </CardContent>
               </Card>
             </div>
@@ -245,6 +270,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { usePatternsStore } from '@/stores/patterns'
+import { useCartStore } from '@/stores/cart'
 import { 
   Plus, 
   FileText, 
@@ -252,7 +278,8 @@ import {
   MoreVertical, 
   Check, 
   Archive, 
-  Trash2
+  Trash2,
+  ShoppingCart
 } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -270,9 +297,11 @@ import type { Pattern } from '@/types/pattern.types'
 const router = useRouter()
 const authStore = useAuthStore()
 const patternsStore = usePatternsStore()
+const cartStore = useCartStore()
 
 const activeTab = ref<'all' | 'draft' | 'finalized' | 'archived'>('all')
 const selectedPatternForMenu = ref<Pattern | null>(null)
+const addingToCart = ref<Set<number>>(new Set())
 
 // Computed
 const filteredPatterns = computed(() => {
@@ -397,6 +426,22 @@ const deleteSelectedPattern = async () => {
   } else {
     alert(result.message || 'Error al eliminar el patrón')
   }
+}
+
+const addToCart = async (pattern: Pattern) => {
+  addingToCart.value.add(pattern.id)
+  const result = await cartStore.addToCart(pattern)
+  if (result.success) {
+    // Show success feedback - could be replaced with a toast notification
+    console.log(result.message)
+  } else {
+    alert(result.message)
+    addingToCart.value.delete(pattern.id)
+  }
+}
+
+const viewCart = () => {
+  router.push({ name: 'cart' })
 }
 
 // Lifecycle

@@ -57,6 +57,24 @@
           </div>
           <div class="flex gap-2">
             <button
+              v-if="pattern.status === 'finalized' && !cartStore.isInCart(pattern.id)"
+              @click="addToCart"
+              class="px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F450]/80 transition-colors orbitron-variable flex items-center gap-2"
+              style="--orbitron-weight: 600;"
+            >
+              <ShoppingCart class="w-4 h-4" />
+              Agregar al Carrito
+            </button>
+            <button
+              v-else-if="pattern.status === 'finalized' && cartStore.isInCart(pattern.id)"
+              @click="viewCart"
+              class="px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F450]/80 transition-colors orbitron-variable flex items-center gap-2"
+              style="--orbitron-weight: 600;"
+            >
+              <ShoppingCart class="w-4 h-4" />
+              Ver Carrito
+            </button>
+            <button
               @click="downloadSVG"
               class="px-4 py-2 bg-lime-400 text-black rounded-lg hover:bg-lime-300 transition-colors orbitron-variable"
               style="--orbitron-weight: 600;"
@@ -101,10 +119,13 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { usePatternsStore } from '@/stores/patterns'
+import { useCartStore } from '@/stores/cart'
+import { ShoppingCart } from 'lucide-vue-next'
 
 const route = useRoute()
 const router = useRouter()
 const patternsStore = usePatternsStore()
+const cartStore = useCartStore()
 
 const pattern = ref(patternsStore.selectedPattern)
 const loading = ref(false)
@@ -152,5 +173,20 @@ const downloadSVG = () => {
   link.click()
   document.body.removeChild(link)
   URL.revokeObjectURL(url)
+}
+
+const addToCart = async () => {
+  if (!pattern.value) return
+  
+  const result = await cartStore.addToCart(pattern.value)
+  if (result.success) {
+    console.log(result.message)
+  } else {
+    alert(result.message)
+  }
+}
+
+const viewCart = () => {
+  router.push({ name: 'cart' })
 }
 </script>

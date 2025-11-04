@@ -135,7 +135,7 @@ import { Ruler, ShoppingBag, FileText, Settings, LogOut } from 'lucide-vue-next'
 import { Separator } from '@/components/ui/separator'
 
 interface Props {
-  activeSection: 'account' | 'measurements' | 'patterns'
+  activeSection: 'account' | 'measurements' | 'patterns' | 'cart'
 }
 
 defineProps<Props>()
