@@ -11,6 +11,7 @@ import AccountView from '@/views/AccountView.vue'
 import UserMeasurementsView from '@/views/UserMeasurementsView.vue'
 import AIMeasurementsView from '@/views/AIMeasurementsView.vue'
 import BodyTypeGuideView from '@/views/BodyTypeGuideView.vue'
+import PaymentConfirmationView from '@/views/PaymentConfirmationView.vue'
 import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
@@ -81,6 +82,12 @@ const router = createRouter({
       name: 'ai-measurements',
       component: AIMeasurementsView,
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/payment/confirmation',
+      name: 'payment-confirmation',
+      component: PaymentConfirmationView,
+      meta: { requiresAuth: false }
     }
   ]
 })

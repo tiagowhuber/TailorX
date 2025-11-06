@@ -18,6 +18,12 @@ import type {
   PatternResponse,
   UpdatePatternRequest
 } from '@/types/pattern.types'
+import type {
+  PaymentRequest,
+  PaymentResponse,
+  PaymentConfirmationResponse,
+  PaymentStatusResponse
+} from '@/types/payment.types'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api',
@@ -163,6 +169,27 @@ export const patternsApi = {
   // Delete pattern
   deletePattern: async (id: number) => {
     const response = await api.delete<{ success: boolean }>(`/patterns/${id}`)
+    return response.data
+  },
+}
+
+// Payment API functions
+export const paymentsApi = {
+  // Create a new payment transaction
+  createPayment: async (data: PaymentRequest) => {
+    const response = await api.post<PaymentResponse>('/payments/create', data)
+    return response.data
+  },
+
+  // Confirm payment status with token
+  confirmPayment: async (token: string) => {
+    const response = await api.put<PaymentConfirmationResponse>(`/payments/confirm/${token}`)
+    return response.data
+  },
+
+  // Get payment status by order ID
+  getPaymentStatus: async (orderId: number) => {
+    const response = await api.get<PaymentStatusResponse>(`/payments/order/${orderId}`)
     return response.data
   },
 }
