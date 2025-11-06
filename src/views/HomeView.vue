@@ -1,8 +1,9 @@
 <template>
-  <!-- Navigation Header - Outside scrollable content -->
-  <NavigationBar />
-  
-  <div 
+  <div class="overflow-x-hidden">
+    <!-- Navigation Header - Outside scrollable content -->
+    <NavigationBar />
+    
+    <div 
     class="min-h-screen bg-black text-white relative" 
     :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }"
   >
@@ -254,6 +255,7 @@
         </a>
       </div>
     </div>
+  </div>
   </div>
 </template>
 

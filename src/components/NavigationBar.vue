@@ -233,7 +233,22 @@ const handleLogout = async () => {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'Stack Sans Notch';
+  src: url('@/assets/fonts/Stack_Sans_Notch/static/StackSansNotch-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Apply Stack Sans Notch font globally */
+body {
+  font-family: 'Stack Sans Notch', sans-serif;
+}
+
+/* Navigation links */
 .nav-link {
+  font-family: 'Stack Sans Notch', sans-serif;
+  font-weight: 300; 
   color: rgba(255, 255, 255, 0.6);
   transition: color 0.2s;
   padding-top: 0.75rem;
@@ -248,5 +263,11 @@ const handleLogout = async () => {
 
 .nav-link.active {
   color: rgba(255, 255, 255, 1);
+}
+
+/* Dropdown menu items */
+.DropdownMenuItem {
+  font-family: 'Stack Sans Notch', sans-serif;
+  font-weight: 400; 
 }
 </style>
