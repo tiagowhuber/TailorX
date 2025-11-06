@@ -10,6 +10,7 @@ import LoginView from '@/views/LoginView.vue'
 import AccountView from '@/views/AccountView.vue'
 import UserMeasurementsView from '@/views/UserMeasurementsView.vue'
 import AIMeasurementsView from '@/views/AIMeasurementsView.vue'
+import BodyTypeGuideView from '@/views/BodyTypeGuideView.vue'
 import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
@@ -19,6 +20,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView
+    },
+    {
+      path: '/guia-tipos-cuerpo',
+      name: 'body-type-guide',
+      component: BodyTypeGuideView
     },
     {
       path: '/catalogo',
