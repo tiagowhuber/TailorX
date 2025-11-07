@@ -1,108 +1,151 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-3xl mx-auto">
+  <!-- Navigation Header -->
+  <NavigationBar />
+
+  <div class="min-h-screen bg-black text-white relative overflow-hidden">
+    <!-- Subtle spotlight background -->
+    <div class="pointer-events-none absolute -top-24 left-1/3 w-[700px] h-[700px] bg-gradient-radial from-lime-400/20 via-yellow-300/10 to-transparent rounded-full blur-3xl"></div>
+    <div class="pointer-events-none absolute bottom-0 right-1/4 w-[900px] h-[600px] bg-gradient-radial from-lime-400/30 via-yellow-300/20 to-transparent rounded-full blur-3xl"></div>
+
+    <main class="relative z-10 max-w-5xl mx-auto px-8 py-12">
       <!-- Loading State -->
-      <div v-if="loading" class="bg-white rounded-lg shadow-lg p-8 text-center">
-        <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-        <h2 class="text-xl font-semibold text-gray-900 mb-2">Procesando pago...</h2>
-        <p class="text-gray-600">Por favor espera mientras confirmamos tu transacción.</p>
-      </div>
+      <motion.div
+        v-if="loading"
+        class="bg-white/5 border border-white/10 rounded-lg p-12 text-center"
+        :initial="{ opacity: 0, scale: 0.95 }"
+        :animate="{ opacity: 1, scale: 1 }"
+        :transition="{ type: 'spring', stiffness: 250, damping: 25 }"
+      >
+        <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-[#E3F450] mx-auto mb-4"></div>
+        <h2 class="text-2xl font-bold mb-2" style="font-family: 'Avenir Next', sans-serif;">Procesando pago...</h2>
+        <p class="text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">Por favor espera mientras confirmamos tu transacción.</p>
+      </motion.div>
 
       <!-- Success State -->
-      <div v-else-if="success" class="bg-white rounded-lg shadow-lg p-8">
-        <div class="text-center mb-8">
-          <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
-            <svg class="h-10 w-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <motion.div
+        v-else-if="success"
+        class="space-y-8"
+        :initial="{ opacity: 0, y: 20 }"
+        :animate="{ opacity: 1, y: 0 }"
+        :transition="{ type: 'spring', stiffness: 200, damping: 25 }"
+      >
+        <!-- Success Header -->
+        <div class="text-center space-y-4">
+          <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-[#E3F450]/20 border-2 border-[#E3F450] mb-4">
+            <svg class="h-12 w-12 text-[#E3F450]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
             </svg>
           </div>
-          <h1 class="text-3xl font-bold text-gray-900 mb-2">¡Pago Exitoso!</h1>
-          <p class="text-lg text-gray-600">Tu orden ha sido confirmada</p>
+          <div class="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider orbitron-variable" style="--orbitron-weight: 700; background-color: #E3F450; color: black;">
+            Pago Confirmado
+          </div>
+          <h1 class="text-4xl md:text-5xl font-black" style="font-family: 'Avenir Next', sans-serif;">¡PAGO EXITOSO!</h1>
+          <p class="text-xl text-gray-300 orbitron-variable" style="--orbitron-weight: 400;">Tu orden ha sido confirmada</p>
         </div>
 
-        <div v-if="paymentData" class="border-t border-gray-200 pt-6 mb-6">
+        <!-- Payment Details Card -->
+        <div v-if="paymentData" class="bg-white/5 border border-white/10 rounded-lg p-8">
+          <h3 class="text-lg font-bold mb-6 orbitron-variable" style="--orbitron-weight: 700;">Detalles de la Transacción</h3>
           <dl class="space-y-4">
-            <div class="flex justify-between">
-              <dt class="text-sm font-medium text-gray-500">Número de Orden</dt>
-              <dd class="text-sm font-semibold text-gray-900">{{ paymentData.orderNumber }}</dd>
+            <div class="flex justify-between items-center py-3 border-b border-white/10">
+              <dt class="text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">Número de Orden</dt>
+              <dd class="text-base font-bold text-[#E3F450] orbitron-variable" style="--orbitron-weight: 700;">{{ paymentData.orderNumber }}</dd>
             </div>
-            <div class="flex justify-between">
-              <dt class="text-sm font-medium text-gray-500">Monto Total</dt>
-              <dd class="text-sm font-semibold text-gray-900">{{ formatPrice(paymentData.amount) }}</dd>
+            <div class="flex justify-between items-center py-3 border-b border-white/10">
+              <dt class="text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">Monto Total</dt>
+              <dd class="text-xl font-bold text-white orbitron-variable" style="--orbitron-weight: 700;">{{ formatPrice(paymentData.amount) }}</dd>
             </div>
-            <div class="flex justify-between">
-              <dt class="text-sm font-medium text-gray-500">Fecha de Transacción</dt>
-              <dd class="text-sm text-gray-900">{{ formatDate(paymentData.transaction_date) }}</dd>
+            <div class="flex justify-between items-center py-3 border-b border-white/10">
+              <dt class="text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">Fecha de Transacción</dt>
+              <dd class="text-sm text-white orbitron-variable" style="--orbitron-weight: 400;">{{ formatDate(paymentData.transaction_date) }}</dd>
             </div>
-            <div class="flex justify-between" v-if="paymentData.card_detail">
-              <dt class="text-sm font-medium text-gray-500">Tarjeta</dt>
-              <dd class="text-sm text-gray-900">**** {{ paymentData.card_detail.card_number }}</dd>
+            <div v-if="paymentData.card_detail" class="flex justify-between items-center py-3 border-b border-white/10">
+              <dt class="text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">Tarjeta</dt>
+              <dd class="text-sm text-white orbitron-variable" style="--orbitron-weight: 400;">**** {{ paymentData.card_detail.card_number }}</dd>
             </div>
-            <div class="flex justify-between">
-              <dt class="text-sm font-medium text-gray-500">Código de Autorización</dt>
-              <dd class="text-sm text-gray-900">{{ paymentData.response_code }}</dd>
+            <div class="flex justify-between items-center py-3">
+              <dt class="text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">Código de Autorización</dt>
+              <dd class="text-sm text-white orbitron-variable" style="--orbitron-weight: 400;">{{ paymentData.response_code }}</dd>
             </div>
           </dl>
         </div>
 
-        <div class="bg-blue-50 rounded-lg p-4 mb-6">
-          <p class="text-sm text-blue-800">
-            <strong>¡Gracias por tu compra!</strong> Tus patrones están ahora disponibles en tu cuenta.
+        <!-- Success Message -->
+        <div class="bg-[#E3F450]/10 border border-[#E3F450]/30 rounded-lg p-6">
+          <p class="text-sm text-[#E3F450] orbitron-variable" style="--orbitron-weight: 400;">
+            <strong class="font-bold">¡Gracias por tu compra!</strong> Tus patrones están ahora disponibles en tu cuenta.
             Puedes descargarlos en cualquier momento desde tu lista de patrones.
           </p>
         </div>
 
-        <div class="flex flex-col sm:flex-row gap-3">
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4">
           <button
             @click="goToPatterns"
-            class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+            class="flex-1 px-6 py-4 rounded-md font-bold uppercase tracking-wide transition-all orbitron-variable"
+            style="--orbitron-weight: 700; background-color: #E3F450; color: black;"
           >
             Ver Mis Patrones
           </button>
           <button
             @click="goToHome"
-            class="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+            class="flex-1 px-6 py-4 rounded-md font-bold uppercase tracking-wide bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all orbitron-variable"
+            style="--orbitron-weight: 700;"
           >
             Volver al Inicio
           </button>
         </div>
-      </div>
+      </motion.div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="bg-white rounded-lg shadow-lg p-8">
-        <div class="text-center mb-8">
-          <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4">
-            <svg class="h-10 w-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <motion.div
+        v-else-if="error"
+        class="space-y-8"
+        :initial="{ opacity: 0, y: 20 }"
+        :animate="{ opacity: 1, y: 0 }"
+        :transition="{ type: 'spring', stiffness: 200, damping: 25 }"
+      >
+        <!-- Error Header -->
+        <div class="text-center space-y-4">
+          <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-red-500/20 border-2 border-red-500 mb-4">
+            <svg class="h-12 w-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </div>
-          <h1 class="text-3xl font-bold text-gray-900 mb-2">Pago No Completado</h1>
-          <p class="text-lg text-red-600 mb-4">{{ errorMessage }}</p>
+          <div class="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider orbitron-variable" style="--orbitron-weight: 700; background-color: #EF4444; color: white;">
+            Pago Rechazado
+          </div>
+          <h1 class="text-4xl md:text-5xl font-black" style="font-family: 'Avenir Next', sans-serif;">PAGO NO COMPLETADO</h1>
+          <p class="text-xl text-red-400 orbitron-variable" style="--orbitron-weight: 400;">{{ errorMessage }}</p>
         </div>
 
-        <div class="bg-yellow-50 rounded-lg p-4 mb-6">
-          <p class="text-sm text-yellow-800">
+        <!-- Error Message -->
+        <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-6">
+          <p class="text-sm text-yellow-300 orbitron-variable" style="--orbitron-weight: 400;">
             Tu pago no pudo ser procesado. Esto puede deberse a fondos insuficientes, datos incorrectos,
             o una cancelación manual. Por favor, intenta nuevamente o contacta a tu banco para más información.
           </p>
         </div>
 
-        <div class="flex flex-col sm:flex-row gap-3">
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4">
           <button
             @click="goToCart"
-            class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+            class="flex-1 px-6 py-4 rounded-md font-bold uppercase tracking-wide transition-all orbitron-variable"
+            style="--orbitron-weight: 700; background-color: #E3F450; color: black;"
           >
             Volver al Carrito
           </button>
           <button
             @click="goToHome"
-            class="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+            class="flex-1 px-6 py-4 rounded-md font-bold uppercase tracking-wide bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all orbitron-variable"
+            style="--orbitron-weight: 700;"
           >
             Volver al Inicio
           </button>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </main>
   </div>
 </template>
 
@@ -111,6 +154,8 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { usePaymentStore } from '@/stores/payment'
 import { useCartStore } from '@/stores/cart'
+import NavigationBar from '@/components/NavigationBar.vue'
+import { motion } from 'motion-v'
 
 const route = useRoute()
 const router = useRouter()
@@ -184,5 +229,26 @@ const goToHome = () => {
 </script>
 
 <style scoped>
-/* Additional styles if needed */
+@font-face {
+  font-family: 'Stack Sans Notch';
+  src: url('@/assets/fonts/Stack_Sans_Notch/static/StackSansNotch-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Apply Stack Sans Notch font globally */
+body {
+  font-family: 'Stack Sans Notch', sans-serif;
+}
+
+/* General text styles */
+p, dl, dt, dd {
+  font-family: 'Stack Sans Notch', sans-serif;
+}
+
+/* Button styles */
+button {
+  font-family: 'Stack Sans Notch', sans-serif;
+  cursor: pointer;
+}
 </style>

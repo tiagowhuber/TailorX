@@ -37,7 +37,13 @@
           Mis Patrones
         </button>
         <button
-          class="px-4 py-2 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors whitespace-nowrap"
+          @click="router.push({ name: 'orders' })"
+          :class="[
+            'px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap border',
+            activeSection === 'orders'
+              ? 'bg-white text-black border-white'
+              : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
+          ]"
         >
           Mis Pedidos
         </button>
@@ -81,7 +87,7 @@
               : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
           ]"
         >
-          <Ruler :class="['inline-block mr-2 h-4 w-4', activeSection === 'measurements' ? 'text-black' : 'text-[#E3F450]']" />
+          <RulerDimensionLine :class="['inline-block mr-2 h-4 w-4', activeSection === 'measurements' ? 'text-black' : 'text-[#E3F450]']" />
           Mis Medidas
         </button>
         
@@ -94,14 +100,20 @@
               : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
           ]"
         >
-          <FileText :class="['inline-block mr-2 h-4 w-4', activeSection === 'patterns' ? 'text-black' : 'text-[#E3F450]']" />
+          <ScissorsLineDashed :class="['inline-block mr-2 h-4 w-4', activeSection === 'patterns' ? 'text-black' : 'text-[#E3F450]']" />
           Mis Patrones
         </button>
         
         <button
-          class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors cursor-pointer"
+          @click="router.push({ name: 'orders' })"
+          :class="[
+            'w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors border cursor-pointer',
+            activeSection === 'orders'
+              ? 'bg-white text-black border-white'
+              : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
+          ]"
         >
-          <ShoppingBag class="inline-block mr-2 h-4 w-4 text-[#E3F450]" />
+          <BaggageClaim :class="['inline-block mr-2 h-4 w-4', activeSection === 'orders' ? 'text-black' : 'text-[#E3F450]']" />
           Mis Pedidos
         </button>
         
@@ -131,11 +143,11 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { Ruler, ShoppingBag, FileText, Settings, LogOut } from 'lucide-vue-next'
+import { RulerDimensionLine, ScissorsLineDashed, Settings, LogOut, BaggageClaim } from 'lucide-vue-next'
 import { Separator } from '@/components/ui/separator'
 
 interface Props {
-  activeSection: 'account' | 'measurements' | 'patterns' | 'cart'
+  activeSection: 'account' | 'measurements' | 'patterns' | 'cart' | 'orders'
 }
 
 defineProps<Props>()

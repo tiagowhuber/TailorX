@@ -101,17 +101,17 @@
               <span>Mi Cuenta</span>
             </DropdownMenuItem>
             <DropdownMenuItem @click="router.push({ name: 'measurements' })" class="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer">
-              <Ruler class="mr-2 h-4 w-4" />
+              <RulerDimensionLine class="mr-2 h-4 w-4" />
               <span>Mis Medidas</span>
             </DropdownMenuItem>
             <DropdownMenuItem @click="router.push({ name: 'patterns' })" class="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer">
-              <FileText class="mr-2 h-4 w-4" />
+              <Scissors class="mr-2 h-4 w-4" />
               <span>Mis Patrones</span>
             </DropdownMenuItem>
-            <!-- <DropdownMenuItem @click="router.push({ name: 'catalogo' })" class="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer">
-              <ShoppingBag class="mr-2 h-4 w-4" />
-              <span>Catálogo</span>
-            </DropdownMenuItem> -->
+            <DropdownMenuItem @click="router.push({ name: 'orders' })" class="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer">
+              <BaggageClaim class="mr-2 h-4 w-4" />
+              <span>Mis Pedidos</span>
+            </DropdownMenuItem>
             <DropdownMenuSeparator class="bg-white/20" />
             <DropdownMenuItem @click="handleLogout" class="text-red-400 hover:bg-red-500/10 focus:bg-red-500/10 focus:text-red-400 cursor-pointer">
               <LogOut class="mr-2 h-4 w-4" />
@@ -129,7 +129,7 @@ import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
-import { User as UserIcon, LogOut, Ruler, FileText, ShoppingCart } from 'lucide-vue-next'
+import { User as UserIcon, LogOut, RulerDimensionLine, Scissors, ShoppingCart, BaggageClaim  } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
