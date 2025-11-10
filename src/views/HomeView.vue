@@ -1,7 +1,7 @@
 <template>
   <!-- Navigation Header - Outside scrollable content -->
   <NavigationBar />
-  
+
   <div class="overflow-x-hidden">
     <div 
     class="min-h-screen bg-black text-white relative" 
@@ -13,7 +13,12 @@
     
     <!-- Main Content -->
     <main class="relative z-10 flex items-center justify-center min-h-[calc(100vh-120px)] px-8">
-      <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <motion.div
+        class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+        :initial="{ opacity: 0, y: 20 }"
+        :animate="{ opacity: 1, y: 0 }"
+        :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
+      >
         <!-- Left Content -->
         <div class="space-y-8">
           
@@ -50,7 +55,7 @@
         
         <!-- Right Content - Empty space for design balance -->
         <div class="hidden lg:block"></div>
-      </div>
+      </motion.div>
     </main>
   </div>
 
@@ -68,56 +73,42 @@
   <div class="min-h-screen bg-black text-white py-20 px-8">
     <div class="max-w-6xl mx-auto">
       <!-- Section Header -->
-      <div class="text-left mb-16">
+      <motion.div
+        class="text-left mb-16"
+        :initial="{ opacity: 0, y: 20 }"
+        :animate="{ opacity: 1, y: 0 }"
+        :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
+      >
         <h2 class="text-5xl md:text-6xl font-black mb-6" style="font-family: 'Avenir Next', sans-serif;">
           VISTE A TU<br>MEDIDA
         </h2>
         <p class="text-xl md:text-2xl orbitron-variable" style="--orbitron-weight: 400;">
           PRODUCIMOS SOLO LO QUE SE USA. <span class="text-[#E3F450]">NADA MÁS.</span>
         </p>
-      </div>
+      </motion.div>
 
       <!-- Icons Grid -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12 orbitron-variable" style="--orbitron-weight: 400;">
-        <!-- Icon 1: Create Account -->
-        <div class="flex flex-col items-center text-center orbitron-variable" style="--orbitron-weight: 400;">
+        <motion.div
+          v-for="(icon, index) in [
+            { src: createAccountIcon, title: 'CREA TU\nCUENTA' },
+            { src: giveMeasurementsIcon, title: 'PROPORCIONA\nTUS MEDIDAS' },
+            { src: hangingShirtIcon, title: 'SELECCIONA\nLA PRENDA' },
+            { src: shirtPriceTagIcon, title: 'VÍSTELO' }
+          ]"
+          :key="index"
+          class="flex flex-col items-center text-center"
+          :initial="{ opacity: 0, y: 20 }"
+          :animate="{ opacity: 1, y: 0 }"
+          :transition="{ type: 'spring', stiffness: 200, damping: 25, delay: index * 0.1 }"
+        >
           <div class="w-32 h-32 rounded-full flex items-center justify-center mb-4" style="background-color: #E3F450;">
-            <img :src="createAccountIcon" alt="Crea tu cuenta" class="w-30 h-30" />
+            <img :src="icon.src" :alt="icon.title" class="w-30 h-30" />
           </div>
           <h3 class="text-lg font-bold uppercase">
-            CREA TU<br>CUENTA
+            {{ icon.title }}
           </h3>
-        </div>
-
-        <!-- Icon 2: Provide Measurements -->
-        <div class="flex flex-col items-center text-center orbitron-variable" style="--orbitron-weight: 400;">
-          <div class="w-32 h-32 rounded-full flex items-center justify-center mb-4" style="background-color: #E3F450;">
-            <img :src="giveMeasurementsIcon" alt="Proporciona tus medidas" class="w-30 h-30" />
-          </div>
-          <h3 class="text-lg font-bold uppercase">
-            PROPORCIONA<br>TUS MEDIDAS
-          </h3>
-        </div>
-
-        <!-- Icon 3: Select Garment -->
-        <div class="flex flex-col items-center text-center orbitron-variable" style="--orbitron-weight: 400;">
-          <div class="w-32 h-32 rounded-full flex items-center justify-center mb-4" style="background-color: #E3F450;">
-            <img :src="hangingShirtIcon" alt="Selecciona la prenda" class="w-30 h-30" />
-          </div>
-          <h3 class="text-lg font-bold uppercase">
-            SELECCIONA<br>LA PRENDA
-          </h3>
-        </div>
-
-        <!-- Icon 4: See It On You -->
-        <div class="flex flex-col items-center text-center orbitron-variable" style="--orbitron-weight: 400;">
-          <div class="w-32 h-32 rounded-full flex items-center justify-center mb-4" style="background-color: #E3F450;">
-            <img :src="shirtPriceTagIcon" alt="Vístelo" class="w-30 h-30" />
-          </div>
-          <h3 class="text-lg font-bold uppercase">
-            VÍSTELO
-          </h3>
-        </div>
+        </motion.div>
       </div>
 
       <!-- CTA Button -->
@@ -143,7 +134,12 @@
   </div>
 
   <!-- Models Carousel -->
-  <div class="bg-black text-black px-8 -mt-15">
+  <motion.div
+    class="bg-black text-black px-8 -mt-15"
+    :initial="{ opacity: 0, y: 20 }"
+    :animate="{ opacity: 1, y: 0 }"
+    :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
+  >
     <div class="max-w-7xl mx-auto">
       <Carousel class="w-full">
         <CarouselContent>
@@ -173,7 +169,7 @@
         </router-link>
       </div>
     </div>
-  </div>
+  </motion.div>
 
   <!-- World Section -->
   <div 
@@ -274,6 +270,7 @@ import TwitterIcon from '@/components/icons/TwitterIcon.vue'
 import FacebookIcon from '@/components/icons/FacebookIcon.vue'
 import WhatsAppIcon from '@/components/icons/WhatsAppIcon.vue'
 import InstagramIcon from '@/components/icons/InstagramIcon.vue'
+import { motion } from 'motion-v' // Added motion-v import
 import bgImage from '@/assets/backgrounds/elemento-amarillo.png'
 import yellowDude from '@/assets/backgrounds/yellow-dude.jpg'
 import elementoImg from '@/assets/elements/elemento.png'
