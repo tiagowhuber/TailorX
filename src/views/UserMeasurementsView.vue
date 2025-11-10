@@ -103,14 +103,24 @@
                   <div v-if="measurementsStore.userMeasurementsCount === 0 && measurementsStore.measurementTypesCount > 0" class="mb-6 text-center py-8 bg-white/5 border border-white/10 rounded-lg">
                     <Ruler class="h-12 w-12 text-gray-600 mx-auto mb-3" />
                     <p class="text-gray-400 text-base mb-4">Aún no tienes medidas guardadas</p>
-                    <Button 
-                      @click="router.push({ name: 'ai-measurements' })"
-                      variant="outline"
-                      class="px-8 py-3 border-white/20 text-black hover:bg-white/10"
-                    >
-                      <Sparkles class="mr-2 h-5 w-5" />
-                      Obtener con IA
-                    </Button>
+                    <div class="flex gap-3 justify-center">
+                      <Button 
+                        @click="router.push({ name: 'ai-measurements' })"
+                        variant="outline"
+                        class="px-8 py-3 border-white/20 text-black hover:bg-white/10"
+                      >
+                        <Sparkles class="mr-2 h-5 w-5" />
+                        Obtener con IA
+                      </Button>
+                      <Button 
+                        @click="enterEditMode"
+                        variant="outline"
+                        class="px-8 py-3 border-white/20 text-black hover:bg-white/10"
+                      >
+                        <Edit class="mr-2 h-5 w-5" />
+                        Agregar Manualmente
+                      </Button>
+                    </div>
                   </div>
 
                   <!-- Success/Error Messages -->
@@ -129,7 +139,7 @@
                   </div>
 
                   <!-- Measurements Stats -->
-                  <div v-if="measurementsStore.userMeasurementsCount > 0" class="mb-6 flex items-center justify-between">
+                  <div v-if="measurementsStore.userMeasurementsCount > 0 || isEditMode" class="mb-6 flex items-center justify-between">
                     <p class="text-gray-400">
                       {{ measurementsStore.userMeasurementsCount }} de {{ measurementsStore.measurementTypesCount }} medidas guardadas
                     </p>
@@ -140,7 +150,7 @@
                   </div>
 
                   <!-- Measurements Grid -->
-                  <div v-if="measurementsStore.userMeasurementsCount > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div v-if="measurementsStore.userMeasurementsCount > 0 || isEditMode" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <Card 
                       v-for="type in measurementsStore.measurementTypes" 
                       :key="type.id"
@@ -161,7 +171,7 @@
                               <HelpCircle class="h-4 w-4" />
                             </Button>
                             <Button
-                              v-if="!isEditMode && getMeasurementValue(type.id) !== null"
+                              v-if="getMeasurementValue(type.id) !== null"
                               @click="() => openDeleteDialog(type)"
                               variant="ghost"
                               size="icon"
@@ -188,16 +198,15 @@
                               step="0.01"
                               min="0"
                               max="9999.99"
-                              :placeholder="isEditMode ? 'Ingrese medida' : 'No registrada'"
-                              :disabled="!isEditMode"
+                              placeholder="Ingrese medida"
                               :class="[
                                 'bg-white/10 border-white/20 text-white placeholder:text-gray-500',
-                                !isEditMode && 'cursor-not-allowed opacity-60',
                                 getValidationError(type.id) && 'border-red-500 focus:ring-red-500'
                               ]"
                               @input="() => validateMeasurement(type.id)"
+                              @change="() => handleMeasurementChange(type.id)"
                             />
-                            <span v-if="getMeasurementValue(type.id) !== null && !isEditMode" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
+                            <span v-if="getMeasurementValue(type.id) !== null" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">
                               mm
                             </span>
                           </div>
@@ -209,7 +218,7 @@
                           </p>
 
                           <!-- Last Updated -->
-                          <p v-if="getLastUpdated(type.id) && !isEditMode" class="text-gray-500 text-xs">
+                          <p v-if="getLastUpdated(type.id)" class="text-gray-500 text-xs">
                             Actualizado: {{ getLastUpdated(type.id) }}
                           </p>
                         </div>
@@ -524,6 +533,40 @@ const handleSaveMeasurements = async () => {
 const openDeleteDialog = (type: MeasurementType) => {
   measurementToDelete.value = type
   showDeleteDialog.value = true
+}
+
+const handleMeasurementChange = async (typeId: number) => {
+  if (!authStore.user?.id) return
+  
+  // Validate the measurement
+  if (!validateMeasurement(typeId)) {
+    return
+  }
+
+  const value = editedMeasurements[typeId]
+  
+  // Only save if there's a valid value and it has changed
+  if (value && value > 0 && hasValueChanged(typeId)) {
+    const result = await measurementsStore.saveMeasurements(authStore.user.id, [
+      {
+        measurement_type_id: typeId,
+        value: Number(value)
+      }
+    ])
+
+    if (result.success) {
+      // Update original value to mark as saved
+      originalMeasurements[typeId] = editedMeasurements[typeId]
+      
+      const typeName = measurementsStore.measurementTypes.find(t => t.id === typeId)?.name
+      successMessage.value = `Medida "${typeName}" guardada correctamente`
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => {
+        successMessage.value = ''
+      }, 3000)
+    }
+  }
 }
 
 const confirmDelete = async () => {

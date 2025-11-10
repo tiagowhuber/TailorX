@@ -73,19 +73,19 @@
         <!-- Success Message -->
         <div class="bg-[#E3F450]/10 border border-[#E3F450]/30 rounded-lg p-6">
           <p class="text-sm text-[#E3F450] orbitron-variable" style="--orbitron-weight: 400;">
-            <strong class="font-bold">¡Gracias por tu compra!</strong> Tus patrones están ahora disponibles en tu cuenta.
-            Puedes descargarlos en cualquier momento desde tu lista de patrones.
+            <strong class="font-bold">¡Gracias por tu compra!</strong> Tu pedido está siendo procesado.
+            Nuestro equipo empezará a coser tu patrón personalizado de inmediato. Puedes verificar el estado de tu orden en cualquier momento.
           </p>
         </div>
 
         <!-- Action Buttons -->
         <div class="flex flex-col sm:flex-row gap-4">
           <button
-            @click="goToPatterns"
+            @click="goToOrders"
             class="flex-1 px-6 py-4 rounded-md font-bold uppercase tracking-wide transition-all orbitron-variable"
             style="--orbitron-weight: 700; background-color: #E3F450; color: black;"
           >
-            Ver Mis Patrones
+            Ver Mis Órdenes
           </button>
           <button
             @click="goToHome"
@@ -215,8 +215,8 @@ const formatDate = (dateString: string): string => {
   }).format(date)
 }
 
-const goToPatterns = () => {
-  router.push('/patterns')
+const goToOrders = () => {
+  router.push('/mis-pedidos')
 }
 
 const goToCart = () => {
