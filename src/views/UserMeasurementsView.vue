@@ -158,7 +158,7 @@
                       :class="{ 'ring-2 ring-white': editedMeasurements[type.id] !== undefined && hasValueChanged(type.id) }"
                     >
                       <CardHeader class="pb-3">
-                        <CardTitle class="text-lg font-bold text-white flex items-center justify-between">
+                        <CardTitle class="text-lg font-medium text-white flex items-center justify-between">
                           {{ type.name }}
                           <div class="flex items-center gap-1">
                             <Button
@@ -631,5 +631,14 @@ onMounted(() => {
 :deep(input[type="number"]) {
   appearance: textfield;
   -moz-appearance: textfield;
+}
+
+/* Apply Stack Sans Notch globally except for h1 */
+:deep(*) {
+  font-family: 'Stack Sans Notch', sans-serif !important;
+}
+
+:deep(h1) {
+  font-family: sans-serif !important;
 }
 </style>

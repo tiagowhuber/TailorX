@@ -20,9 +20,12 @@
               :animate="{ opacity: 1, y: 0 }"
               :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
             >
+              <div class="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider mb-4 orbitron-variable" style="--orbitron-weight: 700; background-color: #E3F450; color: black;">
+                  Confirmación de Compra
+              </div>
               <div class="flex items-center justify-between mb-2">
                 <div>
-                  <h1 class="text-3xl font-bold text-white">Mi Carrito</h1>
+                  <h1 class="text-3xl font-bold text-white">MI CARRITO</h1>
                   <p class="text-gray-400 text-sm mt-1">
                     {{ cartStore.itemCount }} {{ cartStore.itemCount === 1 ? 'artículo' : 'artículos' }} en tu carrito
                   </p>
@@ -402,4 +405,12 @@ onMounted(() => {
 
 <style scoped>
 /* Add any custom styles here */
+/* Apply Stack Sans Notch globally except for h1 */
+:deep(*) {
+  font-family: 'Stack Sans Notch', sans-serif !important;
+}
+
+:deep(h1) {
+  font-family: sans-serif !important;
+}
 </style>

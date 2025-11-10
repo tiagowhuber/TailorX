@@ -17,7 +17,7 @@
           CATÁLOGO
         </h2>
         <p class="text-xl md:text-2xl orbitron-variable" style="--orbitron-weight: 400;">
-          CADA DISEÑO SE ADAPTA A TI, NO AL REVÉS.
+          CADA DISEÑO SE ADAPTA A TI, <span style="color: #E3F450;">NO AL REVÉS.</span>
         </p>
       </motion.div>
 
@@ -167,5 +167,14 @@ const formatPrice = (price: number): string => {
 /* Gradient radial utility */
 .bg-gradient-radial {
   background: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
+/* Apply Stack Sans Notch globally except for h1 */
+:deep(*) {
+  font-family: 'Stack Sans Notch', sans-serif !important;
+}
+
+:deep(h1) {
+  font-family: sans-serif !important;
 }
 </style>

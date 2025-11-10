@@ -125,4 +125,8 @@
     @apply bg-background text-foreground;
     font-family: 'Poppins', sans-serif;
   }
+  /* Ensure all clickable buttons have a hand pointer */
+  button {
+    cursor: pointer !important;
+  }
 }

@@ -492,4 +492,21 @@ const viewCart = () => {
 .bg-gradient-radial {
   background: radial-gradient(circle, var(--tw-gradient-stops));
 }
+
+/* Apply Stack Sans Notch globally except for h1 */
+:deep(*) {
+  font-family: 'Stack Sans Notch', sans-serif !important;
+}
+
+:deep(h1) {
+  font-family: sans-serif !important;
+}
+
+/* Ensure cursor is a hand pointer on specific buttons */
+:deep(button.customize-design),
+:deep(button.view-measurements),
+:deep(button.view-pattern),
+:deep(button.view-cart) {
+  cursor: pointer !important;
+}
 </style>
