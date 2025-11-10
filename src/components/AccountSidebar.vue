@@ -183,4 +183,9 @@ const handleLogout = async () => {
 .overflow-x-auto::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
 }
+
+/* Sidebar buttons */
+nav button {
+  font-family: 'Stack Sans Notch', sans-serif;
+}
 </style>

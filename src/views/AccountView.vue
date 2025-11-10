@@ -17,7 +17,12 @@
           <!-- Main Content Area -->
           <main class="flex-1 min-w-0">
             <!-- Header with Avatar -->
-            <div class="mb-8">
+            <motion.div
+              class="mb-8"
+              :initial="{ opacity: 0, y: 20 }"
+              :animate="{ opacity: 1, y: 0 }"
+              :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
+            >
               <div class="flex items-center gap-4 mb-2">
                 <Avatar class="h-16 w-16 border-2 border-[#E3F450]">
                   <AvatarImage v-if="getProfilePictureUrl()" :src="getProfilePictureUrl()!" :alt="authStore.user?.first_name || 'User'" />
@@ -26,40 +31,43 @@
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <h1 class="text-3xl font-bold text-white">Configuración de Cuenta</h1>
+                  <h1 class="text-3xl font-bold text-white">CONFIGURACIÓN DE CUENTA</h1>
                   <p class="text-gray-400 text-sm">Administra tu información personal</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             <!-- Account Information Card -->
-            <Card class="bg-white/5 border-white/10">
-              <CardHeader>
-                <CardTitle class="text-xl font-semibold text-white">Información Personal</CardTitle>
-                <CardDescription class="text-gray-400 text-sm">
-                  Tu información personal y detalles de cuenta
-                </CardDescription>
-              </CardHeader>
-              <CardContent class="space-y-6">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <motion.div
+              :initial="{ opacity: 0, y: 20 }"
+              :animate="{ opacity: 1, y: 0 }"
+              :transition="{ type: 'spring', stiffness: 200, damping: 25 }"
+            >
+              <Card class="bg-white/5 border-white/10">
+                <CardHeader>
+                  <CardTitle class="text-lg font-medium text-white">Información Personal</CardTitle>
+                </CardHeader>
+                <CardContent class="space-y-6">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <Label class="text-gray-400 text-xs uppercase tracking-wider">Email</Label>
+                      <p class="text-white text-base mt-1">{{ authStore.user?.email }}</p>
+                    </div>
+                    <div v-if="authStore.user?.first_name">
+                      <Label class="text-gray-400 text-xs uppercase tracking-wider">Nombre Completo</Label>
+                      <p class="text-white text-base mt-1">{{ authStore.user.first_name }} {{ authStore.user.last_name }}</p>
+                    </div>
+                  </div>
+                  
+                  <Separator class="bg-white/10" />
+                  
                   <div>
-                    <Label class="text-gray-400 text-xs uppercase tracking-wider">Email</Label>
-                    <p class="text-white text-base mt-1">{{ authStore.user?.email }}</p>
+                    <Label class="text-gray-400 text-xs uppercase tracking-wider">Miembro Desde</Label>
+                    <p class="text-white text-base mt-1">{{ formatDate(authStore.user?.created_at) }}</p>
                   </div>
-                  <div v-if="authStore.user?.first_name">
-                    <Label class="text-gray-400 text-xs uppercase tracking-wider">Nombre Completo</Label>
-                    <p class="text-white text-base mt-1">{{ authStore.user.first_name }} {{ authStore.user.last_name }}</p>
-                  </div>
-                </div>
-                
-                <Separator class="bg-white/10" />
-                
-                <div>
-                  <Label class="text-gray-400 text-xs uppercase tracking-wider">Miembro Desde</Label>
-                  <p class="text-white text-base mt-1">{{ formatDate(authStore.user?.created_at) }}</p>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </motion.div>
           </main>
         </div>
       </div>
@@ -187,12 +195,12 @@ import { Separator } from '@/components/ui/separator'
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
 import NavigationBar from '@/components/NavigationBar.vue'
 import AccountSidebar from '@/components/AccountSidebar.vue'
+import { motion } from 'motion-v' // Added motion-v import
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -362,5 +370,14 @@ if (!authStore.isAuthenticated) {
 
 .overflow-x-auto::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
+}
+
+/* Apply Stack Sans Notch globally except for h1 */
+:deep(*) {
+  font-family: 'Stack Sans Notch', sans-serif !important;
+}
+
+:deep(h1) {
+  font-family: sans-serif !important;
 }
 </style>

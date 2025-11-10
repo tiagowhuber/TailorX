@@ -23,17 +23,25 @@
     <!-- Design Detail Content -->
     <main v-else-if="design" class="px-8 py-12 max-w-7xl mx-auto">
       <!-- Back Button -->
-      <button
+      <motion.button
         @click="goBack"
         class="mb-8 flex items-center gap-2 text-gray-400 hover:text-white transition-colors orbitron-variable"
         style="--orbitron-weight: 500;"
+        :initial="{ opacity: 0, y: 20 }"
+        :animate="{ opacity: 1, y: 0 }"
+        :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
       >
         <span class="text-2xl">←</span>
         <span>Volver al catálogo</span>
-      </button>
+      </motion.button>
 
       <!-- Design Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+      <motion.div
+        class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16"
+        :initial="{ opacity: 0, y: 20 }"
+        :animate="{ opacity: 1, y: 0 }"
+        :transition="{ type: 'spring', stiffness: 200, damping: 25 }"
+      >
         <!-- Image Section -->
         <div>
           <div class="relative overflow-hidden rounded-lg aspect-[3/4] bg-gray-800">
@@ -92,16 +100,19 @@
               Tus Patrones Para Este Diseño
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6">
-              <div 
-                v-for="pattern in userPatternsForDesign" 
+              <motion.div 
+                v-for="(pattern, index) in userPatternsForDesign" 
                 :key="pattern.id"
                 class="bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-lime-400/50 transition-all group"
+                :initial="{ opacity: 0, y: 20 }"
+                :animate="{ opacity: 1, y: 0 }"
+                :transition="{ type: 'spring', stiffness: 200, damping: 25, delay: index * 0.05 }"
               >
                 <div class="space-y-4">
                   <!-- Pattern Name -->
-                    <h3 class="text-xl font-bold group-hover:text-lime-400 transition-colors" style="font-family: 'Poppins', sans-serif;">
-                      {{ pattern.name ? pattern.name : `Patrón #${pattern.id}` }}
-                    </h3>
+                  <h3 class="text-xl font-bold group-hover:text-lime-400 transition-colors" style="font-family: 'Poppins', sans-serif;">
+                    {{ pattern.name ? pattern.name : `Patrón #${pattern.id}` }}
+                  </h3>
                   
                   <!-- Status Badge -->
                   <div class="flex items-center gap-2">
@@ -156,7 +167,7 @@
                     </button>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
       
@@ -213,7 +224,7 @@
             </p>
           </div>
         </div>
-      </div>
+      </motion.div>
       
       <!-- Additional Information Section -->
       <div class="border-t border-gray-800 pt-12">
@@ -292,6 +303,7 @@ import { useAuthStore } from '@/stores/auth'
 import { usePatternsStore } from '@/stores/patterns'
 import { useCartStore } from '@/stores/cart'
 import { ShoppingCart } from 'lucide-vue-next'
+import { motion } from 'motion-v' // Added motion-v import
 import type { DesignMeasurement } from '@/types/design.types'
 
 const catalogStore = useCatalogStore()

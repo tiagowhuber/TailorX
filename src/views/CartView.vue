@@ -14,7 +14,12 @@
           <!-- Main Content Area -->
           <main class="flex-1 min-w-0">
             <!-- Header -->
-            <div class="mb-8">
+            <motion.div
+              class="mb-8"
+              :initial="{ opacity: 0, y: 20 }"
+              :animate="{ opacity: 1, y: 0 }"
+              :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
+            >
               <div class="flex items-center justify-between mb-2">
                 <div>
                   <h1 class="text-3xl font-bold text-white">Mi Carrito</h1>
@@ -32,10 +37,16 @@
                   Vaciar Carrito
                 </Button>
               </div>
-            </div>
+            </motion.div>
 
             <!-- Empty State -->
-            <div v-if="cartStore.itemCount === 0" class="text-center py-20">
+            <motion.div
+              v-if="cartStore.itemCount === 0"
+              class="text-center py-20"
+              :initial="{ opacity: 0, scale: 0.95 }"
+              :animate="{ opacity: 1, scale: 1 }"
+              :transition="{ type: 'spring', stiffness: 200, damping: 25 }"
+            >
               <ShoppingCart class="mx-auto h-24 w-24 text-gray-600 mb-6" />
               <h3 class="text-2xl font-semibold text-gray-400 mb-2">
                 Tu carrito está vacío
@@ -51,140 +62,152 @@
                 <FileText class="mr-2 h-4 w-4" />
                 Ver Mis Patrones
               </Button>
-            </div>
+            </motion.div>
 
             <!-- Cart Items -->
             <div v-else class="space-y-6">
               <!-- Cart Items List -->
               <div class="space-y-4">
-                <Card
-                  v-for="item in cartStore.cartItems"
+                <motion.div
+                  v-for="(item, index) in cartStore.cartItems"
                   :key="item.patternId"
-                  class="bg-white/5 border-white/10 hover:border-white/20 transition-all"
+                  :initial="{ opacity: 0, y: 20 }"
+                  :animate="{ opacity: 1, y: 0 }"
+                  :transition="{ type: 'spring', stiffness: 200, damping: 25, delay: index * 0.05 }"
                 >
-                  <CardContent class="p-6">
-                    <div class="flex gap-6">
-                      <!-- Image -->
-                      <div class="flex-shrink-0">
-                        <div class="w-24 h-24 rounded-lg overflow-hidden bg-gray-800">
-                          <img
-                            v-if="item.imageUrl"
-                            :src="item.imageUrl"
-                            :alt="item.designName"
-                            class="w-full h-full object-cover"
-                          />
-                          <div v-else class="w-full h-full flex items-center justify-center">
-                            <FileText class="w-10 h-10 text-gray-500" />
+                  <Card
+                    class="bg-white/5 border-white/10 hover:border-white/20 transition-all"
+                  >
+                    <CardContent class="p-6">
+                      <div class="flex gap-6">
+                        <!-- Image -->
+                        <div class="flex-shrink-0">
+                          <div class="w-24 h-24 rounded-lg overflow-hidden bg-gray-800">
+                            <img
+                              v-if="item.imageUrl"
+                              :src="item.imageUrl"
+                              :alt="item.designName"
+                              class="w-full h-full object-cover"
+                            />
+                            <div v-else class="w-full h-full flex items-center justify-center">
+                              <FileText class="w-10 h-10 text-gray-500" />
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <!-- Details -->
-                      <div class="flex-1 min-w-0">
-                        <div class="flex items-start justify-between mb-2">
-                          <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-white mb-1">
-                              {{ item.patternName }}
-                            </h3>
-                            <p class="text-sm text-gray-400">
-                              Diseño: {{ item.designName }}
-                            </p>
-                            <!-- Warning for archived patterns -->
-                            <div v-if="item.status === 'archived'" class="mt-2">
-                              <div class="flex items-center gap-2 text-yellow-400 text-sm">
-                                <AlertTriangle class="w-4 h-4" />
-                                <span>Este patrón ha sido archivado</span>
+                        <!-- Details -->
+                        <div class="flex-1 min-w-0">
+                          <div class="flex items-start justify-between mb-2">
+                            <div class="flex-1">
+                              <h3 class="text-lg font-semibold text-white mb-1">
+                                {{ item.patternName }}
+                              </h3>
+                              <p class="text-sm text-gray-400">
+                                Diseño: {{ item.designName }}
+                              </p>
+                              <!-- Warning for archived patterns -->
+                              <div v-if="item.status === 'archived'" class="mt-2">
+                                <div class="flex items-center gap-2 text-yellow-400 text-sm">
+                                  <AlertTriangle class="w-4 h-4" />
+                                  <span>Este patrón ha sido archivado</span>
+                                </div>
                               </div>
                             </div>
+                            <Button
+                              @click="removeItemConfirm(item)"
+                              variant="ghost"
+                              size="icon"
+                              class="text-gray-400 hover:text-red-400 hover:bg-red-500/10"
+                            >
+                              <X class="h-5 w-5" />
+                            </Button>
                           </div>
-                          <Button
-                            @click="removeItemConfirm(item)"
-                            variant="ghost"
-                            size="icon"
-                            class="text-gray-400 hover:text-red-400 hover:bg-red-500/10"
-                          >
-                            <X class="h-5 w-5" />
-                          </Button>
-                        </div>
 
-                        <!-- Price and Quantity Controls -->
-                        <div class="flex items-center justify-between mt-4">
-                          <!-- Quantity Controls -->
-                          <div class="flex items-center gap-3">
-                            <span class="text-sm text-gray-400">Cantidad:</span>
-                            <div class="flex items-center gap-2 bg-white/10 rounded-lg">
-                              <Button
-                                @click="decrementQuantity(item)"
-                                variant="ghost"
-                                size="icon"
-                                class="h-8 w-8 text-white hover:bg-white/10"
-                              >
-                                <Minus class="h-4 w-4" />
-                              </Button>
-                              <span class="text-white font-semibold min-w-[2rem] text-center">
-                                {{ item.quantity }}
-                              </span>
-                              <Button
-                                @click="incrementQuantity(item)"
-                                variant="ghost"
-                                size="icon"
-                                class="h-8 w-8 text-white hover:bg-white/10"
-                              >
-                                <Plus class="h-4 w-4" />
-                              </Button>
+                          <!-- Price and Quantity Controls -->
+                          <div class="flex items-center justify-between mt-4">
+                            <!-- Quantity Controls -->
+                            <div class="flex items-center gap-3">
+                              <span class="text-sm text-gray-400">Cantidad:</span>
+                              <div class="flex items-center gap-2 bg-white/10 rounded-lg">
+                                <Button
+                                  @click="decrementQuantity(item)"
+                                  variant="ghost"
+                                  size="icon"
+                                  class="h-8 w-8 text-white hover:bg-white/10"
+                                >
+                                  <Minus class="h-4 w-4" />
+                                </Button>
+                                <span class="text-white font-semibold min-w-[2rem] text-center">
+                                  {{ item.quantity }}
+                                </span>
+                                <Button
+                                  @click="incrementQuantity(item)"
+                                  variant="ghost"
+                                  size="icon"
+                                  class="h-8 w-8 text-white hover:bg-white/10"
+                                >
+                                  <Plus class="h-4 w-4" />
+                                </Button>
+                              </div>
                             </div>
-                          </div>
 
-                          <!-- Price -->
-                          <div class="text-right">
-                            <p class="text-sm text-gray-400">Precio unitario</p>
-                            <p class="text-lg font-bold text-[#E3F450]">
-                              {{ cartStore.formatPrice(item.price) }}
-                            </p>
-                            <p v-if="item.quantity > 1" class="text-sm text-gray-400 mt-1">
-                              Subtotal: {{ cartStore.formatPrice(item.price * item.quantity) }}
-                            </p>
+                            <!-- Price -->
+                            <div class="text-right">
+                              <p class="text-sm text-gray-400">Precio unitario</p>
+                              <p class="text-lg font-bold text-[#E3F450]">
+                                {{ cartStore.formatPrice(item.price) }}
+                              </p>
+                              <p v-if="item.quantity > 1" class="text-sm text-gray-400 mt-1">
+                                Subtotal: {{ cartStore.formatPrice(item.price * item.quantity) }}
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               </div>
 
               <!-- Cart Summary -->
-              <Card class="bg-white/5 border-white/10 sticky bottom-4">
-                <CardContent class="p-6">
-                  <div class="space-y-4">
-                    <div class="flex items-center justify-between text-lg">
-                      <span class="text-gray-400">Total:</span>
-                      <span class="text-2xl font-bold text-[#E3F450]">
-                        {{ cartStore.formatPrice(cartStore.totalAmount) }}
-                      </span>
+              <motion.div
+                :initial="{ opacity: 0, y: 20 }"
+                :animate="{ opacity: 1, y: 0 }"
+                :transition="{ type: 'spring', stiffness: 200, damping: 25 }"
+              >
+                <Card class="bg-white/5 border-white/10 sticky bottom-4">
+                  <CardContent class="p-6">
+                    <div class="space-y-4">
+                      <div class="flex items-center justify-between text-lg">
+                        <span class="text-gray-400">Total:</span>
+                        <span class="text-2xl font-bold text-[#E3F450]">
+                          {{ cartStore.formatPrice(cartStore.totalAmount) }}
+                        </span>
+                      </div>
+
+                      <Separator class="bg-white/10" />
+
+                      <div class="flex justify-center">
+                        <Button
+                          @click="proceedToCheckout"
+                          class="w-full max-w-md bg-[#E3F450] text-black hover:bg-[#E3F450]/80"
+                          :disabled="hasArchivedItems || processingCheckout"
+                        >
+                          <span v-if="processingCheckout">Procesando...</span>
+                          <span v-else>Proceder al Checkout</span>
+                        </Button>
+                      </div>
+
+                      <p v-if="hasArchivedItems" class="text-sm text-yellow-400 text-center">
+                        Elimina los patrones archivados para continuar
+                      </p>
+                      <p v-else class="text-sm text-gray-400 text-center">
+                        Los precios están congelados al momento de agregar al carrito
+                      </p>
                     </div>
-
-                    <Separator class="bg-white/10" />
-
-                    <div class="flex justify-center">
-                      <Button
-                        @click="proceedToCheckout"
-                        class="w-full max-w-md bg-[#E3F450] text-black hover:bg-[#E3F450]/80"
-                        :disabled="hasArchivedItems || processingCheckout"
-                      >
-                        <span v-if="processingCheckout">Procesando...</span>
-                        <span v-else>Proceder al Checkout</span>
-                      </Button>
-                    </div>
-
-                    <p v-if="hasArchivedItems" class="text-sm text-yellow-400 text-center">
-                      Elimina los patrones archivados para continuar
-                    </p>
-                    <p v-else class="text-sm text-gray-400 text-center">
-                      Los precios están congelados al momento de agregar al carrito
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </motion.div>
             </div>
           </main>
         </div>
@@ -280,6 +303,7 @@ import {
 } from '@/components/ui/dialog'
 import NavigationBar from '@/components/NavigationBar.vue'
 import AccountSidebar from '@/components/AccountSidebar.vue'
+import { motion } from 'motion-v' // Added motion-v import
 import type { CartItem } from '@/types/cart.types'
 
 const router = useRouter()

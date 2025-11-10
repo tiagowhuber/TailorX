@@ -1,6 +1,5 @@
 <template>
   <div class="min-h-screen bg-black text-white"
-  
     :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'top 600px center', backgroundRepeat: 'no-repeat' }">
     <!-- Navigation Header -->
     <NavigationBar />
@@ -8,14 +7,19 @@
     <!-- Main Content -->
     <main class="px-8 py-12 max-w-7xl mx-auto">
       <!-- Page Title -->
-      <div class="mb-12">
+      <motion.div
+        class="mb-12"
+        :initial="{ opacity: 0, y: 20 }"
+        :animate="{ opacity: 1, y: 0 }"
+        :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
+      >
         <h2 class="text-5xl md:text-6xl font-black mb-4" style="font-family: 'Avenir Next', sans-serif;">
           CATÁLOGO
         </h2>
         <p class="text-xl md:text-2xl orbitron-variable" style="--orbitron-weight: 400;">
           CADA DISEÑO SE ADAPTA A TI, NO AL REVÉS.
         </p>
-      </div>
+      </motion.div>
 
       <!-- Filter Toggle -->
       <div class="mb-8 flex items-center justify-between">
@@ -54,20 +58,29 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else-if="catalogStore.filteredDesigns.length === 0" class="text-center py-20">
+      <motion.div
+        v-else-if="catalogStore.filteredDesigns.length === 0"
+        class="text-center py-20"
+        :initial="{ opacity: 0, scale: 0.95 }"
+        :animate="{ opacity: 1, scale: 1 }"
+        :transition="{ type: 'spring', stiffness: 200, damping: 25 }"
+      >
         <p class="text-gray-400 text-xl orbitron-variable" style="--orbitron-weight: 400;">
           No hay diseños disponibles
         </p>
-      </div>
+      </motion.div>
 
       <!-- Products Grid -->
       <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <!-- Product Card -->
-        <div 
-          v-for="design in catalogStore.filteredDesigns" 
+        <motion.div
+          v-for="(design, index) in catalogStore.filteredDesigns"
           :key="design.id"
           class="group cursor-pointer"
           @click="goToDesign(design.id)"
+          :initial="{ opacity: 0, y: 20 }"
+          :animate="{ opacity: 1, y: 0 }"
+          :transition="{ type: 'spring', stiffness: 200, damping: 25, delay: index * 0.05 }"
         >
           <div class="relative overflow-hidden rounded-lg aspect-[3/4] mb-4 bg-gray-800">
             <img 
@@ -102,7 +115,7 @@
               {{ formatPrice(design.base_price) }}
             </p>
           </div>
-        </div>
+        </motion.div>
       </div>
     </main>
 
@@ -117,6 +130,7 @@ import { useRouter } from 'vue-router'
 import NavigationBar from '@/components/NavigationBar.vue'
 import { useCatalogStore } from '@/stores/catalog'
 import bgImage from '@/assets/backgrounds/elemento-amarillo.png'
+import { motion } from 'motion-v' // Added motion-v import
 
 const catalogStore = useCatalogStore()
 const router = useRouter()

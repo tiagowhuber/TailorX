@@ -14,14 +14,22 @@
           <!-- Main Content Area -->
           <main class="flex-1 min-w-0">
             <!-- Header -->
-            <div class="mb-8">
+            <motion.div
+              class="mb-8"
+              :initial="{ opacity: 0, y: 20 }"
+              :animate="{ opacity: 1, y: 0 }"
+              :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
+            >
+              <div class="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider mb-4 orbitron-variable" style="--orbitron-weight: 700; background-color: #E3F450; color: black;">
+                Patrones de Diseños
+              </div>
               <div class="flex items-center justify-between mb-2">
                 <div>
-                  <h1 class="text-3xl font-bold text-white">Mis Patrones</h1>
+                  <h1 class="text-3xl font-bold text-white">MIS PATRONES</h1>
                   <p class="text-gray-400 text-sm mt-1">Administra todos tus patrones generados</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             <!-- Tabs for Pattern Status -->
             <div class="mb-6">
@@ -79,7 +87,13 @@
             </div>
 
             <!-- Empty State -->
-            <div v-else-if="filteredPatterns.length === 0" class="text-center py-20">
+            <motion.div
+              v-else-if="filteredPatterns.length === 0"
+              class="text-center py-20"
+              :initial="{ opacity: 0, scale: 0.95 }"
+              :animate="{ opacity: 1, scale: 1 }"
+              :transition="{ type: 'spring', stiffness: 200, damping: 25 }"
+            >
               <FileText class="mx-auto h-16 w-16 text-gray-600 mb-4" />
               <h3 class="text-xl font-semibold text-gray-400 mb-2">
                 {{ emptyStateMessage }}
@@ -95,87 +109,92 @@
                 <Plus class="mr-2 h-4 w-4" />
                 Generar mi Primer Patrón
               </Button>
-            </div>
+            </motion.div>
 
             <!-- Patterns Grid -->
             <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <Card
-                v-for="pattern in filteredPatterns"
+              <motion.div
+                v-for="(pattern, index) in filteredPatterns"
                 :key="pattern.id"
-                class="bg-white/5 border-white/10 hover:border-white/20 transition-all cursor-pointer group"
-                @click="viewPattern(pattern.id)"
+                :initial="{ opacity: 0, y: 20 }"
+                :animate="{ opacity: 1, y: 0 }"
+                :transition="{ type: 'spring', stiffness: 200, damping: 25, delay: index * 0.05 }"
               >
-                <CardHeader>
-                  <div class="flex items-start justify-between">
-                    <div class="flex-1">
-                      <CardTitle class="text-lg font-semibold text-white group-hover:text-[#E3F450] transition-colors">
-                        {{ pattern.name || `Patrón #${pattern.id}` }}
-                      </CardTitle>
-                      <CardDescription class="text-gray-400 text-sm mt-1">
-                        {{ pattern.design?.name || 'Diseño' }}
-                      </CardDescription>
+                <Card
+                  class="bg-white/5 border-white/10 hover:border-white/20 transition-all cursor-pointer group"
+                  @click="viewPattern(pattern.id)"
+                >
+                  <CardHeader>
+                    <div class="flex items-start justify-between">
+                      <div class="flex-1">
+                        <CardTitle class="text-md font-medium text-white group-hover:text-[#E3F450] transition-colors">
+                          {{ pattern.name || `Patrón #${pattern.id}` }}
+                        </CardTitle>
+                        <CardDescription class="text-gray-500 text-xs mt-1">
+                          {{ pattern.design?.name || 'Diseño' }}
+                        </CardDescription>
+                      </div>
+                      <div class="flex gap-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          @click.stop="openPatternMenu(pattern)"
+                          class="text-gray-400 hover:text-white hover:bg-white/10"
+                        >
+                          <MoreVertical class="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
-                    <div class="flex gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        @click.stop="openPatternMenu(pattern)"
-                        class="text-gray-400 hover:text-white hover:bg-white/10"
+                  </CardHeader>
+                  <CardContent class="space-y-4">
+                    <div class="flex items-center justify-between">
+                      <span
+                        :class="[
+                          'px-3 py-1 rounded-full text-xs font-medium',
+                          pattern.status === 'draft' && 'bg-yellow-500/20 text-yellow-400',
+                          pattern.status === 'finalized' && 'bg-green-500/20 text-green-400',
+                          pattern.status === 'archived' && 'bg-gray-500/20 text-gray-400'
+                        ]"
                       >
-                        <MoreVertical class="h-4 w-4" />
+                        {{ getStatusLabel(pattern.status) }}
+                      </span>
+                    </div>
+                    
+                    <Separator class="bg-white/10" />
+                    
+                    <div class="space-y-2 text-sm">
+                      <div class="flex items-center justify-between text-gray-400">
+                        <span>Creado:</span>
+                        <span class="text-white">{{ formatDate(pattern.created_at) }}</span>
+                      </div>
+                      <div v-if="pattern.updated_at && pattern.status === 'finalized'" class="flex items-center justify-between text-gray-400">
+                        <span>Actualizado:</span>
+                        <span class="text-white">{{ formatDate(pattern.updated_at) }}</span>
+                      </div>
+                    </div>
+
+                    <div class="flex gap-2 pt-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        @click.stop="downloadPattern(pattern)"
+                        :class="pattern.status === 'finalized' ? 'flex-1' : 'flex-1'"
+                        class="bg-black border-white/20 text-white hover:bg-black/90"
+                      >
+                        <Download class="mr-2 h-3 w-3" />
+                        Descargar
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        @click.stop="viewPattern(pattern.id)"
+                        :class="pattern.status === 'finalized' ? 'flex-1' : 'flex-1'"
+                        class="border-[#E3F450] bg-black text-white hover:bg-black/90"
+                      >
+                        Ver Detalles
                       </Button>
                     </div>
-                  </div>
-                </CardHeader>
-                <CardContent class="space-y-4">
-                  <div class="flex items-center justify-between">
-                    <span
-                      :class="[
-                        'px-3 py-1 rounded-full text-xs font-medium',
-                        pattern.status === 'draft' && 'bg-yellow-500/20 text-yellow-400',
-                        pattern.status === 'finalized' && 'bg-green-500/20 text-green-400',
-                        pattern.status === 'archived' && 'bg-gray-500/20 text-gray-400'
-                      ]"
-                    >
-                      {{ getStatusLabel(pattern.status) }}
-                    </span>
-                  </div>
-                  
-                  <Separator class="bg-white/10" />
-                  
-                  <div class="space-y-2 text-sm">
-                    <div class="flex items-center justify-between text-gray-400">
-                      <span>Creado:</span>
-                      <span class="text-white">{{ formatDate(pattern.created_at) }}</span>
-                    </div>
-                    <div v-if="pattern.updated_at && pattern.status === 'finalized'" class="flex items-center justify-between text-gray-400">
-                      <span>Actualizado:</span>
-                      <span class="text-white">{{ formatDate(pattern.updated_at) }}</span>
-                    </div>
-                  </div>
-
-                  <div class="flex gap-2 pt-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      @click.stop="downloadPattern(pattern)"
-                      :class="pattern.status === 'finalized' ? 'flex-1' : 'flex-1'"
-                      class="bg-black border-white/20 text-white hover:bg-black/90"
-                    >
-                      <Download class="mr-2 h-3 w-3" />
-                      Descargar
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      @click.stop="viewPattern(pattern.id)"
-                      :class="pattern.status === 'finalized' ? 'flex-1' : 'flex-1'"
-                      class="border-[#E3F450] bg-black text-white hover:bg-black/90"
-                    >
-                      Ver Detalles
-                    </Button>
-                  </div>
-                  
+                    
                     <div class="flex justify-center gap-2">
                       <Button
                       v-if="!cartStore.isInCart(pattern.id)"
@@ -198,8 +217,9 @@
                       Ver Carrito
                       </Button>
                     </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </motion.div>
             </div>
           </main>
         </div>
@@ -303,6 +323,7 @@ import {
 } from '@/components/ui/card'
 import NavigationBar from '@/components/NavigationBar.vue'
 import AccountSidebar from '@/components/AccountSidebar.vue'
+import { motion } from 'motion-v' // Added motion-v import
 import type { Pattern } from '@/types/pattern.types'
 
 const router = useRouter()
@@ -496,5 +517,19 @@ onMounted(async () => {
 
 .overflow-x-auto::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
+}
+
+/* Ensure cursor is pointer on tabs */
+:deep(.tabs button) {
+  cursor: pointer;
+}
+
+/* Apply Stack Sans Notch globally except for h1 */
+:deep(*) {
+  font-family: 'Stack Sans Notch', sans-serif !important;
+}
+
+:deep(h1) {
+  font-family: sans-serif !important;
 }
 </style>

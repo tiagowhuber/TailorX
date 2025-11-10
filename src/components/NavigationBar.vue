@@ -188,7 +188,6 @@ onUnmounted(() => {
 // Tabs config for the nav underline animation
 const tabs = [
   { id: 'home', title: 'Inicio', to: '/' },
-  { id: 'tailorx', title: 'TailorX', to: '/#tailorx' },
   { id: 'catalogo', title: 'Catálogo', to: '/catalogo' },
   { id: 'contacto', title: 'Contacto', to: '/#contacto' },
 ]
@@ -269,5 +268,10 @@ body {
 .DropdownMenuItem {
   font-family: 'Stack Sans Notch', sans-serif;
   font-weight: 400; 
+}
+
+/* Dropdown menu content */
+.DropdownMenuContent {
+  font-family: 'Stack Sans Notch', sans-serif;
 }
 </style>
