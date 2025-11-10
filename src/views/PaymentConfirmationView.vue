@@ -39,7 +39,7 @@
           <div class="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider orbitron-variable" style="--orbitron-weight: 700; background-color: #E3F450; color: black;">
             Pago Confirmado
           </div>
-          <h1 class="text-4xl md:text-5xl font-black" style="font-family: 'Avenir Next', sans-serif;">¡PAGO EXITOSO!</h1>
+          <h1 class="text-4xl md:text-5xl font-black" style="font-family: 'Avenir Next', sans-serif;">PAGO EXITOSO</h1>
           <p class="text-xl text-gray-300 orbitron-variable" style="--orbitron-weight: 400;">Tu orden ha sido confirmada</p>
         </div>
 
