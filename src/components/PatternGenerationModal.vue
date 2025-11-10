@@ -19,7 +19,7 @@
         <!-- Generating Progress State -->
         <div v-if="state === 'generating'" class="text-center space-y-4">
           <div class="flex justify-center">
-            <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-lime-400"></div>
+            <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#E3F450]"></div>
           </div>
           <p class="text-gray-300 orbitron-variable" style="--orbitron-weight: 400;">
             {{ message || 'Generando tu patrón personalizado...' }}
@@ -32,8 +32,8 @@
         <!-- Success State -->
         <div v-else-if="state === 'success'" class="space-y-4">
           <div class="flex justify-center">
-            <div class="w-16 h-16 rounded-full bg-lime-400/20 flex items-center justify-center">
-              <svg class="w-10 h-10 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-16 h-16 rounded-full bg-[#E3F450]/20 flex items-center justify-center">
+              <svg class="w-10 h-10 text-[#E3F450]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
             </div>
@@ -87,7 +87,7 @@
                 :key="measurement.id"
                 class="flex items-start gap-3"
               >
-                <div class="w-2 h-2 rounded-full bg-lime-400 mt-2 flex-shrink-0"></div>
+                <div class="w-2 h-2 rounded-full bg-[#E3F450] mt-2 flex-shrink-0"></div>
                 <div>
                   <p class="font-semibold text-white orbitron-variable" style="--orbitron-weight: 500;">
                     {{ measurement.name }}
@@ -119,7 +119,7 @@
           <button
             v-if="onViewPattern"
             @click="handleViewPattern"
-            class="px-6 py-2 bg-lime-400 text-black rounded-lg hover:bg-lime-300 transition-colors orbitron-variable"
+            class="px-6 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F45080] transition-colors orbitron-variable"
             style="--orbitron-weight: 600;"
           >
             Ver Patrón
@@ -138,7 +138,7 @@
           <button
             v-if="onRetry"
             @click="handleRetry"
-            class="px-6 py-2 bg-lime-400 text-black rounded-lg hover:bg-lime-300 transition-colors orbitron-variable"
+            class="px-6 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F45080] transition-colors orbitron-variable"
             style="--orbitron-weight: 600;"
           >
             Reintentar
@@ -156,7 +156,7 @@
           </button>
           <button
             @click="handleAddMeasurements"
-            class="px-6 py-2 bg-lime-400 text-black rounded-lg hover:bg-lime-300 transition-colors orbitron-variable"
+            class="px-6 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F45080] transition-colors orbitron-variable"
             style="--orbitron-weight: 600;"
           >
             Agregar Medidas

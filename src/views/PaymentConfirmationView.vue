@@ -4,8 +4,8 @@
 
   <div class="min-h-screen bg-black text-white relative overflow-hidden">
     <!-- Subtle spotlight background -->
-    <div class="pointer-events-none absolute -top-24 left-1/3 w-[700px] h-[700px] bg-gradient-radial from-lime-400/20 via-yellow-300/10 to-transparent rounded-full blur-3xl"></div>
-    <div class="pointer-events-none absolute bottom-0 right-1/4 w-[900px] h-[600px] bg-gradient-radial from-lime-400/30 via-yellow-300/20 to-transparent rounded-full blur-3xl"></div>
+    <div class="pointer-events-none absolute -top-24 left-1/3 w-[700px] h-[700px] bg-gradient-radial from-[#E3F450]/20 via-yellow-300/10 to-transparent rounded-full blur-3xl"></div>
+    <div class="pointer-events-none absolute bottom-0 right-1/4 w-[900px] h-[600px] bg-gradient-radial from-[#E3F450]/30 via-yellow-300/20 to-transparent rounded-full blur-3xl"></div>
 
     <main class="relative z-10 max-w-5xl mx-auto px-8 py-12">
       <!-- Loading State -->

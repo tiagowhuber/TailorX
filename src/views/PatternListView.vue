@@ -211,7 +211,7 @@
                       variant="outline"
                       size="sm"
                       @click.stop="viewCart"
-                      class="flex-1 bg-[#E3F450] border-lime-400 text-black hover:bg-[#E3F450]/80"
+                      class="flex-1 bg-[#E3F450] border-[#E3F450] text-black hover:bg-[#E3F450]/80"
                       >
                       <ShoppingCart class="mr-2 h-3 w-3" />
                       Ver Carrito

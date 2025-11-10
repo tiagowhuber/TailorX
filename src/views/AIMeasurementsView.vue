@@ -1,8 +1,8 @@
 <template>
   <div class="min-h-screen bg-black text-white overflow-hidden relative">
     <!-- Background spotlight effect -->
-    <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-lime-400/30 via-yellow-300/20 to-transparent rounded-full blur-3xl transform translate-x-32 -translate-y-32"></div>
-    <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-radial from-lime-400/20 via-yellow-300/10 to-transparent rounded-full blur-3xl transform -translate-x-32 translate-y-32"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-[#E3F450]/30 via-yellow-300/20 to-transparent rounded-full blur-3xl transform translate-x-32 -translate-y-32"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-radial from-[#E3F450]/20 via-yellow-300/10 to-transparent rounded-full blur-3xl transform -translate-x-32 translate-y-32"></div>
     
     <!-- Navigation Header -->
     <NavigationBar />

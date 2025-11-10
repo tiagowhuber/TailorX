@@ -28,7 +28,7 @@
             @click="catalogStore.toggleActiveFilter()"
             class="px-4 py-2 rounded-lg border-2 transition-all orbitron-variable"
             :class="catalogStore.showOnlyActive 
-              ? 'border-lime-400 bg-lime-400/10 text-lime-400' 
+              ? 'border-[#E3F450] bg-[#E3F450]/10 text-[#E3F450]' 
               : 'border-gray-600 text-gray-400 hover:border-gray-400'"
             style="--orbitron-weight: 500;"
           >
@@ -42,7 +42,7 @@
 
       <!-- Loading State -->
       <div v-if="catalogStore.loading" class="flex justify-center items-center py-20">
-        <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-lime-400"></div>
+        <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#E3F450]"></div>
       </div>
 
       <!-- Error State -->
@@ -50,7 +50,7 @@
         <p class="text-red-400 text-xl mb-4">{{ catalogStore.error }}</p>
         <button
           @click="loadDesigns"
-          class="px-6 py-3 bg-lime-400 text-black rounded-lg font-bold hover:bg-lime-300 transition-colors orbitron-variable"
+          class="px-6 py-3 bg-[#E3F450] text-black rounded-lg font-bold hover:bg-[#E3F45080] transition-colors orbitron-variable"
           style="--orbitron-weight: 600;"
         >
           Reintentar
@@ -120,7 +120,7 @@
     </main>
 
     <!-- Gradient Spotlight Effect -->
-    <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-[1200px] h-[400px] bg-gradient-radial from-lime-400/20 via-yellow-300/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-[1200px] h-[400px] bg-gradient-radial from-[#E3F450]/20 via-yellow-300/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
   </div>
 </template>
 

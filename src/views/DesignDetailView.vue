@@ -5,7 +5,7 @@
 
     <!-- Loading State -->
     <div v-if="catalogStore.loading" class="flex justify-center items-center py-20 min-h-screen">
-      <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-lime-400"></div>
+      <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#E3F450]"></div>
     </div>
 
     <!-- Error State -->
@@ -13,7 +13,7 @@
       <p class="text-red-400 text-xl mb-4">{{ catalogStore.error }}</p>
       <button
         @click="loadDesign"
-        class="px-6 py-3 bg-lime-400 text-black rounded-lg font-bold hover:bg-lime-300 transition-colors orbitron-variable"
+        class="px-6 py-3 bg-[#E3F450] text-black rounded-lg font-bold hover:bg-[#E3F45080] transition-colors orbitron-variable"
         style="--orbitron-weight: 600;"
       >
         Reintentar
@@ -69,7 +69,7 @@
             <h1 class="text-4xl md:text-5xl font-black mb-4" style="font-family: 'Avenir Next', sans-serif;">
               {{ design.name }}
             </h1>
-            <p class="text-3xl font-bold text-lime-400 orbitron-variable" style="--orbitron-weight: 700;">
+            <p class="text-3xl font-bold text-[#E3F450] orbitron-variable" style="--orbitron-weight: 700;">
               {{ formatPrice(design.base_price) }}
             </p>
           </div>
@@ -103,14 +103,14 @@
               <motion.div 
                 v-for="(pattern, index) in userPatternsForDesign" 
                 :key="pattern.id"
-                class="bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-lime-400/50 transition-all group"
+                class="bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-[#E3F450]/50 transition-all group"
                 :initial="{ opacity: 0, y: 20 }"
                 :animate="{ opacity: 1, y: 0 }"
                 :transition="{ type: 'spring', stiffness: 200, damping: 25, delay: index * 0.05 }"
               >
                 <div class="space-y-4">
                   <!-- Pattern Name -->
-                  <h3 class="text-xl font-bold group-hover:text-lime-400 transition-colors" style="font-family: 'Poppins', sans-serif;">
+                  <h3 class="text-xl font-bold group-hover:text-[#E3F450] transition-colors" style="font-family: 'Poppins', sans-serif;">
                     {{ pattern.name ? pattern.name : `Patrón #${pattern.id}` }}
                   </h3>
                   
@@ -142,7 +142,7 @@
                   <div class="pt-2 flex gap-2">
                     <button
                       @click="router.push(`/patrones/${pattern.id}`)"
-                      class="flex-1 text-lime-400 text-sm font-bold orbitron-variable hover:underline text-left"
+                      class="flex-1 text-[#E3F450] text-sm font-bold orbitron-variable hover:underline text-left"
                       style="--orbitron-weight: 600;"
                     >
                       Ver patrón →
@@ -188,7 +188,7 @@
                 <p v-if="measurement.measurementType?.description" class="text-sm text-gray-400 mt-1">
                   {{ measurement.measurementType.description }}
                 </p>
-                <p class="text-xs text-lime-400 mt-1">
+                <p class="text-xs text-[#E3F450] mt-1">
                   mm
                 </p>
               </div>
@@ -199,7 +199,7 @@
           <div class="space-y-4 pt-4">
             <button
               @click="customizeDesign"
-              class="w-full px-8 py-4 bg-lime-400 text-black rounded-lg font-bold hover:bg-lime-300 transition-colors orbitron-variable text-lg"
+              class="w-full px-8 py-4 bg-[#E3F450] text-black rounded-lg font-bold hover:bg-[#E3F45080] transition-colors orbitron-variable text-lg"
               style="--orbitron-weight: 700;"
               :disabled="!design.is_active"
               :class="!design.is_active ? 'opacity-50 cursor-not-allowed' : ''"
@@ -210,7 +210,7 @@
             <button
               v-if="design.is_active"
               @click="viewMeasurements"
-              class="w-full px-8 py-4 bg-transparent border-2 border-lime-400 text-lime-400 rounded-lg font-bold hover:bg-lime-400/10 transition-colors orbitron-variable text-lg"
+              class="w-full px-8 py-4 bg-transparent border-2 border-[#E3F450] text-[#E3F450] rounded-lg font-bold hover:bg-[#E3F450]/10 transition-colors orbitron-variable text-lg"
               style="--orbitron-weight: 600;"
             >
               VER MIS MEDIDAS
@@ -234,8 +234,8 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <!-- Step 1 -->
           <div class="space-y-4">
-            <div class="w-16 h-16 rounded-full bg-lime-400/20 flex items-center justify-center">
-              <span class="text-lime-400 text-2xl font-bold orbitron-variable" style="--orbitron-weight: 700;">1</span>
+            <div class="w-16 h-16 rounded-full bg-[#E3F450]/20 flex items-center justify-center">
+              <span class="text-[#E3F450] text-2xl font-bold orbitron-variable" style="--orbitron-weight: 700;">1</span>
             </div>
             <h3 class="text-xl font-bold orbitron-variable" style="--orbitron-weight: 600;">
               Ingresa tus medidas
@@ -247,8 +247,8 @@
 
           <!-- Step 2 -->
           <div class="space-y-4">
-            <div class="w-16 h-16 rounded-full bg-lime-400/20 flex items-center justify-center">
-              <span class="text-lime-400 text-2xl font-bold orbitron-variable" style="--orbitron-weight: 700;">2</span>
+            <div class="w-16 h-16 rounded-full bg-[#E3F450]/20 flex items-center justify-center">
+              <span class="text-[#E3F450] text-2xl font-bold orbitron-variable" style="--orbitron-weight: 700;">2</span>
             </div>
             <h3 class="text-xl font-bold orbitron-variable" style="--orbitron-weight: 600;">
               Personaliza el diseño
@@ -260,8 +260,8 @@
 
           <!-- Step 3 -->
           <div class="space-y-4">
-            <div class="w-16 h-16 rounded-full bg-lime-400/20 flex items-center justify-center">
-              <span class="text-lime-400 text-2xl font-bold orbitron-variable" style="--orbitron-weight: 700;">3</span>
+            <div class="w-16 h-16 rounded-full bg-[#E3F450]/20 flex items-center justify-center">
+              <span class="text-[#E3F450] text-2xl font-bold orbitron-variable" style="--orbitron-weight: 700;">3</span>
             </div>
             <h3 class="text-xl font-bold orbitron-variable" style="--orbitron-weight: 600;">
               Recibe tu prenda
@@ -276,7 +276,7 @@
     </main>
 
     <!-- Gradient Spotlight Effect -->
-    <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-[1200px] h-[400px] bg-gradient-radial from-lime-400/20 via-yellow-300/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-[1200px] h-[400px] bg-gradient-radial from-[#E3F450]/20 via-yellow-300/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
 
     <!-- Pattern Generation Modal -->
     <PatternGenerationModal

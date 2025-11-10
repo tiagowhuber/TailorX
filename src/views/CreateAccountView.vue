@@ -4,8 +4,8 @@
     :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'top 600px center', backgroundRepeat: 'no-repeat' }"
   >
     <!-- Background spotlight effect -->
-    <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-lime-400/30 via-yellow-300/20 to-transparent rounded-full blur-3xl transform translate-x-32 -translate-y-32"></div>
-    <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-radial from-lime-400/20 via-yellow-300/10 to-transparent rounded-full blur-3xl transform -translate-x-32 translate-y-32"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-[#E3F450]/30 via-yellow-300/20 to-transparent rounded-full blur-3xl transform translate-x-32 -translate-y-32"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-radial from-[#E3F450]/20 via-yellow-300/10 to-transparent rounded-full blur-3xl transform -translate-x-32 translate-y-32"></div>
     
     <!-- Navigation Header -->
     <header class="absolute top-0 left-0 right-0 z-10 flex justify-between items-center px-8 py-6">
@@ -17,16 +17,16 @@
       
       <!-- Social Media Icons -->
       <div class="flex space-x-3">
-        <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+        <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-[#E3F450] transition-colors">
           <TwitterSmallIcon />
         </a>
-        <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+        <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-[#E3F450] transition-colors">
           <FacebookSmallIcon />
         </a>
-        <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+        <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-[#E3F450] transition-colors">
           <InstagramSmallIcon />
         </a>
-        <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+        <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-[#E3F450] transition-colors">
           <WhatsAppSmallIcon />
         </a>
       </div>

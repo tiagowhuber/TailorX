@@ -8,8 +8,8 @@
     :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }"
   >
     <!-- Background spotlight effect -->
-    <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-lime-400/30 via-yellow-300/20 to-transparent rounded-full blur-3xl transform translate-x-32 -translate-y-32"></div>
-    <div class="absolute top-32 right-16 w-64 h-64 bg-gradient-radial from-lime-300/40 via-yellow-200/30 to-transparent rounded-full blur-2xl"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-[#E3F450]/30 via-yellow-300/20 to-transparent rounded-full blur-3xl transform translate-x-32 -translate-y-32"></div>
+    <div class="absolute top-32 right-16 w-64 h-64 bg-gradient-radial from-[#E3F45080]/40 via-yellow-200/30 to-transparent rounded-full blur-2xl"></div>
     
     <!-- Main Content -->
     <main class="relative z-10 flex items-center justify-center min-h-[calc(100vh-120px)] px-8">
@@ -212,7 +212,7 @@
     :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'top 300px center', backgroundRepeat: 'no-repeat' }"
   >
     <!-- Gradient spotlight effect at bottom -->
-    <div class="absolute bottom-0 right-1/4 w-[800px] h-[600px] bg-gradient-radial from-lime-400/40 via-yellow-300/30 to-transparent rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 right-1/4 w-[800px] h-[600px] bg-gradient-radial from-[#E3F450]/40 via-yellow-300/30 to-transparent rounded-full blur-3xl"></div>
     
     <div class="max-w-6xl mx-auto text-center relative z-200">
       <!-- Main Heading -->
@@ -241,16 +241,16 @@
       
       <!-- Social Media Icons -->
       <div class="flex justify-center space-x-4">
-        <a href="#" class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+        <a href="#" class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-[#E3F450] transition-colors">
           <FacebookIcon />
         </a>
-        <a href="#" class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+        <a href="#" class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-[#E3F450] transition-colors">
           <TwitterIcon />
         </a>
-        <a href="#" class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+        <a href="#" class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-[#E3F450] transition-colors">
           <InstagramIcon />
         </a>
-        <a href="#" class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 transition-colors">
+        <a href="#" class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-[#E3F450] transition-colors">
           <WhatsAppIcon />
         </a>
       </div>

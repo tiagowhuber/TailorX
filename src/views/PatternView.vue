@@ -4,7 +4,7 @@
       <!-- Loading State -->
       <div v-if="loading" class="flex items-center justify-center min-h-[60vh]">
         <div class="text-center space-y-4">
-          <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-lime-400 mx-auto"></div>
+          <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#E3F450] mx-auto"></div>
           <p class="text-gray-300 orbitron-variable" style="--orbitron-weight: 400;">
             Cargando patrón...
           </p>
@@ -25,7 +25,7 @@
           <p class="text-gray-400">{{ error }}</p>
           <button
             @click="router.push({ name: 'catalogo' })"
-            class="px-6 py-2 bg-lime-400 text-black rounded-lg hover:bg-lime-300 transition-colors orbitron-variable"
+            class="px-6 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F45080] transition-colors orbitron-variable"
             style="--orbitron-weight: 600;"
           >
             Volver al Catálogo
@@ -40,7 +40,7 @@
           <div>
             <button
               @click="router.back()"
-              class="text-lime-400 hover:text-lime-300 flex items-center gap-2 mb-4 orbitron-variable"
+              class="text-[#E3F450] hover:text-[#E3F45080] flex items-center gap-2 mb-4 orbitron-variable"
               style="--orbitron-weight: 500;"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -76,7 +76,7 @@
             </button>
             <button
               @click="downloadSVG"
-              class="px-4 py-2 bg-lime-400 text-black rounded-lg hover:bg-lime-300 transition-colors orbitron-variable"
+              class="px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F45080] transition-colors orbitron-variable"
               style="--orbitron-weight: 600;"
             >
               Descargar SVG
