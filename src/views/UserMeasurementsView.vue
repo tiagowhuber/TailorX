@@ -13,18 +13,23 @@
 
           <!-- Main Content Area -->
           <main class="flex-1 min-w-0">
-            <Card class="bg-white/5 backdrop-blur-md border-white/10 shadow-2xl">
-              <CardHeader class="pb-4">
-                <div class="flex justify-between items-center flex-wrap gap-4">
-                  <div>
-                    <CardTitle class="text-4xl font-black text-white mb-1">
-                      MIS MEDIDAS
-                    </CardTitle>
-                    <CardDescription class="text-gray-400 font-normal text-base">
-                      Gestiona tus medidas corporales para confección personalizada
-                    </CardDescription>
-                  </div>
-                  <div class="flex gap-3">
+            <motion.div
+              :initial="{ opacity: 0, y: 20 }"
+              :animate="{ opacity: 1, y: 0 }"
+              :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
+            >
+              <Card class="bg-white/5 backdrop-blur-md border-white/10 shadow-2xl">
+                <CardHeader class="pb-4">
+                  <div class="flex justify-between items-center flex-wrap gap-4">
+                    <div>
+                      <CardTitle class="text-4xl font-black text-white mb-1">
+                        MIS MEDIDAS
+                      </CardTitle>
+                      <CardDescription class="text-gray-400 font-normal text-base">
+                        Gestiona tus medidas corporales para confección personalizada
+                      </CardDescription>
+                    </div>
+                    <div class="flex gap-3">
               <Button 
                 @click="router.push({ name: 'ai-measurements' })"
                 variant="outline"
@@ -61,179 +66,192 @@
                   {{ measurementsStore.loading ? 'Guardando...' : 'Guardar Todo' }}
                 </Button>
               </template>
-                  </div>
-                </div>
-              </CardHeader>
-
-              <Separator class="bg-white/20 mb-8" />
-
-              <CardContent class="space-y-6">
-                <!-- Loading State -->
-                <div v-if="measurementsStore.loading && !measurementsStore.measurementTypes.length" class="text-center py-12">
-                  <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-white border-r-transparent"></div>
-                  <p class="mt-4 text-gray-400">Cargando medidas...</p>
-                </div>
-
-                <!-- Error State -->
-                <div v-else-if="measurementsStore.error && !measurementsStore.measurementTypes.length" class="text-center py-12">
-                  <p class="text-red-400">{{ measurementsStore.error }}</p>
-                  <Button 
-                    @click="loadData"
-                    variant="outline"
-                    class="mt-4 px-6 py-3 border-white/20 text-white hover:bg-white/10"
-                  >
-                    Reintentar
-                  </Button>
-                </div>
-
-                <!-- Measurements Grid -->
-                <div v-else>
-                  <!-- Info Banner -->
-                  <div class="mb-6 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
-                    <div class="flex items-start gap-3">
-                      <AlertCircle class="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-                      <div class="text-sm text-gray-300">
-                        <p class="font-semibold mb-1">Todas las medidas deben ingresarse en milímetros (mm)</p>
-                        <p>Tus medidas son utilizadas para generar patrones personalizados de confección.</p>
-                      </div>
                     </div>
                   </div>
+                </CardHeader>
 
-                  <!-- Empty State / No Measurements Yet -->
-                  <div v-if="measurementsStore.userMeasurementsCount === 0 && measurementsStore.measurementTypesCount > 0" class="mb-6 text-center py-8 bg-white/5 border border-white/10 rounded-lg">
-                    <Ruler class="h-12 w-12 text-gray-600 mx-auto mb-3" />
-                    <p class="text-gray-400 text-base mb-4">Aún no tienes medidas guardadas</p>
-                    <div class="flex gap-3 justify-center">
-                      <Button 
-                        @click="router.push({ name: 'ai-measurements' })"
-                        variant="outline"
-                        class="px-8 py-3 border-white/20 text-black hover:bg-white/10"
-                      >
-                        <Sparkles class="mr-2 h-5 w-5" />
-                        Obtener con IA
-                      </Button>
-                      <Button 
-                        @click="enterEditMode"
-                        variant="outline"
-                        class="px-8 py-3 border-white/20 text-black hover:bg-white/10"
-                      >
-                        <Edit class="mr-2 h-5 w-5" />
-                        Agregar Manualmente
-                      </Button>
-                    </div>
+                <Separator class="bg-white/20 mb-8" />
+
+                <CardContent class="space-y-6">
+                  <!-- Loading State -->
+                  <div v-if="measurementsStore.loading && !measurementsStore.measurementTypes.length" class="text-center py-12">
+                    <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-white border-r-transparent"></div>
+                    <p class="mt-4 text-gray-400">Cargando medidas...</p>
                   </div>
 
-                  <!-- Success/Error Messages -->
-                  <div v-if="successMessage" class="mb-4 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
-                    <div class="flex items-center gap-3">
-                      <CheckCircle class="h-5 w-5 text-green-400" />
-                      <p class="text-sm text-green-300">{{ successMessage }}</p>
-                    </div>
-                  </div>
-
-                  <div v-if="measurementsStore.error && isEditMode" class="mb-4 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
-                    <div class="flex items-center gap-3">
-                      <AlertCircle class="h-5 w-5 text-red-400" />
-                      <p class="text-sm text-red-300">{{ measurementsStore.error }}</p>
-                    </div>
-                  </div>
-
-                  <!-- Measurements Stats -->
-                  <div v-if="measurementsStore.userMeasurementsCount > 0 || isEditMode" class="mb-6 flex items-center justify-between">
-                    <p class="text-gray-400">
-                      {{ measurementsStore.userMeasurementsCount }} de {{ measurementsStore.measurementTypesCount }} medidas guardadas
-                    </p>
-                    <div v-if="hasChanges && isEditMode" class="text-yellow-400 text-sm flex items-center gap-2">
-                      <AlertCircle class="h-4 w-4" />
-                      Cambios sin guardar
-                    </div>
+                  <!-- Error State -->
+                  <div v-else-if="measurementsStore.error && !measurementsStore.measurementTypes.length" class="text-center py-12">
+                    <p class="text-red-400">{{ measurementsStore.error }}</p>
+                    <Button 
+                      @click="loadData"
+                      variant="outline"
+                      class="mt-4 px-6 py-3 border-white/20 text-white hover:bg-white/10"
+                    >
+                      Reintentar
+                    </Button>
                   </div>
 
                   <!-- Measurements Grid -->
-                  <div v-if="measurementsStore.userMeasurementsCount > 0 || isEditMode" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <Card 
-                      v-for="type in measurementsStore.measurementTypes" 
-                      :key="type.id"
-                      class="bg-white/10 border-white/20 transition-all"
-                      :class="{ 'ring-2 ring-white': editedMeasurements[type.id] !== undefined && hasValueChanged(type.id) }"
-                    >
-                      <CardHeader class="pb-3">
-                        <CardTitle class="text-lg font-medium text-white flex items-center justify-between">
-                          {{ type.name }}
-                          <div class="flex items-center gap-1">
-                            <Button
-                              v-if="hasGuideImage(type.id)"
-                              @click="() => openImageDialog(type)"
-                              variant="ghost"
-                              size="icon"
-                              class="h-8 w-8 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10"
-                            >
-                              <HelpCircle class="h-4 w-4" />
-                            </Button>
-                            <Button
-                              v-if="getMeasurementValue(type.id) !== null"
-                              @click="() => openDeleteDialog(type)"
-                              variant="ghost"
-                              size="icon"
-                              class="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-red-500/10"
-                            >
-                              <Trash2 class="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </CardTitle>
-                        <CardDescription v-if="type.description" class="text-gray-400 text-sm">
-                          {{ type.description }}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent class="space-y-2">
-                        <div class="space-y-2">
-                          <Label :for="`measure-${type.id}`" class="text-gray-300 text-sm">
-                            Valor (mm)
-                          </Label>
-                          <div class="relative">
-                            <Input 
-                              :id="`measure-${type.id}`"
-                              v-model.number="editedMeasurements[type.id]"
-                              type="number"
-                              step="0.01"
-                              min="0"
-                              max="9999.99"
-                              placeholder="Ingrese medida"
-                              :class="[
-                                'bg-white/10 border-white/20 text-white placeholder:text-gray-500',
-                                getValidationError(type.id) && 'border-red-500 focus:ring-red-500'
-                              ]"
-                              @input="() => validateMeasurement(type.id)"
-                              @change="() => handleMeasurementChange(type.id)"
-                            />
-                            <span v-if="getMeasurementValue(type.id) !== null" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">
-                              mm
-                            </span>
-                          </div>
-                          
-                          <!-- Inline Validation Error -->
-                          <p v-if="getValidationError(type.id)" class="text-red-400 text-xs flex items-center gap-1">
-                            <AlertCircle class="h-3 w-3" />
-                            {{ getValidationError(type.id) }}
-                          </p>
-
-                          <!-- Last Updated -->
-                          <p v-if="getLastUpdated(type.id)" class="text-gray-500 text-xs">
-                            Actualizado: {{ getLastUpdated(type.id) }}
-                          </p>
+                  <div v-else>
+                    <!-- Info Banner -->
+                    <div class="mb-6 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                      <div class="flex items-start gap-3">
+                        <AlertCircle class="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
+                        <div class="text-sm text-gray-300">
+                          <p class="font-semibold mb-1">Todas las medidas deben ingresarse en milímetros (mm)</p>
+                          <p>Tus medidas son utilizadas para generar patrones personalizados de confección.</p>
                         </div>
-                      </CardContent>
-                    </Card>
-                  </div>
+                      </div>
+                    </div>
 
-                  <!-- Empty State - No Measurement Types -->
-                  <div v-if="measurementsStore.measurementTypesCount === 0" class="text-center py-12">
-                    <Ruler class="h-16 w-16 text-gray-600 mx-auto mb-4" />
-                    <p class="text-gray-400 text-lg">No hay tipos de medidas disponibles</p>
+                    <!-- Empty State / No Measurements Yet -->
+                    <motion.div
+                      v-if="measurementsStore.userMeasurementsCount === 0 && measurementsStore.measurementTypesCount > 0"
+                      class="mb-6 text-center py-8 bg-white/5 border border-white/10 rounded-lg"
+                      :initial="{ opacity: 0, scale: 0.95 }"
+                      :animate="{ opacity: 1, scale: 1 }"
+                      :transition="{ type: 'spring', stiffness: 200, damping: 25 }"
+                    >
+                      <Ruler class="h-12 w-12 text-gray-600 mx-auto mb-3" />
+                      <p class="text-gray-400 text-base mb-4">Aún no tienes medidas guardadas</p>
+                      <div class="flex gap-3 justify-center">
+                        <Button 
+                          @click="router.push({ name: 'ai-measurements' })"
+                          variant="outline"
+                          class="px-8 py-3 border-white/20 text-black hover:bg-white/10"
+                        >
+                          <Sparkles class="mr-2 h-5 w-5" />
+                          Obtener con IA
+                        </Button>
+                        <Button 
+                          @click="enterEditMode"
+                          variant="outline"
+                          class="px-8 py-3 border-white/20 text-black hover:bg-white/10"
+                        >
+                          <Edit class="mr-2 h-5 w-5" />
+                          Agregar Manualmente
+                        </Button>
+                      </div>
+                    </motion.div>
+
+                    <!-- Success/Error Messages -->
+                    <div v-if="successMessage" class="mb-4 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+                      <div class="flex items-center gap-3">
+                        <CheckCircle class="h-5 w-5 text-green-400" />
+                        <p class="text-sm text-green-300">{{ successMessage }}</p>
+                      </div>
+                    </div>
+
+                    <div v-if="measurementsStore.error && isEditMode" class="mb-4 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+                      <div class="flex items-center gap-3">
+                        <AlertCircle class="h-5 w-5 text-red-400" />
+                        <p class="text-sm text-red-300">{{ measurementsStore.error }}</p>
+                      </div>
+                    </div>
+
+                    <!-- Measurements Stats -->
+                    <div v-if="measurementsStore.userMeasurementsCount > 0 || isEditMode" class="mb-6 flex items-center justify-between">
+                      <p class="text-gray-400">
+                        {{ measurementsStore.userMeasurementsCount }} de {{ measurementsStore.measurementTypesCount }} medidas guardadas
+                      </p>
+                      <div v-if="hasChanges && isEditMode" class="text-yellow-400 text-sm flex items-center gap-2">
+                        <AlertCircle class="h-4 w-4" />
+                        Cambios sin guardar
+                      </div>
+                    </div>
+
+                    <!-- Measurements Grid -->
+                    <div v-if="measurementsStore.userMeasurementsCount > 0 || isEditMode" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <motion.div
+                        v-for="(type, index) in measurementsStore.measurementTypes"
+                        :key="type.id"
+                        :initial="{ opacity: 0, y: 20 }"
+                        :animate="{ opacity: 1, y: 0 }"
+                        :transition="{ type: 'spring', stiffness: 200, damping: 25, delay: index * 0.05 }"
+                      >
+                        <Card 
+                          class="bg-white/10 border-white/20 transition-all"
+                          :class="{ 'ring-2 ring-white': editedMeasurements[type.id] !== undefined && hasValueChanged(type.id) }"
+                        >
+                          <CardHeader class="pb-3">
+                            <CardTitle class="text-lg font-medium text-white flex items-center justify-between">
+                              {{ type.name }}
+                              <div class="flex items-center gap-1">
+                                <Button
+                                  v-if="hasGuideImage(type.id)"
+                                  @click="() => openImageDialog(type)"
+                                  variant="ghost"
+                                  size="icon"
+                                  class="h-8 w-8 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10"
+                                >
+                                  <HelpCircle class="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  v-if="getMeasurementValue(type.id) !== null"
+                                  @click="() => openDeleteDialog(type)"
+                                  variant="ghost"
+                                  size="icon"
+                                  class="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                                >
+                                  <Trash2 class="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </CardTitle>
+                            <CardDescription v-if="type.description" class="text-gray-400 text-sm">
+                              {{ type.description }}
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent class="space-y-2">
+                            <div class="space-y-2">
+                              <Label :for="`measure-${type.id}`" class="text-gray-300 text-sm">
+                                Valor (mm)
+                              </Label>
+                              <div class="relative">
+                                <Input 
+                                  :id="`measure-${type.id}`"
+                                  v-model.number="editedMeasurements[type.id]"
+                                  type="number"
+                                  step="0.01"
+                                  min="0"
+                                  max="9999.99"
+                                  placeholder="Ingrese medida"
+                                  :class="[
+                                    'bg-white/10 border-white/20 text-white placeholder:text-gray-500',
+                                    getValidationError(type.id) && 'border-red-500 focus:ring-red-500'
+                                  ]"
+                                  @input="() => validateMeasurement(type.id)"
+                                  @change="() => handleMeasurementChange(type.id)"
+                                />
+                                <span v-if="getMeasurementValue(type.id) !== null" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">
+                                  mm
+                                </span>
+                              </div>
+                              
+                              <!-- Inline Validation Error -->
+                              <p v-if="getValidationError(type.id)" class="text-red-400 text-xs flex items-center gap-1">
+                                <AlertCircle class="h-3 w-3" />
+                                {{ getValidationError(type.id) }}
+                              </p>
+
+                              <!-- Last Updated -->
+                              <p v-if="getLastUpdated(type.id)" class="text-gray-500 text-xs">
+                                Actualizado: {{ getLastUpdated(type.id) }}
+                              </p>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    </div>
+
+                    <!-- Empty State - No Measurement Types -->
+                    <div v-if="measurementsStore.measurementTypesCount === 0" class="text-center py-12">
+                      <Ruler class="h-16 w-16 text-gray-600 mx-auto mb-4" />
+                      <p class="text-gray-400 text-lg">No hay tipos de medidas disponibles</p>
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </motion.div>
           </main>
         </div>
       </div>
@@ -306,6 +324,7 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useMeasurementsStore } from '@/stores/measurements'
+import { motion } from 'motion-v' // Added motion-v import
 import type { MeasurementType } from '@/types/measurements.types'
 import { Edit, Save, X, Trash2, Ruler, CheckCircle, AlertCircle, Sparkles, HelpCircle } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
