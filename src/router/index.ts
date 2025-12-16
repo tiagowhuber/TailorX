@@ -13,6 +13,7 @@ import AIMeasurementsView from '@/views/AIMeasurementsView.vue'
 import BodyTypeGuideView from '@/views/BodyTypeGuideView.vue'
 import PaymentConfirmationView from '@/views/PaymentConfirmationView.vue'
 import OrderListView from '@/views/OrderListView.vue'
+import AddressesView from '@/views/AddressesView.vue'
 import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
@@ -95,7 +96,13 @@ const router = createRouter({
       name: 'orders',
       component: OrderListView,
       meta: { requiresAuth: true }
-    }
+    },
+    {
+      path: '/mis-direcciones',
+      name: 'addresses',
+      component: AddressesView,
+      meta: { requiresAuth: true }
+    },
   ]
 })
 

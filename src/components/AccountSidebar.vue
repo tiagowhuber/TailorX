@@ -48,6 +48,17 @@
           Mis Pedidos
         </button>
         <button
+          @click="router.push({ name: 'addresses' })"
+          :class="[
+            'px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap border',
+            activeSection === 'addresses'
+              ? 'bg-white text-black border-white'
+              : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
+          ]"
+        >
+          Direcciones
+        </button>
+        <button
           v-if="activeSection === 'account'"
           @click="$emit('edit-profile')"
           class="px-4 py-2 rounded-lg text-sm font-medium text-white border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors whitespace-nowrap"
@@ -117,6 +128,19 @@
           Mis Pedidos
         </button>
         
+        <button
+          @click="router.push({ name: 'addresses' })"
+          :class="[
+            'w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors border cursor-pointer',
+            activeSection === 'addresses'
+              ? 'bg-white text-black border-white'
+              : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
+          ]"
+        >
+          <MapPin :class="['inline-block mr-2 h-4 w-4', activeSection === 'addresses' ? 'text-black' : 'text-[#E3F450]']" />
+          Direcciones
+        </button>
+        
         <Separator class="bg-white/10 my-4" />
         
         <button
@@ -143,11 +167,11 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { RulerDimensionLine, ScissorsLineDashed, Settings, LogOut, BaggageClaim } from 'lucide-vue-next'
+import { RulerDimensionLine, ScissorsLineDashed, Settings, LogOut, BaggageClaim, MapPin } from 'lucide-vue-next'
 import { Separator } from '@/components/ui/separator'
 
 interface Props {
-  activeSection: 'account' | 'measurements' | 'patterns' | 'cart' | 'orders'
+  activeSection: 'account' | 'measurements' | 'patterns' | 'cart' | 'orders' | 'addresses'
 }
 
 defineProps<Props>()

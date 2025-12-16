@@ -24,6 +24,12 @@ import type {
   PaymentConfirmationResponse,
   PaymentStatusResponse
 } from '@/types/payment.types'
+import type {
+  CreateAddressRequest,
+  UpdateAddressRequest,
+  AddressResponse,
+  AddressesResponse
+} from '@/types/address.types'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api',
@@ -205,6 +211,33 @@ export const ordersApi = {
   // Get order by ID
   getOrderById: async (orderId: number) => {
     const response = await api.get<{ success: boolean; data: any }>(`/orders/${orderId}`)
+    return response.data
+  },
+}
+
+// Address API functions
+export const addressesApi = {
+  // Get user addresses
+  getUserAddresses: async () => {
+    const response = await api.get<AddressesResponse>('/user-addresses')
+    return response.data
+  },
+
+  // Create address
+  createAddress: async (data: CreateAddressRequest) => {
+    const response = await api.post<AddressResponse>('/user-addresses', data)
+    return response.data
+  },
+
+  // Update address
+  updateAddress: async (id: number, data: UpdateAddressRequest) => {
+    const response = await api.put<AddressResponse>(`/user-addresses/${id}`, data)
+    return response.data
+  },
+
+  // Delete address
+  deleteAddress: async (id: number) => {
+    const response = await api.delete<{ success: boolean; message?: string }>(`/user-addresses/${id}`)
     return response.data
   },
 }
