@@ -127,6 +127,30 @@ export const useMeasurementsStore = defineStore('measurements', () => {
     }
   }
 
+  const generateMeasurements = async (userId: number, formData: FormData) => {
+    loading.value = true
+    error.value = null
+    
+    try {
+      const response = await measurementsApi.generateMeasurements(formData)
+      
+      if (response.success) {
+        // Refresh user measurements
+        await fetchUserMeasurements(userId)
+        return { success: true, data: response.data }
+      } else {
+        error.value = response.message || 'Error al generar medidas'
+        return { success: false, message: error.value }
+      }
+    } catch (err: any) {
+      const message = err.response?.data?.message || 'Error de conexión con el servidor'
+      error.value = message
+      return { success: false, message }
+    } finally {
+      loading.value = false
+    }
+  }
+
   const clearError = () => {
     error.value = null
   }
@@ -146,6 +170,7 @@ export const useMeasurementsStore = defineStore('measurements', () => {
     fetchUserMeasurements,
     saveMeasurements,
     deleteMeasurement,
+    generateMeasurements,
     clearError,
   }
 })

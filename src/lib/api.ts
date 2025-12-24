@@ -91,6 +91,25 @@ export const measurementsApi = {
     const response = await api.delete<{ success: boolean }>(`/user-measurements/${id}`)
     return response.data
   },
+
+  // Generate measurements from images (TailorVision)
+  generateMeasurements: async (formData: FormData) => {
+    const response = await api.post<{ 
+      success: boolean; 
+      message: string; 
+      data: { 
+        measurements: UserMeasurement[]; 
+        raw_measurements: Record<string, number>;
+        warnings?: string[];
+        debug_images?: string[];
+      } 
+    }>('/tailor-vision/generate', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    return response.data
+  },
 }
 
 // Design API functions

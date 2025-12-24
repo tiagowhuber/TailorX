@@ -121,6 +121,45 @@
                   class="hidden"
                 />
               </div>
+
+              <!-- Arm Photo (Optional) -->
+              <div>
+                <Label class="text-white font-medium mb-2 block">
+                  Foto Brazos (Opcional)
+                  <span class="text-xs text-gray-400 ml-2 font-normal">Pose "Invisible Box" para mayor precisión</span>
+                </Label>
+                <div 
+                  v-if="!armPhotoPreview"
+                  @click="() => armPhotoInput?.click()"
+                  @dragover.prevent="handleDragOver"
+                  @dragleave.prevent="handleDragLeave"
+                  @drop.prevent="(e) => handleDrop(e, 'arm')"
+                  class="upload-area border-2 border-dashed border-white/20 rounded-lg p-8 text-center cursor-pointer hover:bg-white/5 transition-all"
+                  :class="{ 'border-[#E3F450] bg-white/5': armPhotoDragging }"
+                >
+                  <Camera class="h-12 w-12 text-[#E3F450] mx-auto mb-4" />
+                  <p class="text-white mb-2">Click para subir o arrastra la imagen</p>
+                  <p class="text-gray-400 text-sm">JPEG, PNG o WebP</p>
+                </div>
+                <div v-else class="relative">
+                  <img :src="armPhotoPreview" alt="Vista previa brazos" class="w-full h-64 object-contain rounded-lg bg-white/5 border border-white/20" />
+                  <Button
+                    @click="removeArmPhoto"
+                    variant="destructive"
+                    size="icon"
+                    class="absolute top-2 right-2 h-10 w-10 bg-red-500 hover:bg-red-600"
+                  >
+                    <Trash2 class="h-5 w-5" />
+                  </Button>
+                </div>
+                <input
+                  ref="armPhotoInput"
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                  @change="(e) => handleFileSelect(e, 'arm')"
+                  class="hidden"
+                />
+              </div>
             </div>
 
             <!-- Form Section -->
@@ -320,10 +359,16 @@ const measurementsStore = useMeasurementsStore()
 // Form state
 const frontPhotoInput = ref<HTMLInputElement | null>(null)
 const sidePhotoInput = ref<HTMLInputElement | null>(null)
+const armPhotoInput = ref<HTMLInputElement | null>(null)
+const frontPhotoFile = ref<File | null>(null)
+const sidePhotoFile = ref<File | null>(null)
+const armPhotoFile = ref<File | null>(null)
 const frontPhotoPreview = ref<string | null>(null)
 const sidePhotoPreview = ref<string | null>(null)
+const armPhotoPreview = ref<string | null>(null)
 const frontPhotoDragging = ref(false)
 const sidePhotoDragging = ref(false)
+const armPhotoDragging = ref(false)
 const height = ref<number | undefined>(undefined)
 const gender = ref<'male' | 'female'>('male')
 const errorMessage = ref('')
@@ -332,7 +377,7 @@ const isSaving = ref(false)
 const showPreview = ref(false)
 
 // Results state
-const detectedMeasurements = ref<Array<{ name: string; value: number }>>([])
+const detectedMeasurements = ref<Array<{ name: string; value: number; typeId?: number }>>([])
 const bodyTypeData = ref<{
   type: string
   icon: string
@@ -349,7 +394,7 @@ const bodyTypeData = ref<{
 
 // Computed
 const canAnalyze = computed(() => {
-  return frontPhotoPreview.value && sidePhotoPreview.value && height.value && height.value > 0
+  return frontPhotoFile.value && sidePhotoFile.value && height.value && height.value > 0
 })
 
 // Methods
@@ -358,8 +403,10 @@ const handleDragOver = (e: DragEvent) => {
   if (target.closest('.upload-area')) {
     if (target.closest('[data-photo="front"]')) {
       frontPhotoDragging.value = true
-    } else {
+    } else if (target.closest('[data-photo="side"]')) {
       sidePhotoDragging.value = true
+    } else {
+      armPhotoDragging.value = true
     }
   }
 }
@@ -367,11 +414,13 @@ const handleDragOver = (e: DragEvent) => {
 const handleDragLeave = () => {
   frontPhotoDragging.value = false
   sidePhotoDragging.value = false
+  armPhotoDragging.value = false
 }
 
-const handleDrop = (e: DragEvent, type: 'front' | 'side') => {
+const handleDrop = (e: DragEvent, type: 'front' | 'side' | 'arm') => {
   frontPhotoDragging.value = false
   sidePhotoDragging.value = false
+  armPhotoDragging.value = false
   
   const files = e.dataTransfer?.files
   if (files && files[0]) {
@@ -379,7 +428,7 @@ const handleDrop = (e: DragEvent, type: 'front' | 'side') => {
   }
 }
 
-const handleFileSelect = (e: Event, type: 'front' | 'side') => {
+const handleFileSelect = (e: Event, type: 'front' | 'side' | 'arm') => {
   const target = e.target as HTMLInputElement
   const file = target.files?.[0]
   if (file) {
@@ -387,7 +436,7 @@ const handleFileSelect = (e: Event, type: 'front' | 'side') => {
   }
 }
 
-const processFile = (file: File, type: 'front' | 'side') => {
+const processFile = (file: File, type: 'front' | 'side' | 'arm') => {
   // Validate file type
   if (!['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(file.type)) {
     errorMessage.value = 'Solo se permiten imágenes JPEG, PNG o WebP'
@@ -402,14 +451,25 @@ const processFile = (file: File, type: 'front' | 'side') => {
 
   errorMessage.value = ''
 
+  // Store file
+  if (type === 'front') {
+    frontPhotoFile.value = file
+  } else if (type === 'side') {
+    sidePhotoFile.value = file
+  } else {
+    armPhotoFile.value = file
+  }
+
   // Create preview
   const reader = new FileReader()
   reader.onload = (e) => {
     const result = e.target?.result as string
     if (type === 'front') {
       frontPhotoPreview.value = result
-    } else {
+    } else if (type === 'side') {
       sidePhotoPreview.value = result
+    } else {
+      armPhotoPreview.value = result
     }
   }
   reader.readAsDataURL(file)
@@ -417,6 +477,7 @@ const processFile = (file: File, type: 'front' | 'side') => {
 
 const removeFrontPhoto = () => {
   frontPhotoPreview.value = null
+  frontPhotoFile.value = null
   if (frontPhotoInput.value) {
     frontPhotoInput.value.value = ''
   }
@@ -424,69 +485,83 @@ const removeFrontPhoto = () => {
 
 const removeSidePhoto = () => {
   sidePhotoPreview.value = null
+  sidePhotoFile.value = null
   if (sidePhotoInput.value) {
     sidePhotoInput.value.value = ''
   }
 }
 
+const removeArmPhoto = () => {
+  armPhotoPreview.value = null
+  armPhotoFile.value = null
+  if (armPhotoInput.value) {
+    armPhotoInput.value.value = ''
+  }
+}
+
 const analyzePhotos = async () => {
-  if (!canAnalyze.value || !height.value) return
+  if (!canAnalyze.value || !height.value || !authStore.user?.id) return
 
   isAnalyzing.value = true
   errorMessage.value = ''
 
-  // Simulate AI processing delay
-  await new Promise(resolve => setTimeout(resolve, 3000))
-
-  // Calculate measurements based on height and gender
-  const measurements = calculateMeasurements(height.value, gender.value)
-  detectedMeasurements.value = measurements
-
-  // Analyze body type
-  const bodyAnalysis = analyzeBodyType(measurements, gender.value)
-  bodyTypeData.value = bodyAnalysis
-
-  isAnalyzing.value = false
-  showPreview.value = true
-}
-
-const calculateMeasurements = (heightValue: number, genderValue: string): Array<{ name: string; value: number }> => {
-  const getRealisticVariation = (maxVariation: number): number => {
-    const random = Math.random()
-    if (random < 0.6) {
-      return Math.floor(Math.random() * (maxVariation + 1))
-    } else if (random < 0.9) {
-      return -Math.floor(Math.random() * (maxVariation + 1))
-    } else {
-      return Math.floor(Math.random() * (maxVariation * 2 + 1)) - maxVariation
+  try {
+    const formData = new FormData()
+    formData.append('front_image', frontPhotoFile.value!)
+    formData.append('side_image', sidePhotoFile.value!)
+    if (armPhotoFile.value) {
+      formData.append('arm_image', armPhotoFile.value)
     }
+    formData.append('height_cm', (height.value / 10).toString()) // Convert mm to cm for API
+
+    const result = await measurementsStore.generateMeasurements(authStore.user.id, formData)
+
+    if (result.success && result.data) {
+      // Map the returned measurements to the view format
+      // The API returns UserMeasurement[] which has measurementType included
+      detectedMeasurements.value = result.data.measurements.map((m: any) => ({
+        name: m.measurementType?.name || 'Medida desconocida',
+        value: Math.round(m.value), // Value is already in mm from API
+        typeId: m.measurement_type_id
+      }))
+
+      // Analyze body type (using the new measurements)
+      // We need to map the names back to what analyzeBodyType expects or update it
+      // analyzeBodyType expects: 'Contorno de pecho/tórax', 'Contorno de cintura', 'Contorno de cadera'
+      // The API returns names from DB. I should check what names are in DB.
+      // For now, I'll try to map based on common names or just pass the values if I can identify them.
+      
+      // Let's try to find chest, waist, hip from the result
+      // We can use the raw_measurements from result.data if available, or filter detectedMeasurements
+      const raw = result.data.raw_measurements || {}
+      
+      // Helper to get value in mm
+      const getVal = (key: string) => (raw[key] || 0) // Value is already in mm
+
+      const chest = getVal('chest') || getVal('chest_circumference')
+      const waist = getVal('waist') || getVal('waist_circumference')
+      const hip = getVal('hips') || getVal('hips_circumference')
+      
+      // Create a temporary array for body analysis
+      const analysisMeasurements = [
+        { name: 'Contorno de pecho/tórax', value: chest },
+        { name: 'Contorno de cintura', value: waist },
+        { name: 'Contorno de cadera', value: hip }
+      ]
+
+      const bodyAnalysis = analyzeBodyType(analysisMeasurements, gender.value)
+      bodyTypeData.value = bodyAnalysis
+
+      showPreview.value = true
+    } else {
+      errorMessage.value = result.message || 'Error al analizar las fotos'
+    }
+  } catch (error) {
+    console.error(error)
+    errorMessage.value = 'Ocurrió un error inesperado'
+  } finally {
+    isAnalyzing.value = false
   }
-
-  const baseChest = genderValue === 'male' 
-    ? Math.round(heightValue * 0.55) 
-    : Math.round(heightValue * 0.53)
-    
-  const baseWaist = genderValue === 'male' 
-    ? Math.round(heightValue * 0.45) 
-    : Math.round(heightValue * 0.42)
-    
-  const baseHip = genderValue === 'male' 
-    ? Math.round(heightValue * 0.50) 
-    : Math.round(heightValue * 0.55)
-
-  // All values are already in mm (user inputs height in mm)
-  return [
-    { name: 'Contorno de pecho/tórax', value: baseChest + getRealisticVariation(30) },
-    { name: 'Contorno de cintura', value: baseWaist + getRealisticVariation(30) },
-    { name: 'Contorno de cadera', value: baseHip + getRealisticVariation(30) },
-    { name: 'Ancho de hombros', value: Math.round(heightValue * 0.26) + getRealisticVariation(20) },
-    { name: 'Largo de torso', value: Math.round(heightValue * 0.30) + getRealisticVariation(20) },
-    { name: 'Alto de sisa', value: Math.round(heightValue * 0.18) + getRealisticVariation(20) },
-    { name: 'Largo de brazo', value: Math.round(heightValue * 0.35) + getRealisticVariation(20) },
-    { name: 'Contorno de brazo', value: Math.round(heightValue * 0.16) + getRealisticVariation(20) },
-    { name: 'Largo lateral', value: Math.round(heightValue * 0.40) + getRealisticVariation(20) },
-    { name: 'Largo total de prenda', value: Math.round(heightValue * 0.60) + getRealisticVariation(30) }
-  ]
 }
 
 const analyzeBodyType = (measurements: Array<{ name: string; value: number }>, genderValue: string) => {
@@ -494,7 +569,7 @@ const analyzeBodyType = (measurements: Array<{ name: string; value: number }>, g
   const waist = measurements.find(m => m.name === 'Contorno de cintura')?.value || 0
   const hip = measurements.find(m => m.name === 'Contorno de cadera')?.value || 0
 
-  const waistHipRatio = (waist / hip).toFixed(2)
+  const waistHipRatio = hip > 0 ? (waist / hip).toFixed(2) : '0.00'
 
   if (genderValue === 'female') {
     return analyzeFemaleBodyType(chest, waist, hip, waistHipRatio)
@@ -508,7 +583,7 @@ const analyzeFemaleBodyType = (chest: number, waist: number, hip: number, ratio:
   const diffChestWaist = chest - waist
   const diffHipWaist = hip - waist
 
-  if (diffChestHip <= 5 && diffChestWaist >= 15 && diffHipWaist >= 15) {
+  if (diffChestHip <= 50 && diffChestWaist >= 150 && diffHipWaist >= 150) { // Adjusted thresholds for mm
     return {
       type: 'Reloj de Arena',
       icon: '⌛',
@@ -520,7 +595,7 @@ const analyzeFemaleBodyType = (chest: number, waist: number, hip: number, ratio:
         'Prendas que resalten las curvas naturales'
       ]
     }
-  } else if (hip > chest + 5) {
+  } else if (hip > chest + 50) {
     return {
       type: 'Pera/Triángulo',
       icon: '🍐',
@@ -532,7 +607,7 @@ const analyzeFemaleBodyType = (chest: number, waist: number, hip: number, ratio:
         'Pantalones de corte recto'
       ]
     }
-  } else if (chest > hip + 5) {
+  } else if (chest > hip + 50) {
     return {
       type: 'Triángulo Invertido',
       icon: '🏋️',
@@ -544,7 +619,7 @@ const analyzeFemaleBodyType = (chest: number, waist: number, hip: number, ratio:
         'Faldas con vuelo'
       ]
     }
-  } else if (diffChestHip <= 3 && diffChestWaist <= 10) {
+  } else if (diffChestHip <= 30 && diffChestWaist <= 100) {
     return {
       type: 'Rectangular',
       icon: '▭',
@@ -572,10 +647,10 @@ const analyzeFemaleBodyType = (chest: number, waist: number, hip: number, ratio:
 }
 
 const analyzeMaleBodyType = (chest: number, waist: number, hip: number, ratio: string) => {
-  const shoulder = chest + 5
+  const shoulder = chest + 50 // Approximation if shoulder not available
   const diffShoulderHip = shoulder - hip
 
-  if (diffShoulderHip >= 8 && (chest - waist) >= 10) {
+  if (diffShoulderHip >= 80 && (chest - waist) >= 100) {
     return {
       type: 'Triángulo Invertido',
       icon: '🏋️',
@@ -587,7 +662,7 @@ const analyzeMaleBodyType = (chest: number, waist: number, hip: number, ratio: s
         'Prendas que mantengan proporciones'
       ]
     }
-  } else if (diffShoulderHip >= 5 && diffShoulderHip < 8) {
+  } else if (diffShoulderHip >= 50 && diffShoulderHip < 80) {
     return {
       type: 'Trapezoidal',
       icon: '⬟',
@@ -599,7 +674,7 @@ const analyzeMaleBodyType = (chest: number, waist: number, hip: number, ratio: s
         'Blazers entallados'
       ]
     }
-  } else if (Math.abs(diffShoulderHip) <= 3) {
+  } else if (Math.abs(diffShoulderHip) <= 30) {
     return {
       type: 'Rectangular',
       icon: '▭',
@@ -611,7 +686,7 @@ const analyzeMaleBodyType = (chest: number, waist: number, hip: number, ratio: s
         'Prendas ajustadas'
       ]
     }
-  } else if (diffShoulderHip <= -5) {
+  } else if (diffShoulderHip <= -50) {
     return {
       type: 'Triángulo',
       icon: '🔻',
@@ -639,55 +714,8 @@ const analyzeMaleBodyType = (chest: number, waist: number, hip: number, ratio: s
 }
 
 const confirmAndSave = async () => {
-  if (!authStore.user?.id) return
-
-  isSaving.value = true
-  errorMessage.value = ''
-
-  try {
-    // First, fetch measurement types to map names to IDs
-    await measurementsStore.fetchMeasurementTypes()
-
-    // Map detected measurements to the format expected by the API
-    const measurementsToSave = detectedMeasurements.value
-      .map(detected => {
-        // Find matching measurement type by name (case-insensitive partial match)
-        const matchingType = measurementsStore.measurementTypes.find(type => {
-          const typeName = type.name.toLowerCase()
-          const detectedName = detected.name.toLowerCase()
-          return typeName.includes(detectedName) || detectedName.includes(typeName)
-        })
-
-        if (matchingType) {
-          return {
-            measurement_type_id: matchingType.id,
-            value: detected.value
-          }
-        }
-        return null
-      })
-      .filter(m => m !== null) as Array<{ measurement_type_id: number; value: number }>
-
-    if (measurementsToSave.length === 0) {
-      errorMessage.value = 'No se pudieron mapear las medidas. Intente nuevamente.'
-      isSaving.value = false
-      return
-    }
-
-    // Save measurements using batch endpoint
-    const result = await measurementsStore.saveMeasurements(authStore.user.id, measurementsToSave)
-
-    if (result.success) {
-      // Redirect to measurements view
-      router.push({ name: 'measurements' })
-    } else {
-      errorMessage.value = result.message || 'Error al guardar las medidas'
-    }
-  } catch (error) {
-    errorMessage.value = 'Error al guardar las medidas'
-  } finally {
-    isSaving.value = false
-  }
+  // Measurements are already saved by the backend during analysis
+  router.push({ name: 'measurements' })
 }
 
 const resetAnalysis = () => {
