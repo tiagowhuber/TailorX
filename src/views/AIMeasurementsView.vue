@@ -246,6 +246,19 @@
               </div>
             </div>
 
+            <!-- Warnings Section -->
+            <div v-if="analysisWarnings.length > 0" class="p-4 bg-orange-500/10 border border-orange-500/20 rounded-lg">
+              <div class="flex items-start gap-3">
+                <AlertCircle class="h-5 w-5 text-orange-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p class="font-semibold text-orange-300 mb-1">Advertencias de consistencia:</p>
+                  <ul class="list-disc list-inside text-sm text-orange-200 space-y-1">
+                    <li v-for="(warning, idx) in analysisWarnings" :key="idx">{{ warning }}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
             <!-- Body Type Analysis -->
             <Card class="bg-white/10 border-white/20">
               <CardHeader>
@@ -296,6 +309,25 @@
                     <p class="text-3xl font-bold text-[#E3F450]">{{ measurement.value }} <span class="text-xl text-gray-400">mm</span></p>
                   </CardContent>
                 </Card>
+              </div>
+            </div>
+
+            <!-- Debug Masks Section -->
+            <div v-if="debugMaskFront || debugMaskSide" class="mt-8">
+              <h4 class="text-xl font-bold text-white mb-4">Depuración Visual (Máscaras)</h4>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div v-if="debugMaskFront" class="bg-white/10 border border-white/20 rounded-lg p-2">
+                  <p class="text-sm text-gray-400 mb-2 text-center">Máscara Frontal</p>
+                  <img :src="'data:image/jpeg;base64,' + debugMaskFront" class="w-full rounded" />
+                </div>
+                <div v-if="debugMaskSide" class="bg-white/10 border border-white/20 rounded-lg p-2">
+                  <p class="text-sm text-gray-400 mb-2 text-center">Máscara Lateral</p>
+                  <img :src="'data:image/jpeg;base64,' + debugMaskSide" class="w-full rounded" />
+                </div>
+                <div v-if="debugMaskArm" class="bg-white/10 border border-white/20 rounded-lg p-2">
+                  <p class="text-sm text-gray-400 mb-2 text-center">Máscara Brazos</p>
+                  <img :src="'data:image/jpeg;base64,' + debugMaskArm" class="w-full rounded" />
+                </div>
               </div>
             </div>
 
@@ -378,6 +410,10 @@ const showPreview = ref(false)
 
 // Results state
 const detectedMeasurements = ref<Array<{ name: string; value: number; typeId?: number }>>([])
+const analysisWarnings = ref<string[]>([])
+const debugMaskFront = ref<string | null>(null)
+const debugMaskSide = ref<string | null>(null)
+const debugMaskArm = ref<string | null>(null)
 const bodyTypeData = ref<{
   type: string
   icon: string
@@ -551,6 +587,14 @@ const analyzePhotos = async () => {
 
       const bodyAnalysis = analyzeBodyType(analysisMeasurements, gender.value)
       bodyTypeData.value = bodyAnalysis
+      
+      // Store warnings
+      analysisWarnings.value = result.data.warnings || []
+      
+      // Store debug masks
+      debugMaskFront.value = result.data.debug_mask_front || null
+      debugMaskSide.value = result.data.debug_mask_side || null
+      debugMaskArm.value = result.data.debug_mask_arm || null
 
       showPreview.value = true
     } else {
@@ -721,6 +765,10 @@ const confirmAndSave = async () => {
 const resetAnalysis = () => {
   showPreview.value = false
   detectedMeasurements.value = []
+  analysisWarnings.value = []
+  debugMaskFront.value = null
+  debugMaskSide.value = null
+  debugMaskArm.value = null
   bodyTypeData.value = {
     type: '',
     icon: '',

@@ -102,6 +102,9 @@ export const measurementsApi = {
         raw_measurements: Record<string, number>;
         warnings?: string[];
         debug_images?: string[];
+        debug_mask_front?: string;
+        debug_mask_side?: string;
+        debug_mask_arm?: string;
       } 
     }>('/tailor-vision/generate', formData, {
       headers: {
