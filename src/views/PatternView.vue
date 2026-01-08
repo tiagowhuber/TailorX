@@ -81,6 +81,13 @@
             >
               Descargar SVG
             </button>
+            <button
+              @click="goToExport"
+              class="px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F45080] transition-colors orbitron-variable"
+              style="--orbitron-weight: 600;"
+            >
+              Exportar
+            </button>
           </div>
         </div>
 
@@ -173,6 +180,12 @@ const downloadSVG = () => {
   link.click()
   document.body.removeChild(link)
   URL.revokeObjectURL(url)
+}
+
+const goToExport = () => {
+  if (pattern.value) {
+    router.push({ name: 'pattern-export', params: { id: pattern.value.id } })
+  }
 }
 
 const addToCart = async () => {

@@ -200,6 +200,38 @@ export const usePatternsStore = defineStore('patterns', () => {
     }
   }
 
+  const downloadPatternPLT = async (id: number, nameFallback?: string) => {
+    try {
+      const result = await patternsApi.exportPatternToPLT(id)
+      const data = result.data
+      let filename = result.filename
+      
+      // If we have a fallback name and the filename is generic, try to improve it
+      if (nameFallback && filename) {
+        const ext = filename.split('.').pop(); // e.g., 'zip' or 'plt'
+        if (ext && (filename === 'pattern.plt' || filename === 'pattern_set.zip')) {
+           filename = `${nameFallback}.${ext}`;
+        }
+      } else if (!filename && nameFallback) {
+         // Should not happen with current api implementation, but safe fallback
+         filename = `${nameFallback}.plt`;
+      }
+
+      const url = window.URL.createObjectURL(new Blob([data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', filename)
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      window.URL.revokeObjectURL(url)
+      return { success: true }
+    } catch (err: any) {
+      console.error('Download PLT error:', err)
+      return { success: false, message: 'Error al descargar el archivo PLT' }
+    }
+  }
+
   const deletePattern = async (id: number) => {
     try {
       const response = await patternsApi.deletePattern(id)
@@ -251,6 +283,7 @@ export const usePatternsStore = defineStore('patterns', () => {
     archivePattern,
     unarchivePattern,
     deletePattern,
+    downloadPatternPLT,
     clearError,
     clearSelectedPattern,
   }

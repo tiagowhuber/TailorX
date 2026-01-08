@@ -194,6 +194,51 @@ export const patternsApi = {
     return response.data
   },
 
+  // Export pattern to PLT
+  exportPatternToPLT: async (id: number) => {
+    const response = await api.post(`/patterns/${id}/export/plt`, {}, {
+      responseType: 'blob'
+    })
+    
+    // Extract filename from content-disposition header if available
+    let filename = '';
+    const disposition = response.headers['content-disposition'];
+    /**
+     * Regex explanation:
+     * - matches "filename=" followed by optional whitespace
+     * - captures the filename value which can be either:
+     *   - quoted string: (['"]).*?\2
+     *   - unquoted token: [^;\n]*
+     */
+    const filenameRegex = /filename\s*=\s*((['"])(.*?)\2|([^;\n]*))/; 
+    
+    if (disposition) {
+      const matches = filenameRegex.exec(disposition);
+      if (matches != null) {
+        if (matches[3]) {
+            filename = matches[3];
+        } else if (matches[4]) {
+            filename = matches[4];
+        }
+      }
+    }
+
+    // Fallback: Check content-type if filename extraction failed
+    if (!filename) {
+        const type = response.data.type;
+        if (type === 'application/zip' || type === 'application/x-zip-compressed') {
+             filename = 'pattern_set.zip';
+        } else {
+             filename = 'pattern.plt';
+        }
+    }
+
+    return {
+      data: response.data,
+      filename
+    }
+  },
+
   // Delete pattern
   deletePattern: async (id: number) => {
     const response = await api.delete<{ success: boolean }>(`/patterns/${id}`)
