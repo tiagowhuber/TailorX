@@ -269,6 +269,12 @@ export const paymentsApi = {
 
 // Order API functions
 export const ordersApi = {
+  // Get all orders (admin only)
+  getAllOrders: async () => {
+    const response = await api.get<{ success: boolean; data: any[]; count: number }>('/orders')
+    return response.data
+  },
+
   // Get user's orders
   getUserOrders: async (userId: number) => {
     const response = await api.get<{ success: boolean; data: any[]; count: number }>(`/orders/user/${userId}`)

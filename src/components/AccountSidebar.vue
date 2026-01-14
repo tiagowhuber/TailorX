@@ -141,6 +141,34 @@
           Direcciones
         </button>
         
+        <button
+          v-if="authStore.user?.role === 'admin'"
+          @click="router.push({ name: 'admin-orders' })"
+          :class="[
+            'w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors border cursor-pointer mt-1',
+            activeSection === 'admin_orders'
+              ? 'bg-white text-black border-white'
+              : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
+          ]"
+        >
+          <BaggageClaim :class="['inline-block mr-2 h-4 w-4', activeSection === 'admin_orders' ? 'text-black' : 'text-[#E3F450]']" />
+          Gestión Pedidos
+        </button>
+
+        <button
+          v-if="authStore.user?.role === 'admin'"
+          @click="router.push({ name: 'admin-patterns' })"
+          :class="[
+            'w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors border cursor-pointer mt-1',
+            activeSection === 'admin_patterns'
+              ? 'bg-white text-black border-white'
+              : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
+          ]"
+        >
+          <ScissorsLineDashed :class="['inline-block mr-2 h-4 w-4', activeSection === 'admin_patterns' ? 'text-black' : 'text-[#E3F450]']" />
+          Patrones Producción
+        </button>
+
         <Separator class="bg-white/10 my-4" />
         
         <button
@@ -171,7 +199,7 @@ import { RulerDimensionLine, ScissorsLineDashed, Settings, LogOut, BaggageClaim,
 import { Separator } from '@/components/ui/separator'
 
 interface Props {
-  activeSection: 'account' | 'measurements' | 'patterns' | 'cart' | 'orders' | 'addresses'
+  activeSection: 'account' | 'measurements' | 'patterns' | 'cart' | 'orders' | 'addresses' | 'admin_orders' | 'admin_patterns'
 }
 
 defineProps<Props>()

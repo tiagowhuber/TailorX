@@ -15,6 +15,8 @@ import BodyTypeGuideView from '@/views/BodyTypeGuideView.vue'
 import PaymentConfirmationView from '@/views/PaymentConfirmationView.vue'
 import OrderListView from '@/views/OrderListView.vue'
 import AddressesView from '@/views/AddressesView.vue'
+import AdminOrdersView from '@/views/AdminOrdersView.vue'
+import AdminPatternsView from '@/views/AdminPatternsView.vue'
 import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
@@ -110,6 +112,18 @@ const router = createRouter({
       component: AddressesView,
       meta: { requiresAuth: true }
     },
+    {
+      path: '/admin/orders',
+      name: 'admin-orders',
+      component: AdminOrdersView,
+      meta: { requiresAuth: true, requiresAdmin: true }
+    },
+    {
+      path: '/admin/patterns',
+      name: 'admin-patterns',
+      component: AdminPatternsView,
+      meta: { requiresAuth: true, requiresAdmin: true }
+    },
   ]
 })
 
@@ -120,6 +134,9 @@ router.beforeEach((to, _from, next) => {
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     // Redirect to login if not authenticated
     next({ name: 'login', query: { redirect: to.fullPath } })
+  } else if (to.meta.requiresAdmin && authStore.user?.role !== 'admin') {
+    // Redirect to home if user is not admin
+    next({ name: 'home' })
   } else {
     next()
   }
