@@ -254,6 +254,34 @@ export const usePatternsStore = defineStore('patterns', () => {
     }
   }
 
+  const downloadOrderedPatternPLT = async (id: number, nameFallback?: string) => {
+    try {
+      const result = await patternsApi.exportOrderedPatternToPLT(id)
+      const data = result.data
+      let filename = result.filename
+      
+      if (nameFallback && filename) {
+        const ext = filename.split('.').pop();
+        if (ext && (filename === 'pattern_mirrored.plt' || filename === 'pattern_set.zip')) {
+           filename = `${nameFallback}_mirrored.${ext}`;
+        }
+      }
+
+      const url = window.URL.createObjectURL(new Blob([data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', filename)
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      window.URL.revokeObjectURL(url)
+      return { success: true }
+    } catch (err: any) {
+      console.error('Download Ordered PLT error:', err)
+      return { success: false, message: 'Error al descargar el archivo PLT' }
+    }
+  }
+
   const deletePattern = async (id: number) => {
     try {
       const response = await patternsApi.deletePattern(id)
@@ -308,6 +336,7 @@ export const usePatternsStore = defineStore('patterns', () => {
     unarchivePattern,
     deletePattern,
     downloadPatternPLT,
+    downloadOrderedPatternPLT,
     clearError,
     clearSelectedPattern,
   }

@@ -113,6 +113,16 @@
                       >
                          <Download class="mr-2 h-3 w-3" /> Mirrored SVG
                       </Button>
+
+                       <!-- Mirrored PLT (New Button) -->
+                       <Button 
+                        @click="downloadMirroredPLT(item.id, item.pattern?.name)" 
+                        variant="ghost" 
+                        size="sm"
+                        class="col-span-2 w-full text-white bg-blue-900/20 border border-blue-500/30 hover:bg-blue-900/40 hover:text-blue-300"
+                      >
+                         <Download class="mr-2 h-3 w-3" /> Mirrored PLT
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -144,6 +154,10 @@ const patternsStore = usePatternsStore()
 const loading = ref(true)
 
 const orderedPatterns = computed(() => patternsStore.orderedPatterns)
+
+const downloadMirroredPLT = async (id: number, name: string | undefined) => {
+    await patternsStore.downloadOrderedPatternPLT(id, name || 'pattern');
+}
 
 const downloadSvg = (svgData: string | undefined, filename: string) => {
   if (svgData) {

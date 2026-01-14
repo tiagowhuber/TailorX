@@ -250,6 +250,44 @@ export const patternsApi = {
     const response = await api.get<{ success: boolean; data: any[]; count: number }>('/patterns/ordered')
     return response.data
   },
+
+  // Export ordered pattern to PLT
+  exportOrderedPatternToPLT: async (id: number) => {
+    const response = await api.post(`/patterns/ordered/${id}/export/plt`, {}, {
+      responseType: 'blob'
+    })
+    
+    // Extract filename from content-disposition header if available
+    let filename = '';
+    const disposition = response.headers['content-disposition'];
+    const filenameRegex = /filename\s*=\s*((['"])(.*?)\2|([^;\n]*))/; 
+    
+    if (disposition) {
+      const matches = filenameRegex.exec(disposition);
+      if (matches != null) {
+        if (matches[3]) {
+            filename = matches[3];
+        } else if (matches[4]) {
+            filename = matches[4];
+        }
+      }
+    }
+
+    // Fallback
+    if (!filename) {
+        const type = response.data.type;
+        if (type === 'application/zip' || type === 'application/x-zip-compressed') {
+             filename = 'pattern_set.zip';
+        } else {
+             filename = 'pattern_mirrored.plt';
+        }
+    }
+
+    return {
+      data: response.data,
+      filename
+    }
+  },
 }
 
 // Payment API functions
