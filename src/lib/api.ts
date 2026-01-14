@@ -244,6 +244,12 @@ export const patternsApi = {
     const response = await api.delete<{ success: boolean }>(`/patterns/${id}`)
     return response.data
   },
+
+  // Get admin ordered patterns
+  getOrderedPatterns: async () => {
+    const response = await api.get<{ success: boolean; data: any[]; count: number }>('/patterns/ordered')
+    return response.data
+  },
 }
 
 // Payment API functions

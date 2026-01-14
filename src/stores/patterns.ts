@@ -6,6 +6,7 @@ import type { Pattern } from '@/types/pattern.types'
 export const usePatternsStore = defineStore('patterns', () => {
   // State
   const patterns = ref<Pattern[]>([])
+  const orderedPatterns = ref<any[]>([])
   const selectedPattern = ref<Pattern | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
@@ -63,6 +64,27 @@ export const usePatternsStore = defineStore('patterns', () => {
       return { success: false, message }
     } finally {
       generationProgress.value = false
+    }
+  }
+
+  const fetchOrderedPatterns = async () => {
+    loading.value = true
+    error.value = null
+    try {
+      const response = await patternsApi.getOrderedPatterns()
+      if (response.success) {
+        orderedPatterns.value = response.data
+        return { success: true }
+      } else {
+        error.value = 'Error al cargar los patrones de producción'
+        return { success: false, message: error.value }
+      }
+    } catch (err: any) {
+      const message = err.response?.data?.message || 'Error de conexión al cargar patrones'
+      error.value = message
+      return { success: false, message }
+    } finally {
+      loading.value = false
     }
   }
 
@@ -263,6 +285,7 @@ export const usePatternsStore = defineStore('patterns', () => {
   return {
     // State
     patterns,
+    orderedPatterns,
     selectedPattern,
     loading,
     error,
@@ -277,6 +300,7 @@ export const usePatternsStore = defineStore('patterns', () => {
     // Actions
     generatePattern,
     fetchUserPatterns,
+    fetchOrderedPatterns,
     fetchPatternById,
     updatePattern,
     finalizePattern,

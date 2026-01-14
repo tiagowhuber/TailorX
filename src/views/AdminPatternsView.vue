@@ -27,35 +27,11 @@
                 <div>
                   <h1 class="text-3xl md:text-4xl font-bold text-white mb-2" style="font-family: 'Avenir Next', sans-serif;">PATRONES DE PRODUCCIÓN</h1>
                   <p class="text-gray-400 text-sm orbitron-variable" style="--orbitron-weight: 400;">
-                    Copias espejadas generadas automáticamente de las órdenes ({{ filteredPatterns.length }} items)
+                    Patrones generados de órdenes confirmadas ({{ orderedPatterns.length }} items)
                   </p>
                 </div>
               </div>
             </motion.div>
-
-            <!-- Filters -->
-            <div class="mb-6">
-              <div class="flex gap-2 overflow-x-auto pb-2">
-                <button 
-                  @click="activeTab = 'all'" 
-                  :class="[
-                    'px-4 py-2 rounded-lg text-sm font-medium transition-colors border',
-                    activeTab === 'all' ? 'bg-white text-black border-white' : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
-                  ]"
-                >
-                  Todos
-                </button>
-                <button 
-                  @click="activeTab = 'finalized'" 
-                  :class="[
-                    'px-4 py-2 rounded-lg text-sm font-medium transition-colors border',
-                    activeTab === 'finalized' ? 'bg-white text-black border-white' : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
-                  ]"
-                >
-                  Finalizados (Listos)
-                </button>
-              </div>
-            </div>
 
             <!-- Loading State -->
             <div v-if="loading" class="flex justify-center py-20">
@@ -64,7 +40,7 @@
 
             <!-- Empty State -->
             <motion.div
-              v-else-if="filteredPatterns.length === 0"
+              v-else-if="orderedPatterns.length === 0"
               class="text-center py-20"
               :initial="{ opacity: 0, scale: 0.95 }"
               :animate="{ opacity: 1, scale: 1 }"
@@ -81,60 +57,61 @@
             <!-- Patterns Grid -->
             <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <motion.div
-                v-for="(pattern, index) in filteredPatterns"
-                :key="pattern.id"
+                v-for="(item, index) in orderedPatterns"
+                :key="item.id"
                 :initial="{ opacity: 0, y: 20 }"
                 :animate="{ opacity: 1, y: 0 }"
                 :transition="{ delay: index * 0.05 }"
               >
                 <div 
-                    class="bg-white/5 border border-white/10 rounded-lg overflow-hidden hover:border-white/20 transition-all cursor-pointer group flex flex-col h-full"
-                    @click="viewPattern(pattern.id)"
+                    class="bg-white/5 border border-white/10 rounded-lg overflow-hidden hover:border-white/20 transition-all group flex flex-col h-full"
                 >
                   <!-- Pattern Preview/Image -->
                    <div class="aspect-[4/3] bg-gray-800 relative overflow-hidden">
                     <img 
-                      v-if="pattern.design?.image_url" 
-                      :src="pattern.design.image_url" 
-                      :alt="pattern.design?.name"
+                      v-if="item.pattern?.design?.image_url" 
+                      :src="item.pattern.design.image_url" 
+                      :alt="item.pattern.design?.name"
                       class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300"
                     />
                     <div v-else class="w-full h-full flex items-center justify-center">
                       <FileText class="w-12 h-12 text-gray-600" />
                     </div>
                     
-                    <!-- Status Badge -->
+                    <!-- Order Badge -->
                     <div class="absolute top-3 right-3">
-                      <Badge :class="getStatusClass(pattern.status)">
-                        {{ getStatusLabel(pattern.status) }}
+                      <Badge class="bg-blue-500/20 text-blue-300 border-blue-500/30">
+                        {{ item.order?.order_number }}
                       </Badge>
                     </div>
                   </div>
 
                   <!-- Content -->
                   <div class="p-5 flex-1 flex flex-col">
-                    <h3 class="text-lg font-bold text-white mb-1 group-hover:text-[#E3F450] transition-colors line-clamp-2" :title="pattern.name">
-                      {{ pattern.name }}
+                    <h3 class="text-lg font-bold text-white mb-1 group-hover:text-[#E3F450] transition-colors line-clamp-2">
+                       {{ item.pattern?.name || 'Patrón sin nombre' }}
                     </h3>
-                    <p class="text-sm text-gray-400 mb-4">{{ pattern.design?.name }}</p>
+                    <p class="text-sm text-gray-400 mb-4">{{ item.pattern?.design?.name }}</p>
                     
                     <div class="mt-auto grid grid-cols-2 gap-3">
+                        <!-- Normal SVG -->
                        <Button 
-                        @click.stop="downloadPattern(pattern)" 
+                        @click="downloadSvg(item.svg_normal, `${item.pattern?.name}_normal.svg`)" 
                         variant="outline" 
                         size="sm"
                         class="w-full bg-black border-white/20 text-white hover:bg-white/10 hover:text-[#E3F450]"
                       >
-                        <Download class="mr-2 h-3 w-3" /> Exportar PLT
+                        <Download class="mr-2 h-3 w-3" /> Normal SVG
                       </Button>
                       
+                       <!-- Mirrored SVG -->
                        <Button 
-                        @click.stop="downloadSvg(pattern)" 
+                        @click="downloadSvg(item.svg_mirrored, `${item.pattern?.name}_mirrored.svg`)" 
                         variant="ghost" 
                         size="sm"
-                        class="w-full text-gray-400 hover:text-white"
+                        class="w-full text-white bg-green-900/20 border border-green-500/30 hover:bg-green-900/40 hover:text-green-300"
                       >
-                         SVG
+                         <Download class="mr-2 h-3 w-3" /> Mirrored SVG
                       </Button>
                     </div>
                   </div>
@@ -159,67 +136,29 @@ import { Badge } from '@/components/ui/badge'
 import NavigationBar from '@/components/NavigationBar.vue'
 import AccountSidebar from '@/components/AccountSidebar.vue'
 import { motion } from 'motion-v'
-import type { Pattern } from '@/types/pattern.types'
-import { patternsApi } from '@/lib/api'
 
 const router = useRouter()
 const authStore = useAuthStore()
 const patternsStore = usePatternsStore()
 
 const loading = ref(true)
-const activeTab = ref<'all' | 'finalized'>('all')
 
-const filteredPatterns = computed(() => {
-  return activeTab.value === 'finalized' ? patternsStore.finalizedPatterns : patternsStore.patterns
-})
+const orderedPatterns = computed(() => patternsStore.orderedPatterns)
 
-const viewPattern = (id: number) => router.push({ name: 'pattern-view', params: { id } })
-
-const downloadSvg = (pattern: Pattern) => {
-  if (pattern.svg_data) {
-    const blob = new Blob([pattern.svg_data], { type: 'image/svg+xml' })
+const downloadSvg = (svgData: string | undefined, filename: string) => {
+  if (svgData) {
+    const blob = new Blob([svgData], { type: 'image/svg+xml' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `${pattern.name}.svg`
+    a.download = filename.replace(/\s+/g, '_')
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
+  } else {
+    // maybe toast here
   }
-}
-
-const downloadPattern = async (pattern: Pattern) => {
-  try {
-    const response = await patternsApi.exportPatternToPLT(pattern.id)
-    const blob = new Blob([response.data], { type: 'application/octet-stream' }) // Or specific PLT mime type
-    const url = window.URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.setAttribute('download', response.filename || `pattern-${pattern.id}.plt`)
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    window.URL.revokeObjectURL(url)
-  } catch (error) {
-    console.error('Error downloading pattern:', error)
-    // Could add toast notification here
-  }
-}
-
-const getStatusLabel = (status: string) => {
-  const map: Record<string, string> = {
-    draft: 'Borrador',
-    finalized: 'Listo',
-    archived: 'Archivado'
-  }
-  return map[status] || status
-}
-
-const getStatusClass = (status: string) => {
-  if (status === 'finalized') return 'bg-green-500/20 text-green-300 border-green-500/30'
-  if (status === 'archived') return 'bg-gray-500/20 text-gray-300 border-gray-500/30'
-  return 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30'
 }
 
 onMounted(async () => {
@@ -229,8 +168,7 @@ onMounted(async () => {
     }
 
     try {
-        // Admin is user_id 1. Fetching "user patterns" for current user (admin) returns these admin copies.
-        await patternsStore.fetchUserPatterns(authStore.user.id)
+        await patternsStore.fetchOrderedPatterns()
     } finally {
         loading.value = false
     }
