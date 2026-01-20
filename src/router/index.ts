@@ -52,7 +52,7 @@ const router = createRouter({
       path: '/patrones/:id/export',
       name: 'pattern-export',
       component: PatternExportView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, requiresAdmin: true }
     },
     {
       path: '/patrones',

@@ -164,7 +164,6 @@ import InstagramSmallIcon from '@/components/icons/InstagramSmallIcon.vue'
 const router = useRouter()
 const authStore = useAuthStore()
 const cartStore = useCartStore()
-const headerRef = ref<HTMLElement | null>(null)
 const scrollProgress = ref(0)
 
 let ticking = false

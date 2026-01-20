@@ -81,13 +81,6 @@
             >
               Descargar SVG
             </button>
-            <button
-              @click="goToExport"
-              class="px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F45080] transition-colors orbitron-variable"
-              style="--orbitron-weight: 600;"
-            >
-              Exportar
-            </button>
           </div>
         </div>
 
