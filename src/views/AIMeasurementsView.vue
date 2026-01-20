@@ -125,7 +125,7 @@
               <!-- Arm Photo (Optional) -->
               <div>
                 <Label class="text-white font-medium mb-2 block">
-                  Foto Brazos (Opcional)
+                  Foto Brazos
                   <span class="text-xs text-gray-400 ml-2 font-normal">Pose "Invisible Box" para mayor precisión</span>
                 </Label>
                 <div 
@@ -168,15 +168,15 @@
               
               <div class="space-y-2">
                 <Label for="height" class="text-white font-medium">
-                  Altura (mm)
+                  Altura (cm)
                 </Label>
                 <Input 
                   id="height"
                   v-model.number="height"
                   type="number"
-                  placeholder="Ej: 1700"
-                  min="1000"
-                  max="2500"
+                  placeholder="Ej: 170"
+                  min="100"
+                  max="250"
                   class="bg-white/10 border-white/20 text-white placeholder:text-gray-500"
                 />
               </div>
@@ -548,7 +548,7 @@ const analyzePhotos = async () => {
     if (armPhotoFile.value) {
       formData.append('arm_image', armPhotoFile.value)
     }
-    formData.append('height_cm', (height.value / 10).toString()) // Convert mm to cm for API
+    formData.append('height_cm', height.value!.toString()) // Height is now provided in cm
 
     const result = await measurementsStore.generateMeasurements(authStore.user.id, formData)
 

@@ -55,6 +55,19 @@
         <WhatsAppSmallIcon />
       </a>
 
+      <!-- Login Button (only when NOT authenticated) -->
+      <template v-if="!authStore.isAuthenticated">
+        <Separator orientation="vertical" class="h-6 bg-white/30 mx-2" />
+        <router-link to="/login">
+          <Button
+            variant="outline"
+            class="h-10 px-4 rounded-full border-white/30 text-black hover:bg-white/10 hover:text-white poppins-button"
+          >
+            Ingresar
+          </Button>
+        </router-link>
+      </template>
+
       <!-- Cart Icon (only when authenticated and has items OR authenticated) -->
       <template v-if="authStore.isAuthenticated && cartStore.itemCount > 0">
         <Separator orientation="vertical" class="h-6 bg-white/30 mx-2" />
@@ -273,5 +286,10 @@ body {
 /* Dropdown menu content */
 .DropdownMenuContent {
   font-family: 'Stack Sans Notch', sans-serif;
+}
+
+/* Poppins button */
+.poppins-button {
+  font-family: 'Poppins', sans-serif !important;
 }
 </style>
