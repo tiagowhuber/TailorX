@@ -175,12 +175,6 @@ const downloadSVG = () => {
   URL.revokeObjectURL(url)
 }
 
-const goToExport = () => {
-  if (pattern.value) {
-    router.push({ name: 'pattern-export', params: { id: pattern.value.id } })
-  }
-}
-
 const addToCart = async () => {
   if (!pattern.value) return
   
