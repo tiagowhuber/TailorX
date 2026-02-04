@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-black">
-    <div class="container mx-auto px-4 py-8">
+    <div class="container mx-auto px-4">
       <!-- Loading State -->
       <div v-if="loading" class="flex items-center justify-center min-h-[60vh]">
         <div class="text-center space-y-4">
@@ -34,61 +34,58 @@
       </div>
 
       <!-- Pattern Display -->
-      <div v-else-if="pattern" class="space-y-4 sm:space-y-6">
+      <div v-else-if="pattern" class="space-y-6">
         <!-- Header -->
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex items-center justify-between">
           <div>
             <button
               @click="router.back()"
-              class="text-[#E3F450] hover:text-[#E3F45080] flex items-center gap-2 mb-3 sm:mb-4 orbitron-variable text-sm sm:text-base"
+              class="text-[#E3F450] hover:text-[#E3F45080] flex items-center gap-2 mb-4 orbitron-variable"
               style="--orbitron-weight: 500;"
             >
-              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
               </svg>
               Volver
             </button>
-            <h1 class="text-3xl sm:text-4xl font-bold text-white orbitron-variable mb-2" style="--orbitron-weight: 700;">
+            <h1 class="text-4xl font-bold text-white orbitron-variable mb-2" style="--orbitron-weight: 700;">
               {{ pattern.name }}
             </h1>
-            <p class="text-sm sm:text-base text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
+            <p class="text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
               Diseño: {{ pattern.design?.name }}
             </p>
           </div>
-          <div class="flex gap-2 w-full sm:w-auto">
+          <div class="flex gap-2">
             <button
               v-if="!cartStore.isInCart(pattern.id)"
               @click="addToCart"
-              class="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F450]/80 transition-colors orbitron-variable flex items-center justify-center gap-2 text-sm sm:text-base"
+              class="px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F450]/80 transition-colors orbitron-variable flex items-center gap-2"
               style="--orbitron-weight: 600;"
             >
               <ShoppingCart class="w-4 h-4" />
-              <span class="hidden sm:inline">Agregar al Carrito</span>
-              <span class="sm:hidden">Carrito</span>
+              Agregar al Carrito
             </button>
             <button
               v-else-if="cartStore.isInCart(pattern.id)"
               @click="viewCart"
-              class="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F450]/80 transition-colors orbitron-variable flex items-center justify-center gap-2 text-sm sm:text-base"
+              class="px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F450]/80 transition-colors orbitron-variable flex items-center gap-2"
               style="--orbitron-weight: 600;"
             >
               <ShoppingCart class="w-4 h-4" />
-              <span class="hidden sm:inline">Ver Carrito</span>
-              <span class="sm:hidden">Ver</span>
+              Ver Carrito
             </button>
             <button
               @click="downloadSVG"
-              class="px-3 sm:px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F45080] transition-colors orbitron-variable text-sm sm:text-base whitespace-nowrap"
+              class="px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F45080] transition-colors orbitron-variable"
               style="--orbitron-weight: 600;"
             >
-              <span class="hidden sm:inline">Descargar SVG</span>
-              <span class="sm:hidden">SVG</span>
+              Descargar SVG
             </button>
           </div>
         </div>
 
         <!-- Pattern Info -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4">
             <p class="text-gray-400 text-sm orbitron-variable" style="--orbitron-weight: 400;">Estado</p>
             <p class="text-white text-lg font-semibold orbitron-variable capitalize" style="--orbitron-weight: 600;">

@@ -5,7 +5,7 @@
 
     <!-- Main Content -->
     <div class="relative pt-20 min-h-screen">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="flex flex-col lg:flex-row gap-10">
           <!-- Sidebar -->
@@ -130,7 +130,7 @@
                           class="flex items-center gap-4 bg-white/5 border border-white/10 rounded-lg p-4"
                           :initial="{ opacity: 0, x: -20 }"
                           :animate="{ opacity: 1, x: 0 }"
-                          :transition="{ delay: itemIndex * 0.05 }"
+                          :transition="{ delay: Number(itemIndex) * 0.05 }"
                         >
                           <div class="flex-shrink-0">
                             <div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-800 flex items-center justify-center">
