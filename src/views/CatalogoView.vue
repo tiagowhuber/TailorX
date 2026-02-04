@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-black text-white"
+  <div class="relative min-h-screen bg-black text-white w-full overflow-x-hidden"
     :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'top 600px center', backgroundRepeat: 'no-repeat' }">
     <!-- Navigation Header -->
     <NavigationBar />

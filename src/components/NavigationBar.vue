@@ -169,7 +169,7 @@
     >
       <div
         v-if="isMobileMenuOpen"
-        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 md:hidden"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[55] md:hidden"
         @click="closeMobileMenu"
         aria-hidden="true"
       />
@@ -183,13 +183,9 @@
       leave-from-class="translate-x-0"
       leave-to-class="translate-x-full"
     >
-      <motion.nav
+      <nav
         v-if="isMobileMenuOpen"
-        class="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-black border-l border-white/10 z-50 md:hidden overflow-y-auto"
-        :initial="{ x: '100%' }"
-        :animate="{ x: 0 }"
-        :exit="{ x: '100%' }"
-        :transition="{ type: 'spring', damping: 25, stiffness: 200 }"
+        class="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-black border-l border-white/10 z-[60] md:hidden overflow-y-auto"
       >
         <!-- Mobile Menu Header -->
         <div class="flex items-center justify-between p-4 border-b border-white/10">
@@ -289,7 +285,7 @@
             </button>
           </div>
         </div>
-      </motion.nav>
+      </nav>
     </Transition>
   </Teleport>
 </template>
@@ -321,7 +317,6 @@ import InstagramSmallIcon from '@/components/icons/InstagramSmallIcon.vue'
 const router = useRouter()
 const authStore = useAuthStore()
 const cartStore = useCartStore()
-const headerRef = ref<HTMLElement | null>(null)
 const scrollProgress = ref(0)
 const isMobileMenuOpen = ref(false)
 
