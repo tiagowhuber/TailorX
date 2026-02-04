@@ -655,11 +655,7 @@ onMounted(() => {
 }
 
 /* Apply Stack Sans Notch globally except for h1 */
-:deep(*) {
-  font-family: 'Stack Sans Notch', sans-serif !important;
-}
 
-:deep(h1) {
-  font-family: sans-serif !important;
-}
+
+
 </style>

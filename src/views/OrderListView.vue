@@ -20,11 +20,11 @@
               :animate="{ opacity: 1, y: 0 }"
               :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
             >
-              <div class="inline-block px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold uppercase tracking-wider mb-3 sm:mb-4 orbitron-variable" style="--orbitron-weight: 700; background-color: #E3F450; color: black;">
+              <div class="inline-block px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold uppercase tracking-wider mb-3 sm:mb-4 " style="background-color: #E3F450; color: black;">
                 Historial de Compras
               </div>
-              <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2" style="font-family: 'Avenir Next', sans-serif;">MIS PEDIDOS</h1>
-              <p class="text-xs sm:text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
+              <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2" >MIS PEDIDOS</h1>
+              <p class="text-xs sm:text-sm text-gray-400 " >
                 {{ orders.length }} {{ orders.length === 1 ? 'pedido' : 'pedidos' }} realizados
               </p>
             </motion.div>
@@ -45,17 +45,17 @@
               <div class="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-white/5 border border-white/10 mb-6">
                 <ShoppingBag class="h-12 w-12 text-gray-500" />
               </div>
-              <h3 class="text-2xl font-semibold text-gray-400 mb-2" style="font-family: 'Avenir Next', sans-serif;">
+              <h3 class="text-2xl font-semibold text-gray-400 mb-2" >
                 No tienes pedidos aún
               </h3>
-              <p class="text-gray-500 mb-6 orbitron-variable" style="--orbitron-weight: 400;">
+              <p class="text-gray-500 mb-6 " >
                 Cuando realices una compra, aparecerá aquí
               </p>
               <Button
                 @click="router.push({ name: 'catalogo' })"
                 variant="outline"
-                class="bg-[#E3F450] border-[#E3F450] text-black hover:bg-[#E3F450]/80 orbitron-variable"
-                style="--orbitron-weight: 700;"
+                class="bg-[#E3F450] border-[#E3F450] text-black hover:bg-[#E3F450]/80 "
+                
               >
                 <Store class="mr-2 h-4 w-4" />
                 Explorar Catálogo
@@ -91,7 +91,7 @@
                             </Badge>
                           </div>
                         </div>
-                        <div class="flex flex-wrap gap-3 sm:gap-4 text-xs sm:text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
+                        <div class="flex flex-wrap gap-3 sm:gap-4 text-xs sm:text-sm text-gray-400 " >
                           <span class="flex items-center gap-1">
                             <Calendar class="h-4 w-4" />
                             {{ formatDate(order.created_at) }}
@@ -104,8 +104,8 @@
                       </div>
                       <div class="flex items-center gap-4 sm:gap-6 w-full sm:w-auto">
                         <div class="text-left sm:text-right flex-1 sm:flex-none">
-                          <p class="text-xs sm:text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">Total</p>
-                          <p class="text-lg sm:text-xl font-bold text-[#E3F450] orbitron-variable" style="--orbitron-weight: 700;">
+                          <p class="text-xs sm:text-sm text-gray-400 " >Total</p>
+                          <p class="text-lg sm:text-xl font-bold text-[#E3F450] " >
                             {{ formatPrice(order.total_amount) }}
                           </p>
                         </div>
@@ -138,18 +138,18 @@
                             </div>
                           </div>
                           <div class="flex-1 min-w-0">
-                            <p class="text-sm font-semibold text-white orbitron-variable" style="--orbitron-weight: 600;">
+                            <p class="text-sm font-semibold text-white " >
                               Patrón #{{ item.pattern_id }}
                             </p>
-                            <p class="text-xs text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
+                            <p class="text-xs text-gray-400 " >
                               Cantidad: {{ item.quantity }}
                             </p>
                           </div>
                           <div class="text-right">
-                            <p class="text-sm font-bold text-white orbitron-variable" style="--orbitron-weight: 700;">
+                            <p class="text-sm font-bold text-white " >
                               {{ formatPrice(item.price * item.quantity) }}
                             </p>
-                            <p class="text-xs text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
+                            <p class="text-xs text-gray-400 " >
                               {{ formatPrice(item.price) }} c/u
                             </p>
                           </div>
@@ -159,10 +159,10 @@
                       <!-- Order Summary -->
                       <div class="mt-6 pt-6 border-t border-white/10">
                         <div class="flex justify-between items-center">
-                          <span class="text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
+                          <span class="text-sm text-gray-400 " >
                             Total del Pedido
                           </span>
-                          <span class="text-xl font-bold text-[#E3F450] orbitron-variable" style="--orbitron-weight: 700;">
+                          <span class="text-xl font-bold text-[#E3F450] " >
                             {{ formatPrice(order.total_amount) }}
                           </span>
                         </div>

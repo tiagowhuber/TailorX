@@ -15,13 +15,13 @@
         :animate="{ opacity: 1, y: 0 }"
         :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
       >
-        <div class="inline-block px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold uppercase tracking-wider orbitron-variable" style="--orbitron-weight: 700; background-color: #E3F450; color: black;">
+        <div class="inline-block px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold uppercase tracking-wider " style="background-color: #E3F450; color: black;">
           Guía de Estilos
         </div>
-        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight" style="font-family: 'Avenir Next', sans-serif;">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight" >
           TIPOS DE CUERPO
         </h1>
-        <p class="text-sm sm:text-base text-gray-300 max-w-3xl orbitron-variable" style="--orbitron-weight: 400;">
+        <p class="text-sm sm:text-base text-gray-300 max-w-3xl " >
           Cada persona es única. Trabajamos a medida, para que la ropa se adapte a tu cuerpo… y no al revés. Explora los tipos corporales y recomendaciones para vestir mejor.
         </p>
       </motion.section>
@@ -39,11 +39,11 @@
             v-for="t in bodyTypes"
             :key="t.id"
             @click="selectType(t.id)"
-            class="w-full text-left px-3 sm:px-4 py-3 sm:py-4 rounded-md border transition-colors orbitron-variable text-sm sm:text-base"
+            class="w-full text-left px-3 sm:px-4 py-3 sm:py-4 rounded-md border transition-colors text-sm sm:text-base"
             :class="t.id === selectedId
               ? 'bg-[#E3F450] text-black border-[#E3F450]'
               : 'bg-white/5 text-white border-white/10 hover:bg-white/10'"
-            style="--orbitron-weight: 600;"
+            
           >
             <span class="uppercase font-semibold tracking-wide">{{ t.name }}</span>
           </button>
@@ -73,25 +73,25 @@
           :transition="{ type: 'spring', stiffness: 220, damping: 26 }"
         >
           <div class="space-y-2">
-            <h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold orbitron-variable" style="--orbitron-weight: 700;">{{ current.name }}</h2>
-            <p class="text-xs sm:text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">Características:</p>
-            <ul class="list-disc list-inside text-sm sm:text-base text-gray-200 space-y-1 orbitron-variable" style="--orbitron-weight: 400;">
+            <h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold " >{{ current.name }}</h2>
+            <p class="text-xs sm:text-sm text-gray-400 " >Características:</p>
+            <ul class="list-disc list-inside text-sm sm:text-base text-gray-200 space-y-1 " >
               <li v-for="(c, i) in current.characteristics" :key="i">{{ c }}</li>
             </ul>
           </div>
 
           <div class="space-y-3 sm:space-y-4">
-            <h3 class="text-sm sm:text-base font-bold text-white orbitron-variable" style="--orbitron-weight: 600;">Recomendaciones de ropa</h3>
+            <h3 class="text-sm sm:text-base font-bold text-white " >Recomendaciones de ropa</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div class="bg-white/5 border border-white/10 rounded-md p-4">
-                <div class="mb-2 text-xs font-bold uppercase inline-flex px-2 py-1 rounded-full orbitron-variable" style="--orbitron-weight: 700; background-color: #E3F450; color: black;">Mujer</div>
-                <ul class="list-disc list-inside text-gray-200 space-y-1 orbitron-variable" style="--orbitron-weight: 400;">
+                <div class="mb-2 text-xs font-bold uppercase inline-flex px-2 py-1 rounded-full " style="background-color: #E3F450; color: black;">Mujer</div>
+                <ul class="list-disc list-inside text-gray-200 space-y-1 " >
                   <li v-for="(r, i) in current.recommendations.women" :key="'w-'+i">{{ r }}</li>
                 </ul>
               </div>
               <div class="bg-white/5 border border-white/10 rounded-md p-4">
-                <div class="mb-2 text-xs font-bold uppercase inline-flex px-2 py-1 rounded-full orbitron-variable" style="--orbitron-weight: 700; background-color: #E3F450; color: black;">Hombre</div>
-                <ul class="list-disc list-inside text-gray-200 space-y-1 orbitron-variable" style="--orbitron-weight: 400;">
+                <div class="mb-2 text-xs font-bold uppercase inline-flex px-2 py-1 rounded-full " style="background-color: #E3F450; color: black;">Hombre</div>
+                <ul class="list-disc list-inside text-gray-200 space-y-1 " >
                   <li v-for="(r, i) in current.recommendations.men" :key="'m-'+i">{{ r }}</li>
                 </ul>
               </div>
@@ -99,8 +99,8 @@
           </div>
 
           <div>
-            <p class="text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">Evitar:</p>
-            <ul class="list-disc list-inside text-gray-200 space-y-1 orbitron-variable" style="--orbitron-weight: 400;">
+            <p class="text-sm text-gray-400 " >Evitar:</p>
+            <ul class="list-disc list-inside text-gray-200 space-y-1 " >
               <li v-for="(e, i) in current.avoid" :key="'e-'+i">{{ e }}</li>
             </ul>
           </div>

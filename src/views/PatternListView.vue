@@ -20,7 +20,7 @@
               :animate="{ opacity: 1, y: 0 }"
               :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
             >
-              <div class="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider mb-4 orbitron-variable" style="--orbitron-weight: 700; background-color: #E3F450; color: black;">
+              <div class="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider mb-4 " style="background-color: #E3F450; color: black;">
                 Patrones de Diseños
               </div>
               <div class="flex items-center justify-between mb-2">
@@ -525,11 +525,7 @@ onMounted(async () => {
 }
 
 /* Apply Stack Sans Notch globally except for h1 */
-:deep(*) {
-  font-family: 'Stack Sans Notch', sans-serif !important;
-}
 
-:deep(h1) {
-  font-family: sans-serif !important;
-}
+
+
 </style>

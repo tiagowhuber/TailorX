@@ -3,7 +3,7 @@
 @plugin "tailwindcss-animate";
 
 /* Import Poppins font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+/* Import Outfit font via HTML */
 
 @custom-variant dark (&:is(.dark *));
 
@@ -121,10 +121,12 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Outfit', sans-serif;
   }
+
   /* Ensure all clickable buttons have a hand pointer */
   button {
     cursor: pointer !important;

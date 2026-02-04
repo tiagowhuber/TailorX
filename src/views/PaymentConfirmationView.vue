@@ -18,8 +18,8 @@
       >
         <div class="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-[#E3F450] mx-auto mb-4">
         </div>
-        <h2 class="text-xl sm:text-2xl font-bold mb-2" style="font-family: 'Avenir Next', sans-serif;">Procesando pago...</h2>
-        <p class="text-sm sm:text-base text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">Por favor espera mientras confirmamos tu transacción.</p>
+        <h2 class="text-xl sm:text-2xl font-bold mb-2" >Procesando pago...</h2>
+        <p class="text-sm sm:text-base text-gray-400 " >Por favor espera mientras confirmamos tu transacción.</p>
       </motion.div>
 
       <!-- Success State -->
@@ -37,43 +37,43 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
             </svg>
           </div>
-          <div class="inline-block px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold uppercase tracking-wider orbitron-variable" style="--orbitron-weight: 700; background-color: #E3F450; color: black;">
+          <div class="inline-block px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold uppercase tracking-wider " style="background-color: #E3F450; color: black;">
             Pago Confirmado
           </div>
-          <h1 class="text-3xl sm:text-4xl md:text-5xl font-black" style="font-family: 'Avenir Next', sans-serif;">PAGO EXITOSO</h1>
-          <p class="text-lg sm:text-xl text-gray-300 orbitron-variable" style="--orbitron-weight: 400;">Tu orden ha sido confirmada</p>
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-black" >PAGO EXITOSO</h1>
+          <p class="text-lg sm:text-xl text-gray-300 " >Tu orden ha sido confirmada</p>
         </div>
 
         <!-- Payment Details Card -->
         <div v-if="paymentData" class="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8">
-          <h3 class="text-base sm:text-lg font-bold mb-4 sm:mb-6 orbitron-variable" style="--orbitron-weight: 700;">Detalles de la Transacción</h3>
+          <h3 class="text-base sm:text-lg font-bold mb-4 sm:mb-6 " >Detalles de la Transacción</h3>
           <dl class="space-y-4">
             <div class="flex justify-between items-center py-3 border-b border-white/10">
-              <dt class="text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">Número de Orden</dt>
-              <dd class="text-base font-bold text-[#E3F450] orbitron-variable" style="--orbitron-weight: 700;">{{ paymentData.orderNumber }}</dd>
+              <dt class="text-sm text-gray-400 " >Número de Orden</dt>
+              <dd class="text-base font-bold text-[#E3F450] " >{{ paymentData.orderNumber }}</dd>
             </div>
             <div class="flex justify-between items-center py-3 border-b border-white/10">
-              <dt class="text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">Monto Total</dt>
-              <dd class="text-xl font-bold text-white orbitron-variable" style="--orbitron-weight: 700;">{{ formatPrice(paymentData.amount) }}</dd>
+              <dt class="text-sm text-gray-400 " >Monto Total</dt>
+              <dd class="text-xl font-bold text-white " >{{ formatPrice(paymentData.amount) }}</dd>
             </div>
             <div class="flex justify-between items-center py-3 border-b border-white/10">
-              <dt class="text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">Fecha de Transacción</dt>
-              <dd class="text-sm text-white orbitron-variable" style="--orbitron-weight: 400;">{{ formatDate(paymentData.transaction_date) }}</dd>
+              <dt class="text-sm text-gray-400 " >Fecha de Transacción</dt>
+              <dd class="text-sm text-white " >{{ formatDate(paymentData.transaction_date) }}</dd>
             </div>
             <div v-if="paymentData.card_detail" class="flex justify-between items-center py-3 border-b border-white/10">
-              <dt class="text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">Tarjeta</dt>
-              <dd class="text-sm text-white orbitron-variable" style="--orbitron-weight: 400;">**** {{ paymentData.card_detail.card_number }}</dd>
+              <dt class="text-sm text-gray-400 " >Tarjeta</dt>
+              <dd class="text-sm text-white " >**** {{ paymentData.card_detail.card_number }}</dd>
             </div>
             <div class="flex justify-between items-center py-3">
-              <dt class="text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">Código de Autorización</dt>
-              <dd class="text-sm text-white orbitron-variable" style="--orbitron-weight: 400;">{{ paymentData.response_code }}</dd>
+              <dt class="text-sm text-gray-400 " >Código de Autorización</dt>
+              <dd class="text-sm text-white " >{{ paymentData.response_code }}</dd>
             </div>
           </dl>
         </div>
 
         <!-- Success Message -->
         <div class="bg-[#E3F450]/10 border border-[#E3F450]/30 rounded-lg p-6">
-          <p class="text-sm text-[#E3F450] orbitron-variable" style="--orbitron-weight: 400;">
+          <p class="text-sm text-[#E3F450] " >
             <strong class="font-bold">¡Gracias por tu compra!</strong> Tu pedido está siendo procesado.
             Nuestro equipo empezará a coser tu patrón personalizado de inmediato. Puedes verificar el estado de tu orden en cualquier momento.
           </p>
@@ -83,15 +83,15 @@
         <div class="flex flex-col sm:flex-row gap-4">
           <button
             @click="goToOrders"
-            class="flex-1 px-6 py-4 rounded-md font-bold uppercase tracking-wide transition-all orbitron-variable"
-            style="--orbitron-weight: 700; background-color: #E3F450; color: black;"
+            class="flex-1 px-6 py-4 rounded-md font-bold uppercase tracking-wide transition-all "
+            style="background-color: #E3F450; color: black;"
           >
             Ver Mis Órdenes
           </button>
           <button
             @click="goToHome"
-            class="flex-1 px-6 py-4 rounded-md font-bold uppercase tracking-wide bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all orbitron-variable"
-            style="--orbitron-weight: 700;"
+            class="flex-1 px-6 py-4 rounded-md font-bold uppercase tracking-wide bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all "
+            
           >
             Volver al Inicio
           </button>
@@ -113,16 +113,16 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </div>
-          <div class="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider orbitron-variable" style="--orbitron-weight: 700; background-color: #EF4444; color: white;">
+          <div class="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider " style="background-color: #EF4444; color: white;">
             Pago Rechazado
           </div>
-          <h1 class="text-4xl md:text-5xl font-black" style="font-family: 'Avenir Next', sans-serif;">PAGO NO COMPLETADO</h1>
-          <p class="text-xl text-red-400 orbitron-variable" style="--orbitron-weight: 400;">{{ errorMessage }}</p>
+          <h1 class="text-4xl md:text-5xl font-black" >PAGO NO COMPLETADO</h1>
+          <p class="text-xl text-red-400 " >{{ errorMessage }}</p>
         </div>
 
         <!-- Error Message -->
         <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-6">
-          <p class="text-sm text-yellow-300 orbitron-variable" style="--orbitron-weight: 400;">
+          <p class="text-sm text-yellow-300 " >
             Tu pago no pudo ser procesado. Esto puede deberse a fondos insuficientes, datos incorrectos,
             o una cancelación manual. Por favor, intenta nuevamente o contacta a tu banco para más información.
           </p>
@@ -132,15 +132,15 @@
         <div class="flex flex-col sm:flex-row gap-4">
           <button
             @click="goToCart"
-            class="flex-1 px-6 py-4 rounded-md font-bold uppercase tracking-wide transition-all orbitron-variable"
-            style="--orbitron-weight: 700; background-color: #E3F450; color: black;"
+            class="flex-1 px-6 py-4 rounded-md font-bold uppercase tracking-wide transition-all "
+            style="background-color: #E3F450; color: black;"
           >
             Volver al Carrito
           </button>
           <button
             @click="goToHome"
-            class="flex-1 px-6 py-4 rounded-md font-bold uppercase tracking-wide bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all orbitron-variable"
-            style="--orbitron-weight: 700;"
+            class="flex-1 px-6 py-4 rounded-md font-bold uppercase tracking-wide bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all "
+            
           >
             Volver al Inicio
           </button>
