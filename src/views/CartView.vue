@@ -82,10 +82,10 @@
                     class="bg-white/5 border-white/10 hover:border-white/20 transition-all"
                   >
                     <CardContent class="p-6">
-                      <div class="flex gap-6">
+                      <div class="flex flex-col sm:flex-row gap-4 sm:gap-6">
                         <!-- Image -->
                         <div class="flex-shrink-0">
-                          <div class="w-24 h-24 rounded-lg overflow-hidden bg-gray-800">
+                          <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden bg-gray-800">
                             <img
                               v-if="item.imageUrl"
                               :src="item.imageUrl"
@@ -127,27 +127,27 @@
                           </div>
 
                           <!-- Price and Quantity Controls -->
-                          <div class="flex items-center justify-between mt-4">
+                          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-4 gap-3 sm:gap-0">
                             <!-- Quantity Controls -->
-                            <div class="flex items-center gap-3">
-                              <span class="text-sm text-gray-400">Cantidad:</span>
-                              <div class="flex items-center gap-2 bg-white/10 rounded-lg">
+                            <div class="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                              <span class="text-xs sm:text-sm text-gray-400">Cantidad:</span>
+                              <div class="flex items-center gap-1 sm:gap-2 bg-white/10 rounded-lg">
                                 <Button
                                   @click="decrementQuantity(item)"
                                   variant="ghost"
                                   size="icon"
-                                  class="h-8 w-8 text-white hover:bg-white/10"
+                                  class="h-9 w-9 sm:h-8 sm:w-8 text-white hover:bg-white/10"
                                 >
                                   <Minus class="h-4 w-4" />
                                 </Button>
-                                <span class="text-white font-semibold min-w-[2rem] text-center">
+                                <span class="text-white font-semibold min-w-[2.5rem] sm:min-w-[2rem] text-center">
                                   {{ item.quantity }}
                                 </span>
                                 <Button
                                   @click="incrementQuantity(item)"
                                   variant="ghost"
                                   size="icon"
-                                  class="h-8 w-8 text-white hover:bg-white/10"
+                                  class="h-9 w-9 sm:h-8 sm:w-8 text-white hover:bg-white/10"
                                 >
                                   <Plus class="h-4 w-4" />
                                 </Button>
@@ -155,7 +155,7 @@
                             </div>
 
                             <!-- Price -->
-                            <div class="text-right">
+                            <div class="text-left sm:text-right w-full sm:w-auto">
                               <p class="text-sm text-gray-400">Precio unitario</p>
                               <p class="text-lg font-bold text-[#E3F450]">
                                 {{ cartStore.formatPrice(item.price) }}

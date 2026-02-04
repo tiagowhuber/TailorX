@@ -18,21 +18,21 @@
           <main class="flex-1 min-w-0">
             <!-- Header with Avatar -->
             <motion.div
-              class="mb-8"
+              class="mb-6 sm:mb-8"
               :initial="{ opacity: 0, y: 20 }"
               :animate="{ opacity: 1, y: 0 }"
               :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
             >
-              <div class="flex items-center gap-4 mb-2">
-                <Avatar class="h-16 w-16 border-2 border-[#E3F450]">
+              <div class="flex items-center gap-3 sm:gap-4 mb-2">
+                <Avatar class="h-12 w-12 sm:h-16 sm:w-16 border-2 border-[#E3F450]">
                   <AvatarImage v-if="getProfilePictureUrl()" :src="getProfilePictureUrl()!" :alt="authStore.user?.first_name || 'User'" />
                   <AvatarFallback class="bg-white/10 text-white text-xl font-bold">
                     {{ getInitials() }}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <h1 class="text-3xl font-bold text-white">CONFIGURACIÓN DE CUENTA</h1>
-                  <p class="text-gray-400 text-sm">Administra tu información personal</p>
+                  <h1 class="text-2xl sm:text-3xl font-bold text-white">CONFIGURACIÓN DE CUENTA</h1>
+                  <p class="text-gray-400 text-xs sm:text-sm">Administra tu información personal</p>
                 </div>
               </div>
             </motion.div>
@@ -75,8 +75,8 @@
 
     <!-- Edit Profile Modal -->
     <div v-if="showEditProfile" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-      <div class="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10 max-w-md w-full">
-        <h3 class="text-2xl font-bold mb-6">Editar Perfil</h3>
+      <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-white/10 max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <h3 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Editar Perfil</h3>
         
         <form @submit.prevent="handleUpdateProfile" class="space-y-4">
           <!-- Profile Picture Section -->

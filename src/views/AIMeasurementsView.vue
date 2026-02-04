@@ -8,24 +8,24 @@
     <NavigationBar />
 
     <!-- Main Content -->
-    <div class="relative z-10 w-full max-w-6xl mx-auto px-8 pt-32 pb-16">
+    <div class="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 lg:pt-32 pb-12 sm:pb-16">
       <Card class="bg-white/5 backdrop-blur-md border-white/10 shadow-2xl">
-        <CardHeader class="pb-4">
-          <div class="flex justify-between items-center">
+        <CardHeader class="pb-3 sm:pb-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
             <div>
-              <CardTitle class="text-4xl font-black text-white mb-1">
+              <CardTitle class="text-3xl sm:text-4xl font-black text-white mb-1">
                 MEDIDAS CON IA
               </CardTitle>
-              <CardDescription class="text-gray-400 font-normal text-base">
+              <CardDescription class="text-gray-400 font-normal text-sm sm:text-base">
                 Análisis preciso de medidas a partir de fotografías
               </CardDescription>
             </div>
             <Button 
               @click="router.push({ name: 'measurements' })"
               variant="outline"
-              class="border-white/20 text-black hover:bg-white/15"
+              class="border-white/20 text-black hover:bg-white/15 w-full sm:w-auto"
             >
-              <ArrowLeft class="mr-2 h-5 w-5" />
+              <ArrowLeft class="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
               Volver
             </Button>
           </div>
@@ -45,10 +45,10 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
             <!-- Upload Section -->
-            <div class="space-y-6">
-              <h3 class="text-2xl font-bold text-white">Subir Fotografías</h3>
+            <div class="space-y-4 sm:space-y-6">
+              <h3 class="text-xl sm:text-2xl font-bold text-white">Subir Fotografías</h3>
               
               <!-- Front Photo -->
               <div>
@@ -124,8 +124,8 @@
             </div>
 
             <!-- Form Section -->
-            <div class="space-y-6">
-              <h3 class="text-2xl font-bold text-white">Información Adicional</h3>
+            <div class="space-y-4 sm:space-y-6">
+              <h3 class="text-xl sm:text-2xl font-bold text-white">Información Adicional</h3>
               
               <div class="space-y-2">
                 <Label for="height" class="text-white font-medium">
@@ -166,7 +166,7 @@
                 <Button 
                 @click="analyzePhotos"
                 :disabled="isAnalyzing || !canAnalyze"
-                class="w-full py-4 bg-white hover:opacity-90 text-black text-lg"
+                class="w-full py-3 sm:py-4 bg-white hover:opacity-90 text-black text-base sm:text-lg"
                 >
                 <div v-if="!isAnalyzing" class="mr-2 h-5 w-5"></div>
                 <div v-else class="inline-block h-5 w-5 mr-2 animate-spin rounded-full border-2 border-solid border-black border-r-transparent"></div>
@@ -186,13 +186,13 @@
 
         <!-- Preview and Confirmation Section -->
         <CardContent v-else>
-          <div class="space-y-6">
-            <div class="flex items-center justify-between">
-              <h3 class="text-2xl font-bold text-white">Resultados del Análisis</h3>
+          <div class="space-y-4 sm:space-y-6">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
+              <h3 class="text-xl sm:text-2xl font-bold text-white">Resultados del Análisis</h3>
               <Button 
                 @click="resetAnalysis"
                 variant="outline"
-                class="border-white/20 text-black hover:bg-white/10"
+                class="border-white/20 text-black hover:bg-white/10 w-full sm:w-auto"
               >
                 <RotateCcw class="mr-2 h-4 w-4" />
                 Analizar de Nuevo
@@ -243,8 +243,8 @@
 
             <!-- Measurements Grid -->
             <div>
-              <h4 class="text-xl font-bold text-white mb-4">Medidas Detectadas</h4>
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <h4 class="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Medidas Detectadas</h4>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 <Card 
                   v-for="measurement in detectedMeasurements" 
                   :key="measurement.name"
@@ -261,11 +261,11 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex gap-4">
+            <div class="flex gap-3 sm:gap-4">
               <Button 
               @click="confirmAndSave"
               :disabled="isSaving"
-              class="flex-1 py-4 bg-[#E3F450] text-black text-lg hover:bg-[#E3F450]/80"
+              class="flex-1 py-3 sm:py-4 bg-[#E3F450] text-black text-base sm:text-lg hover:bg-[#E3F450]/80"
               >
               <Save v-if="!isSaving" class="mr-2 h-5 w-5" />
               <div v-else class="inline-block h-5 w-5 mr-2 animate-spin rounded-full border-2 border-solid border-black border-r-transparent"></div>

@@ -5,28 +5,28 @@
     <NavigationBar />
 
     <!-- Main Content -->
-    <main class="px-8 py-12 max-w-7xl mx-auto">
+    <main class="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 max-w-7xl mx-auto">
       <!-- Page Title -->
       <motion.div
-        class="mb-12"
+        class="mb-8 sm:mb-12"
         :initial="{ opacity: 0, y: 20 }"
         :animate="{ opacity: 1, y: 0 }"
         :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
       >
-        <h2 class="text-5xl md:text-6xl font-black mb-4" style="font-family: 'Avenir Next', sans-serif;">
+        <h2 class="text-4xl sm:text-5xl md:text-6xl font-black mb-3 sm:mb-4" style="font-family: 'Avenir Next', sans-serif;">
           CATÁLOGO
         </h2>
-        <p class="text-xl md:text-2xl orbitron-variable" style="--orbitron-weight: 400;">
+        <p class="text-lg sm:text-xl md:text-2xl orbitron-variable" style="--orbitron-weight: 400;">
           CADA DISEÑO SE ADAPTA A TI, <span style="color: #E3F450;">NO AL REVÉS.</span>
         </p>
       </motion.div>
 
       <!-- Filter Toggle -->
-      <div class="mb-8 flex items-center justify-between">
-        <div class="flex items-center gap-4">
+      <div class="mb-6 sm:mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+        <div class="flex items-center gap-4 w-full sm:w-auto">
           <button
             @click="catalogStore.toggleActiveFilter()"
-            class="px-4 py-2 rounded-lg border-2 transition-all orbitron-variable"
+            class="px-3 sm:px-4 py-2 rounded-lg border-2 transition-all orbitron-variable text-sm sm:text-base w-full sm:w-auto"
             :class="catalogStore.showOnlyActive 
               ? 'border-[#E3F450] bg-[#E3F450]/10 text-[#E3F450]' 
               : 'border-gray-600 text-gray-400 hover:border-gray-400'"
@@ -34,7 +34,7 @@
           >
             {{ catalogStore.showOnlyActive ? 'Solo Activos' : 'Todos los Diseños' }}
           </button>
-          <p class="text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
+          <p class="text-gray-400 orbitron-variable text-sm sm:text-base" style="--orbitron-weight: 400;">
             {{ catalogStore.filteredDesigns.length }} diseño{{ catalogStore.filteredDesigns.length !== 1 ? 's' : '' }}
           </p>
         </div>
@@ -71,7 +71,7 @@
       </motion.div>
 
       <!-- Products Grid -->
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         <!-- Product Card -->
         <motion.div
           v-for="(design, index) in catalogStore.filteredDesigns"

@@ -21,23 +21,23 @@
     </div>
 
     <!-- Design Detail Content -->
-    <main v-else-if="design" class="px-8 py-12 max-w-7xl mx-auto">
+    <main v-else-if="design" class="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 max-w-7xl mx-auto">
       <!-- Back Button -->
       <motion.button
         @click="goBack"
-        class="mb-8 flex items-center gap-2 text-gray-400 hover:text-white transition-colors orbitron-variable"
+        class="mb-6 sm:mb-8 flex items-center gap-2 text-gray-400 hover:text-white transition-colors orbitron-variable text-sm sm:text-base"
         style="--orbitron-weight: 500;"
         :initial="{ opacity: 0, y: 20 }"
         :animate="{ opacity: 1, y: 0 }"
         :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
       >
-        <span class="text-2xl">←</span>
+        <span class="text-xl sm:text-2xl">←</span>
         <span>Volver al catálogo</span>
       </motion.button>
 
       <!-- Design Grid -->
       <motion.div
-        class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16"
+        class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 mb-12 sm:mb-16"
         :initial="{ opacity: 0, y: 20 }"
         :animate="{ opacity: 1, y: 0 }"
         :transition="{ type: 'spring', stiffness: 200, damping: 25 }"
@@ -63,13 +63,13 @@
         </div>
 
         <!-- Details Section -->
-        <div class="space-y-8">
+        <div class="space-y-6 sm:space-y-8">
           <!-- Title and Price -->
           <div>
-            <h1 class="text-4xl md:text-5xl font-black mb-4" style="font-family: 'Avenir Next', sans-serif;">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-black mb-3 sm:mb-4" style="font-family: 'Avenir Next', sans-serif;">
               {{ design.name }}
             </h1>
-            <p class="text-3xl font-bold text-[#E3F450] orbitron-variable" style="--orbitron-weight: 700;">
+            <p class="text-2xl sm:text-3xl font-bold text-[#E3F450] orbitron-variable" style="--orbitron-weight: 700;">
               {{ formatPrice(design.base_price) }}
             </p>
           </div>
@@ -172,11 +172,11 @@
           </div>
       
           <!-- Required Measurements -->
-          <div v-if="measurements.length > 0" class="space-y-4 border-t border-gray-800 pt-12 mt-12">
-            <h2 class="text-xl font-bold orbitron-variable" style="--orbitron-weight: 600;">
+          <div v-if="measurements.length > 0" class="space-y-4 border-t border-gray-800 pt-8 sm:pt-12 mt-8 sm:mt-12">
+            <h2 class="text-lg sm:text-xl font-bold orbitron-variable" style="--orbitron-weight: 600;">
               Medidas Requeridas
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div 
                 v-for="measurement in measurements" 
                 :key="measurement.id"
@@ -196,10 +196,10 @@
           </div>
 
           <!-- Action Buttons -->
-          <div class="space-y-4 pt-4">
+          <div class="space-y-3 sm:space-y-4 pt-4">
             <button
               @click="customizeDesign"
-              class="w-full px-8 py-4 bg-[#E3F450] text-black rounded-lg font-bold hover:bg-[#E3F45080] transition-colors orbitron-variable text-lg"
+              class="w-full px-6 sm:px-8 py-3 sm:py-4 bg-[#E3F450] text-black rounded-lg font-bold hover:bg-[#E3F45080] transition-colors orbitron-variable text-base sm:text-lg"
               style="--orbitron-weight: 700;"
               :disabled="!design.is_active"
               :class="!design.is_active ? 'opacity-50 cursor-not-allowed' : ''"
@@ -210,7 +210,7 @@
             <button
               v-if="design.is_active"
               @click="viewMeasurements"
-              class="w-full px-8 py-4 bg-transparent border-2 border-[#E3F450] text-[#E3F450] rounded-lg font-bold hover:bg-[#E3F450]/10 transition-colors orbitron-variable text-lg"
+              class="w-full px-6 sm:px-8 py-3 sm:py-4 bg-transparent border-2 border-[#E3F450] text-[#E3F450] rounded-lg font-bold hover:bg-[#E3F450]/10 transition-colors orbitron-variable text-base sm:text-lg"
               style="--orbitron-weight: 600;"
             >
               VER MIS MEDIDAS
@@ -227,11 +227,11 @@
       </motion.div>
       
       <!-- Additional Information Section -->
-      <div class="border-t border-gray-800 pt-12">
-        <h2 class="text-3xl font-black mb-8" style="font-family: 'Avenir Next', sans-serif;">
+      <div class="border-t border-gray-800 pt-8 sm:pt-12">
+        <h2 class="text-2xl sm:text-3xl font-black mb-6 sm:mb-8" style="font-family: 'Avenir Next', sans-serif;">
           ¿CÓMO FUNCIONA?
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           <!-- Step 1 -->
           <div class="space-y-4">
             <div class="w-16 h-16 rounded-full bg-[#E3F450]/20 flex items-center justify-center">

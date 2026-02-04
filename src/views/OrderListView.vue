@@ -15,16 +15,16 @@
           <main class="flex-1 min-w-0">
             <!-- Header -->
             <motion.div
-              class="mb-8"
+              class="mb-6 sm:mb-8"
               :initial="{ opacity: 0, y: 20 }"
               :animate="{ opacity: 1, y: 0 }"
               :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
             >
-              <div class="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider mb-4 orbitron-variable" style="--orbitron-weight: 700; background-color: #E3F450; color: black;">
+              <div class="inline-block px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold uppercase tracking-wider mb-3 sm:mb-4 orbitron-variable" style="--orbitron-weight: 700; background-color: #E3F450; color: black;">
                 Historial de Compras
               </div>
-              <h1 class="text-3xl md:text-4xl font-bold text-white mb-2" style="font-family: 'Avenir Next', sans-serif;">MIS PEDIDOS</h1>
-              <p class="text-gray-400 text-sm orbitron-variable" style="--orbitron-weight: 400;">
+              <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2" style="font-family: 'Avenir Next', sans-serif;">MIS PEDIDOS</h1>
+              <p class="text-xs sm:text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
                 {{ orders.length }} {{ orders.length === 1 ? 'pedido' : 'pedidos' }} realizados
               </p>
             </motion.div>
@@ -76,20 +76,22 @@
                   class="bg-white/5 border border-white/10 rounded-lg overflow-hidden hover:border-white/20 transition-all"
                 >
                   <CollapsibleTrigger class="w-full">
-                    <div class="p-6 flex items-center justify-between cursor-pointer">
-                      <div class="flex-1 text-left">
-                        <div class="flex items-center gap-3 mb-2">
-                          <h3 class="text-lg font-bold text-white">
+                    <div class="p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between cursor-pointer gap-3 sm:gap-0">
+                      <div class="flex-1 text-left w-full">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 mb-2">
+                          <h3 class="text-base sm:text-lg font-bold text-white">
                             {{ order.order_number }}
                           </h3>
-                          <Badge :class="getStatusClass(order.status)">
-                            {{ getStatusLabel(order.status) }}
-                          </Badge>
-                          <Badge v-if="order.payment_status" :class="getPaymentStatusClass(order.payment_status)">
-                            {{ getPaymentStatusLabel(order.payment_status) }}
-                          </Badge>
+                          <div class="flex flex-wrap gap-2">
+                            <Badge :class="getStatusClass(order.status)">
+                              {{ getStatusLabel(order.status) }}
+                            </Badge>
+                            <Badge v-if="order.payment_status" :class="getPaymentStatusClass(order.payment_status)">
+                              {{ getPaymentStatusLabel(order.payment_status) }}
+                            </Badge>
+                          </div>
                         </div>
-                        <div class="flex flex-wrap gap-4 text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
+                        <div class="flex flex-wrap gap-3 sm:gap-4 text-xs sm:text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
                           <span class="flex items-center gap-1">
                             <Calendar class="h-4 w-4" />
                             {{ formatDate(order.created_at) }}
@@ -100,10 +102,10 @@
                           </span>
                         </div>
                       </div>
-                      <div class="flex items-center gap-6">
-                        <div class="text-right">
-                          <p class="text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">Total</p>
-                          <p class="text-xl font-bold text-[#E3F450] orbitron-variable" style="--orbitron-weight: 700;">
+                      <div class="flex items-center gap-4 sm:gap-6 w-full sm:w-auto">
+                        <div class="text-left sm:text-right flex-1 sm:flex-none">
+                          <p class="text-xs sm:text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">Total</p>
+                          <p class="text-lg sm:text-xl font-bold text-[#E3F450] orbitron-variable" style="--orbitron-weight: 700;">
                             {{ formatPrice(order.total_amount) }}
                           </p>
                         </div>

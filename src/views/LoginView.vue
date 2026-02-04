@@ -8,16 +8,16 @@
     <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-radial from-[#E3F450]/20 via-yellow-300/10 to-transparent rounded-full blur-3xl transform -translate-x-32 translate-y-32"></div>
     
     <!-- Navigation Header -->
-    <header class="absolute top-0 left-0 right-0 z-10 flex justify-between items-center px-8 py-6">
+    <header class="absolute top-0 left-0 right-0 z-10 flex flex-col sm:flex-row justify-between items-center px-4 sm:px-6 lg:px-8 py-4 sm:py-6 gap-4 sm:gap-0">
       <!-- Logo -->
-      <router-link to="/" class="flex items-center">
-        <h1 class="text-2xl font-bold tracking-widest">TAILORX</h1>
-        <p class="text-xs text-gray-400 ml-4 tracking-wide">DRESS WITHOUT WASTE</p>
+      <router-link to="/" class="flex flex-col sm:flex-row items-center">
+        <h1 class="text-xl sm:text-2xl font-bold tracking-widest">TAILORX</h1>
+        <p class="text-xs text-gray-400 sm:ml-4 tracking-wide">DRESS WITHOUT WASTE</p>
       </router-link>
       
       <!-- Social Media Icons -->
       <div class="flex space-x-3">
-        <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-[#E3F450] transition-colors">
+        <a href="#" class="w-8 h-8 sm:w-6 sm:h-6 bg-white rounded-full flex items-center justify-center hover:bg-[#E3F450] transition-colors">
           <TwitterSmallIcon />
         </a>
         <a href="#" class="w-6 h-6 bg-white rounded-full flex items-center justify-center hover:bg-[#E3F450] transition-colors">
@@ -33,14 +33,14 @@
     </header>
 
     <!-- Main Content - Login Form -->
-    <div class="relative z-10 w-full max-w-xl px-8">
-      <div class="bg-white/5 backdrop-blur-md rounded-2xl p-10 border border-white/10 shadow-2xl">
+    <div class="relative z-10 w-full max-w-md sm:max-w-xl px-4 sm:px-8">
+      <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 lg:p-10 border border-white/10 shadow-2xl">
         <!-- Form Header -->
-        <div class="text-center mb-8">
-          <h2 class="text-4xl font-black mb-2">
+        <div class="text-center mb-6 sm:mb-8">
+          <h2 class="text-3xl sm:text-4xl font-black mb-2">
             INICIAR SESIÓN
           </h2>
-          <p class="text-gray-400 font-normal">
+          <p class="text-gray-400 font-normal text-sm sm:text-base">
             Bienvenido de nuevo a TailorX
           </p>
         </div>
@@ -52,7 +52,7 @@
         <Button 
           v-if="!isGoogleLoaded"
           @click="signInWithGoogle"
-          class="w-full mb-6 bg-white hover:bg-gray-100 text-black font-semibold py-6 flex items-center justify-center gap-3"
+          class="w-full mb-6 bg-white hover:bg-gray-100 text-black font-semibold py-4 sm:py-6 flex items-center justify-center gap-3 text-sm sm:text-base"
         >
           <GoogleIcon />
           <span>CONTINUAR CON GOOGLE</span>
@@ -126,7 +126,7 @@
           <Button 
             type="submit"
             :disabled="isSubmitting || authStore.loading"
-            class="w-full py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity disabled:opacity-50"
+            class="w-full py-4 sm:py-6 text-base sm:text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity disabled:opacity-50"
             style="background-color: #E3F450; color: black;"
           >
             {{ isSubmitting || authStore.loading ? 'INICIANDO SESIÓN...' : 'INICIAR SESIÓN' }}
