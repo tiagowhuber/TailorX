@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@freesewing/hugo": "^4.4.3",
     "@react-oauth/google": "^0.12.2",
     "@tailwindcss/vite": "^4.1.14",
     "@vee-validate/zod": "^4.15.1",
