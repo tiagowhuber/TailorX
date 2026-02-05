@@ -179,7 +179,7 @@
     <div class="max-w-6xl mx-auto w-full text-center relative z-10">
       <div class="max-w-2xl mx-auto">
         <!-- Yellow Highlight Text -->
-        <div class="inline-block mb-4 sm:mb-6" style="background-color: #E3F450; color: black; padding: 0.5rem 1rem sm:padding: 0.5rem 1.5rem;">
+        <div class="inline-block mb-4 sm:mb-6 px-4 py-2 sm:px-6" style="background-color: #E3F450; color: black;">
           <p class="text-sm sm:text-lg md:text-xl font-bold uppercase " >
             CADA AÑO SE FABRICAN MÁS DE
           </p>
@@ -193,7 +193,7 @@
         </h2>
         
         <!-- Black Box with Secondary Stat -->
-        <div class="inline-block" style="background-color: rgba(0, 0, 0, 0.8); padding: 0.75rem 1.5rem sm:padding: 1rem 2rem;">
+        <div class="inline-block px-6 py-3 sm:px-8 sm:py-4" style="background-color: rgba(0, 0, 0, 0.8);">
           <p class="text-base sm:text-xl md:text-2xl font-bold uppercase" style="color: #E3F450;">
             EL 40% TERMINA EN VERTEDEROS
           </p>

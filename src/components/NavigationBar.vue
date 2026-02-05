@@ -59,6 +59,18 @@
         </a>
       </div>
 
+      <!-- Sign In Button (only when NOT authenticated) -->
+      <template v-if="!authStore.isAuthenticated">
+        <router-link to="/login">
+          <Button 
+            variant="outline" 
+            class="hidden sm:flex ml-2 border-black text-black hover:bg-black hover:text-white hover:border-white transition-colors font-bold"
+          >
+            Iniciar Sesión
+          </Button>
+        </router-link>
+      </template>
+
       <!-- Cart Icon (only when authenticated and has items) -->
       <template v-if="authStore.isAuthenticated && cartStore.itemCount > 0">
         <Separator orientation="vertical" class="hidden sm:block h-6 bg-white/30 mx-1" />
@@ -242,6 +254,18 @@
           </div>
         </div>
 
+        <!-- Mobile Login Action (if NOT authenticated) -->
+        <div v-if="!authStore.isAuthenticated" class="px-4 pb-6 border-t border-white/10 pt-4">
+          <router-link 
+            to="/login"
+            @click="closeMobileMenu"
+            class="w-full flex items-center justify-center px-4 py-3.5 rounded-lg bg-[#E3F450] text-black font-bold hover:bg-[#d4e440] transition-colors"
+          >
+            <LogIn class="mr-2 h-5 w-5" />
+            <span>Iniciar Sesión</span>
+          </router-link>
+        </div>
+
         <!-- Mobile User Actions (if authenticated) -->
         <div v-if="authStore.isAuthenticated" class="px-4 pb-6 border-t border-white/10 pt-4">
           <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
@@ -295,7 +319,7 @@ import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
-import { User as UserIcon, LogOut, RulerDimensionLine, Scissors, ShoppingCart, BaggageClaim, Menu, X } from 'lucide-vue-next'
+import { User as UserIcon, LogOut, RulerDimensionLine, Scissors, ShoppingCart, BaggageClaim, Menu, X, LogIn } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
