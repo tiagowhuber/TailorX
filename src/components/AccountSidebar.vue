@@ -37,6 +37,7 @@
           Mis Patrones
         </button>
         <button
+          :key="1"
           @click="router.push({ name: 'orders' })"
           :class="[
             'px-4 py-3 rounded-lg text-sm font-medium transition-all whitespace-nowrap border min-w-[2.75rem] active:scale-95',
@@ -46,6 +47,17 @@
           ]"
         >
           Mis Pedidos
+        </button>
+        <button
+          @click="router.push({ name: 'discount-codes' })"
+          :class="[
+            'px-4 py-3 rounded-lg text-sm font-medium transition-all whitespace-nowrap border min-w-[2.75rem] active:scale-95',
+            activeSection === 'discount-codes'
+              ? 'bg-white text-black border-white shadow-lg'
+              : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
+          ]"
+        >
+          Mis Descuentos
         </button>
         <button
           v-if="activeSection === 'account'"
@@ -104,6 +116,19 @@
           Mis Patrones
         </button>
         
+
+        <button
+          @click="router.push({ name: 'discount-codes' })"
+          :class="[
+            'w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-all border cursor-pointer',
+            activeSection === 'discount-codes'
+              ? 'bg-white text-black border-white shadow-lg'
+              : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
+          ]"
+        >
+          <Ticket :class="['inline-block mr-2 h-4 w-4', activeSection === 'discount-codes' ? 'text-black' : 'text-[#E3F450]']" />
+          Mis Descuentos
+        </button>
         <button
           @click="router.push({ name: 'orders' })"
           :class="[
@@ -143,11 +168,11 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { RulerDimensionLine, ScissorsLineDashed, Settings, LogOut, BaggageClaim } from 'lucide-vue-next'
+import { RulerDimensionLine, ScissorsLineDashed, Settings, LogOut, BaggageClaim, Ticket } from 'lucide-vue-next'
 import { Separator } from '@/components/ui/separator'
 
 interface Props {
-  activeSection: 'account' | 'measurements' | 'patterns' | 'cart' | 'orders'
+  activeSection: 'account' | 'measurements' | 'patterns' | 'cart' | 'orders' | 'discount-codes'
 }
 
 defineProps<Props>()

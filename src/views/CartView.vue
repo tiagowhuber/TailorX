@@ -178,13 +178,61 @@
                 :animate="{ opacity: 1, y: 0 }"
                 :transition="{ type: 'spring', stiffness: 200, damping: 25 }"
               >
+                <!-- Discount Code Input -->
+                <Card class="bg-white/5 border-white/10 mb-6">
+                  <CardContent class="p-6">
+                     <p class="text-sm font-medium text-gray-300 mb-2">Código de Descuento</p>
+                     <div class="flex gap-2">
+                       <input 
+                         v-model="discountCodeInput" 
+                         type="text" 
+                         placeholder="Ingresa tu código"
+                         class="flex-1 bg-black/40 border border-white/10 rounded-md px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-[#E3F450]"
+                         @keyup.enter="applyDiscount"
+                         :disabled="!!cartStore.discountCode"
+                       />
+                       <Button 
+                         v-if="!cartStore.discountCode"
+                         @click="applyDiscount"
+                         class="bg-white/10 hover:bg-white/20 text-white"
+                         :disabled="!discountCodeInput || applyingDiscount"
+                       >
+                         {{ applyingDiscount ? '...' : 'Aplicar' }}
+                       </Button>
+                       <Button 
+                         v-else
+                         @click="removeDiscount"
+                         variant="ghost" 
+                         class="text-red-400 hover:bg-red-500/10"
+                       >
+                         <Trash2 class="h-4 w-4" />
+                       </Button>
+                     </div>
+                     <p v-if="discountMessage" :class="['text-xs mt-2', discountSuccess ? 'text-[#E3F450]' : 'text-red-400']">
+                       {{ discountMessage }}
+                     </p>
+                  </CardContent>
+                </Card>
+
                 <Card class="bg-white/5 border-white/10 sticky bottom-4">
                   <CardContent class="p-6">
                     <div class="space-y-4">
+                      <div class="flex items-center justify-between text-base">
+                        <span class="text-gray-400">Subtotal:</span>
+                        <span class="text-white">{{ cartStore.formatPrice(cartStore.totalAmount) }}</span>
+                      </div>
+                      
+                      <div v-if="cartStore.discountCode" class="flex items-center justify-between text-base">
+                        <span class="text-[#E3F450]">Descuento ({{ cartStore.discountCode }}):</span> // Make sure discountCode is ref in store
+                        <span class="text-[#E3F450]">-{{ cartStore.formatPrice(cartStore.discountAmount) }}</span>
+                      </div>
+
+                      <Separator class="bg-white/10" />
+
                       <div class="flex items-center justify-between text-lg">
                         <span class="text-gray-400">Total:</span>
                         <span class="text-2xl font-bold text-[#E3F450]">
-                          {{ cartStore.formatPrice(cartStore.totalAmount) }}
+                          {{ cartStore.formatPrice(cartStore.finalTotal) }}
                         </span>
                       </div>
 
@@ -281,6 +329,7 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
 import { usePaymentStore } from '@/stores/payment'
+import { useDiscountCodesStore } from '@/stores/discountCodes'
 import { 
   ShoppingCart,
   FileText, 
@@ -313,16 +362,38 @@ const router = useRouter()
 const authStore = useAuthStore()
 const cartStore = useCartStore()
 const paymentStore = usePaymentStore()
+const discountStore = useDiscountCodesStore()
 
 const showRemoveDialog = ref(false)
 const showClearDialog = ref(false)
 const itemToRemove = ref<CartItem | null>(null)
+const discountCodeInput = ref('')
+const applyingDiscount = ref(false)
+const discountMessage = ref('')
+const discountSuccess = ref(false)
 const processingCheckout = ref(false)
 
 // Computed
 const hasArchivedItems = computed(() => {
   return cartStore.cartItems.some(item => item.status === 'archived')
 })
+
+const applyDiscount = async () => {
+    if (!discountCodeInput.value) return
+    applyingDiscount.value = true
+    discountMessage.value = ''
+    
+    const res = await cartStore.applyDiscount(discountCodeInput.value)
+    discountSuccess.value = res.success
+    discountMessage.value = res.message || ''
+    applyingDiscount.value = false
+}
+
+const removeDiscount = () => {
+    cartStore.removeDiscount()
+    discountCodeInput.value = ''
+    discountMessage.value = ''
+}
 
 // Methods
 const incrementQuantity = (item: CartItem) => {
@@ -378,7 +449,8 @@ const proceedToCheckout = async () => {
   try {
     const response = await paymentStore.createPayment(
       cartStore.cartItems,
-      authStore.user.id
+      authStore.user.id,
+      cartStore.discountCode
     )
 
     if (response.success && response.data) {
@@ -396,9 +468,28 @@ const proceedToCheckout = async () => {
 }
 
 // Lifecycle
-onMounted(() => {
+onMounted(async () => {
   if (!authStore.isAuthenticated) {
     router.push('/login')
+    return
+  }
+
+  // Auto-apply discount if available
+  if (!cartStore.discountCode && cartStore.itemCount > 0) {
+    await discountStore.fetchUserCodes()
+    const now = new Date()
+    // Find first valid code
+    const validCode = discountStore.codes.find(c => {
+      if (!c.is_active) return false
+      if (c.starts_at && new Date(c.starts_at) > now) return false
+      if (c.expires_at && new Date(c.expires_at) < now) return false
+      return true
+    })
+
+    if (validCode) {
+      discountCodeInput.value = validCode.code
+      await applyDiscount()
+    }
   }
 })
 </script>

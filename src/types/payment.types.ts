@@ -3,6 +3,7 @@ export interface PaymentRequest {
   user_id: number;
   return_url: string;
   subtotal: number;
+  discountCode?: string;
 }
 
 export interface CartItemForPayment {
