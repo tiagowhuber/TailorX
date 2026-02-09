@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-black text-white">
+  <div class="relative min-h-screen bg-black text-white w-full overflow-x-hidden">
     <!-- Navigation Header -->
     <NavigationBar />
 
