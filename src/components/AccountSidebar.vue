@@ -209,11 +209,11 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { RulerDimensionLine, ScissorsLineDashed, Settings, LogOut, BaggageClaim, Ticket } from 'lucide-vue-next'
+import { RulerDimensionLine, ScissorsLineDashed, Settings, LogOut, BaggageClaim, Ticket, MapPin } from 'lucide-vue-next'
 import { Separator } from '@/components/ui/separator'
 
 interface Props {
-  activeSection: 'account' | 'measurements' | 'patterns' | 'cart' | 'orders' | 'discount-codes'
+  activeSection: 'account' | 'measurements' | 'patterns' | 'cart' | 'orders' | 'discount-codes' | 'addresses' | 'admin_orders' | 'admin_patterns'
 }
 
 defineProps<Props>()
