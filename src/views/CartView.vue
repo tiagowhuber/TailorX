@@ -223,7 +223,7 @@
                       </div>
                       
                       <div v-if="cartStore.discountCode" class="flex items-center justify-between text-base">
-                        <span class="text-[#E3F450]">Descuento ({{ cartStore.discountCode }}):</span> // Make sure discountCode is ref in store
+                        <span class="text-[#E3F450]">Descuento ({{ cartStore.discountCode }}):</span>
                         <span class="text-[#E3F450]">-{{ cartStore.formatPrice(cartStore.discountAmount) }}</span>
                       </div>
 
