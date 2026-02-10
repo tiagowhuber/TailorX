@@ -65,7 +65,6 @@
     :style="{ backgroundImage: `url(${yellowDude})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }"
   >
     <div class="absolute inset-0 flex items-center justify-center">
-      <p class="text-4xl font-bold">video?</p>
     </div>
   </div>
 
