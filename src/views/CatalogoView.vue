@@ -1,40 +1,40 @@
 <template>
-  <div class="min-h-screen bg-black text-white"
+  <div class="relative min-h-screen bg-black text-white w-full overflow-x-hidden"
     :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'top 600px center', backgroundRepeat: 'no-repeat' }">
     <!-- Navigation Header -->
     <NavigationBar />
 
     <!-- Main Content -->
-    <main class="px-8 py-12 max-w-7xl mx-auto">
+    <main class="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 max-w-7xl mx-auto">
       <!-- Page Title -->
       <motion.div
-        class="mb-12"
+        class="mb-8 sm:mb-12"
         :initial="{ opacity: 0, y: 20 }"
         :animate="{ opacity: 1, y: 0 }"
         :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
       >
-        <h2 class="text-5xl md:text-6xl font-black mb-4" style="font-family: 'Avenir Next', sans-serif;">
+        <h2 class="text-4xl sm:text-5xl md:text-6xl font-black mb-3 sm:mb-4">
           CATÁLOGO
         </h2>
-        <p class="text-xl md:text-2xl orbitron-variable" style="--orbitron-weight: 400;">
+        <p class="text-lg sm:text-xl md:text-2xl " >
           CADA DISEÑO SE ADAPTA A TI, <span style="color: #E3F450;">NO AL REVÉS.</span>
         </p>
       </motion.div>
 
       <!-- Filter Toggle -->
-      <div class="mb-8 flex items-center justify-between">
-        <div class="flex items-center gap-4">
+      <div class="mb-6 sm:mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+        <div class="flex items-center gap-4 w-full sm:w-auto">
           <button
             @click="catalogStore.toggleActiveFilter()"
-            class="px-4 py-2 rounded-lg border-2 transition-all orbitron-variable"
+            class="px-3 sm:px-4 py-2 rounded-lg border-2 transition-all text-sm sm:text-base w-full sm:w-auto"
             :class="catalogStore.showOnlyActive 
               ? 'border-[#E3F450] bg-[#E3F450]/10 text-[#E3F450]' 
               : 'border-gray-600 text-gray-400 hover:border-gray-400'"
-            style="--orbitron-weight: 500;"
+            
           >
             {{ catalogStore.showOnlyActive ? 'Solo Activos' : 'Todos los Diseños' }}
           </button>
-          <p class="text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
+          <p class="text-gray-400 text-sm sm:text-base" >
             {{ catalogStore.filteredDesigns.length }} diseño{{ catalogStore.filteredDesigns.length !== 1 ? 's' : '' }}
           </p>
         </div>
@@ -50,8 +50,8 @@
         <p class="text-red-400 text-xl mb-4">{{ catalogStore.error }}</p>
         <button
           @click="loadDesigns"
-          class="px-6 py-3 bg-[#E3F450] text-black rounded-lg font-bold hover:bg-[#E3F45080] transition-colors orbitron-variable"
-          style="--orbitron-weight: 600;"
+          class="px-6 py-3 bg-[#E3F450] text-black rounded-lg font-bold hover:bg-[#E3F45080] transition-colors "
+          
         >
           Reintentar
         </button>
@@ -65,13 +65,13 @@
         :animate="{ opacity: 1, scale: 1 }"
         :transition="{ type: 'spring', stiffness: 200, damping: 25 }"
       >
-        <p class="text-gray-400 text-xl orbitron-variable" style="--orbitron-weight: 400;">
+        <p class="text-gray-400 text-xl " >
           No hay diseños disponibles
         </p>
       </motion.div>
 
       <!-- Products Grid -->
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         <!-- Product Card -->
         <motion.div
           v-for="(design, index) in catalogStore.filteredDesigns"
@@ -91,7 +91,7 @@
             />
             <!-- Fallback for missing image -->
             <div v-else class="w-full h-full flex items-center justify-center">
-              <span class="text-gray-500 text-6xl orbitron-variable" style="--orbitron-weight: 300;">?</span>
+              <span class="text-gray-500 text-6xl " >?</span>
             </div>
             <!-- Plus Icon Overlay -->
             <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/30">
@@ -105,13 +105,13 @@
             </div>
           </div>
           <div class="space-y-2">
-            <h3 class="text-xl font-bold orbitron-variable" style="--orbitron-weight: 600;">
+            <h3 class="text-xl font-bold " >
               {{ design.name }}
             </h3>
-            <p v-if="design.description" class="text-sm text-gray-400 orbitron-variable line-clamp-2" style="--orbitron-weight: 400;">
+            <p v-if="design.description" class="text-sm text-gray-400 line-clamp-2" >
               {{ design.description }}
             </p>
-            <p class="text-lg font-bold orbitron-variable" style="--orbitron-weight: 600;">
+            <p class="text-lg font-bold " >
               {{ formatPrice(design.base_price) }}
             </p>
           </div>
@@ -169,12 +169,5 @@ const formatPrice = (price: number): string => {
   background: radial-gradient(circle, var(--tw-gradient-stops));
 }
 
-/* Apply Stack Sans Notch globally except for h1 */
-:deep(*) {
-  font-family: 'Stack Sans Notch', sans-serif !important;
-}
-
-:deep(h1) {
-  font-family: sans-serif !important;
-}
+/* Fonts handled globally */
 </style>

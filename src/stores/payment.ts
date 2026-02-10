@@ -30,13 +30,14 @@ export const usePaymentStore = defineStore('payment', () => {
   const createPayment = async (
     cart: CartItem[],
     userId: number,
+    discountCode?: string | null,
     returnUrl?: string
   ): Promise<PaymentResponse> => {
     loading.value = true
     error.value = null
 
     try {
-      // Calculate subtotal
+      // Calculate subtotal (client side check, backend re-calculates)
       const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0)
 
       // Prepare payment request
@@ -54,7 +55,8 @@ export const usePaymentStore = defineStore('payment', () => {
         })),
         user_id: userId,
         return_url: returnUrl || `${window.location.origin}/payment/confirmation`,
-        subtotal: subtotal
+        subtotal: subtotal,
+        discountCode: discountCode || undefined // Send code if exists
       }
 
       const response = await paymentsApi.createPayment(paymentRequest)

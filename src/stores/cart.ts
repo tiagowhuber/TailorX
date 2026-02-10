@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import type { CartItem, CartState } from '@/types/cart.types'
 import type { Pattern } from '@/types/pattern.types'
 import { useCatalogStore } from '@/stores/catalog'
+import { useDiscountCodesStore } from '@/stores/discountCodes'
 
 const CART_STORAGE_KEY = 'tailorx_cart'
 
@@ -10,14 +11,23 @@ export const useCartStore = defineStore('cart', () => {
   // State
   const items = ref<CartItem[]>([])
   const loading = ref(false)
+  const discountCode = ref<string | null>(null)
+  const discountAmount = ref<number>(0)
+  const isFreeShipping = ref(false)
 
   // Getters
   const itemCount = computed(() => {
     return items.value.reduce((total, item) => total + item.quantity, 0)
   })
 
+  // This is the subtotal
   const totalAmount = computed(() => {
     return items.value.reduce((total, item) => total + item.price * item.quantity, 0)
+  })
+  
+  // This is the final total to pay
+  const finalTotal = computed(() => {
+    return Math.max(0, totalAmount.value - discountAmount.value)
   })
 
   const cartItems = computed(() => items.value)
@@ -29,6 +39,8 @@ export const useCartStore = defineStore('cart', () => {
         items: items.value,
         lastUpdated: new Date().toISOString(),
       }
+      // Note: we're not persisting discount code to avoid validation issues on reload
+      // But we could if we re-validated on load
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(state))
     } catch (error) {
       console.error('Error saving cart to localStorage:', error)
@@ -56,7 +68,33 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   // Actions
+  const applyDiscount = async (code: string) => {
+    const discountStore = useDiscountCodesStore()
+    const result = await discountStore.validateCode(code, items.value)
+    
+    if (result.success && result.data.isValid) {
+      discountCode.value = code
+      discountAmount.value = Number(result.data.discountAmount)
+      isFreeShipping.value = !!result.data.isFreeShipping
+      return { success: true, message: 'Código aplicado correctamente' }
+    } else {
+      discountCode.value = null
+      discountAmount.value = 0
+      isFreeShipping.value = false
+      return { success: false, message: result.message || 'Código inválido' }
+    }
+  }
+
+  const removeDiscount = () => {
+    discountCode.value = null
+    discountAmount.value = 0
+    isFreeShipping.value = false
+  }
+
   const addToCart = async (pattern: Pattern): Promise<{ success: boolean; message: string }> => {
+    // Reset discount when modifying cart to ensure validity
+    if(discountCode.value) removeDiscount()
+    
     try {
 
       // Resolve design info (may be missing on pattern)
@@ -250,5 +288,12 @@ export const useCartStore = defineStore('cart', () => {
     getItemQuantity,
     initializeCart,
     formatPrice,
+    // Discount
+    discountCode,
+    discountAmount,
+    finalTotal,
+    isFreeShipping,
+    applyDiscount,
+    removeDiscount
   }
 })

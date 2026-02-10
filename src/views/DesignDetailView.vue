@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-black text-white">
+  <div class="relative min-h-screen bg-black text-white w-full overflow-x-hidden">
     <!-- Navigation Header -->
     <NavigationBar />
 
@@ -13,31 +13,31 @@
       <p class="text-red-400 text-xl mb-4">{{ catalogStore.error }}</p>
       <button
         @click="loadDesign"
-        class="px-6 py-3 bg-[#E3F450] text-black rounded-lg font-bold hover:bg-[#E3F45080] transition-colors orbitron-variable"
-        style="--orbitron-weight: 600;"
+        class="px-6 py-3 bg-[#E3F450] text-black rounded-lg font-bold hover:bg-[#E3F45080] transition-colors "
+        
       >
         Reintentar
       </button>
     </div>
 
     <!-- Design Detail Content -->
-    <main v-else-if="design" class="px-8 py-12 max-w-7xl mx-auto">
+    <main v-else-if="design" class="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 max-w-7xl mx-auto">
       <!-- Back Button -->
       <motion.button
         @click="goBack"
-        class="mb-8 flex items-center gap-2 text-gray-400 hover:text-white transition-colors orbitron-variable"
-        style="--orbitron-weight: 500;"
+        class="mb-6 sm:mb-8 flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm sm:text-base"
+        
         :initial="{ opacity: 0, y: 20 }"
         :animate="{ opacity: 1, y: 0 }"
         :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
       >
-        <span class="text-2xl">←</span>
+        <span class="text-xl sm:text-2xl">←</span>
         <span>Volver al catálogo</span>
       </motion.button>
 
       <!-- Design Grid -->
       <motion.div
-        class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16"
+        class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 mb-12 sm:mb-16"
         :initial="{ opacity: 0, y: 20 }"
         :animate="{ opacity: 1, y: 0 }"
         :transition="{ type: 'spring', stiffness: 200, damping: 25 }"
@@ -53,7 +53,7 @@
             />
             <!-- Fallback for missing image -->
             <div v-else class="w-full h-full flex items-center justify-center">
-              <span class="text-gray-500 text-9xl orbitron-variable" style="--orbitron-weight: 300;">?</span>
+              <span class="text-gray-500 text-9xl " >?</span>
             </div>
             <!-- Inactive Badge -->
             <div v-if="!design.is_active" class="absolute top-4 right-4 px-4 py-2 bg-red-500 text-white text-sm font-bold rounded-full">
@@ -63,40 +63,40 @@
         </div>
 
         <!-- Details Section -->
-        <div class="space-y-8">
+        <div class="space-y-6 sm:space-y-8">
           <!-- Title and Price -->
           <div>
-            <h1 class="text-4xl md:text-5xl font-black mb-4" style="font-family: 'Avenir Next', sans-serif;">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-black mb-3 sm:mb-4" >
               {{ design.name }}
             </h1>
-            <p class="text-3xl font-bold text-[#E3F450] orbitron-variable" style="--orbitron-weight: 700;">
+            <p class="text-2xl sm:text-3xl font-bold text-[#E3F450] " >
               {{ formatPrice(design.base_price) }}
             </p>
           </div>
 
           <!-- Description -->
           <div v-if="design.description" class="space-y-2">
-            <h2 class="text-xl font-bold orbitron-variable" style="--orbitron-weight: 600;">
+            <h2 class="text-xl font-bold " >
               Descripción
             </h2>
-            <p class="text-gray-300 leading-relaxed" style="font-family: 'Poppins', sans-serif;">
+            <p class="text-gray-300 leading-relaxed" >
               {{ design.description }}
             </p>
           </div>
 
           <!-- FreeSewing Pattern Info -->
           <div v-if="design.freesewing_pattern" class="space-y-2">
-            <h2 class="text-xl font-bold orbitron-variable" style="--orbitron-weight: 600;">
+            <h2 class="text-xl font-bold " >
               Patrón Base
             </h2>
-            <p class="text-gray-300 orbitron-variable" style="--orbitron-weight: 400;">
+            <p class="text-gray-300 " >
               {{ design.freesewing_pattern }}
             </p>
           </div>
 
           <!-- User Patterns Section -->
           <div v-if="authStore.user && userPatternsForDesign.length > 0" class="border-t border-gray-800 pt-12 mt-12">
-            <h2 class="text-2xl font-black mb-8 orbitron-variable" style="--orbitron-weight: 600;">
+            <h2 class="text-2xl font-black mb-8 " >
               Tus Patrones Para Este Diseño
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6">
@@ -110,7 +110,7 @@
               >
                 <div class="space-y-4">
                   <!-- Pattern Name -->
-                  <h3 class="text-xl font-bold group-hover:text-[#E3F450] transition-colors" style="font-family: 'Poppins', sans-serif;">
+                  <h3 class="text-xl font-bold group-hover:text-[#E3F450] transition-colors" >
                     {{ pattern.name ? pattern.name : `Patrón #${pattern.id}` }}
                   </h3>
                   
@@ -121,20 +121,20 @@
                         'bg-yellow-500/20 text-yellow-400': pattern.status === 'draft',
                         'bg-green-500/20 text-green-400': pattern.status === 'finalized'
                       }"
-                      class="px-3 py-1 rounded-full text-xs font-bold orbitron-variable"
-                      style="--orbitron-weight: 600;"
+                      class="px-3 py-1 rounded-full text-xs font-bold "
+                      
                     >
                       {{ pattern.status === 'draft' ? 'BORRADOR' : 'FINALIZADO' }}
                     </span>
                   </div>
 
                   <!-- Date -->
-                  <p class="text-sm text-gray-500" style="--orbitron-weight: 400;">
+                  <p class="text-sm text-gray-500" >
                     Creado: {{ formatDate(pattern.created_at) }}
                   </p>
 
                   <!-- SVG Size -->
-                  <p v-if="pattern.svg_size_kb && typeof pattern.svg_size_kb === 'number'" class="text-sm text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
+                  <p v-if="pattern.svg_size_kb && typeof pattern.svg_size_kb === 'number'" class="text-sm text-gray-400 " >
                     Tamaño: {{ pattern.svg_size_kb.toFixed(2) }} KB
                   </p>
 
@@ -142,16 +142,16 @@
                   <div class="pt-2 flex gap-2">
                     <button
                       @click="router.push(`/patrones/${pattern.id}`)"
-                      class="flex-1 text-[#E3F450] text-sm font-bold orbitron-variable hover:underline text-left"
-                      style="--orbitron-weight: 600;"
+                      class="flex-1 text-[#E3F450] text-sm font-bold hover:underline text-left"
+                      
                     >
                       Ver patrón →
                     </button>
                     <button
                       v-if="!cartStore.isInCart(pattern.id)"
                       @click.stop="addToCart(pattern)"
-                      class="flex items-center gap-2 px-3 py-2 bg-[#E3F450] text-black rounded-md font-bold hover:bg-[#E3F450]/80 transition-colors orbitron-variable text-sm"
-                      style="--orbitron-weight: 600;"
+                      class="flex items-center gap-2 px-3 py-2 bg-[#E3F450] text-black rounded-md font-bold hover:bg-[#E3F450]/80 transition-colors text-sm"
+                      
                     >
                       <ShoppingCart class="w-4 h-4" />
                       Agregar
@@ -159,8 +159,8 @@
                     <button
                       v-else-if="cartStore.isInCart(pattern.id)"
                       @click.stop="viewCart"
-                      class="flex items-center gap-2 px-3 py-2 bg-[#E3F450] text-black rounded-md font-bold hover:bg-[#E3F450]/80 transition-colors orbitron-variable text-sm"
-                      style="--orbitron-weight: 600;"
+                      class="flex items-center gap-2 px-3 py-2 bg-[#E3F450] text-black rounded-md font-bold hover:bg-[#E3F450]/80 transition-colors text-sm"
+                      
                     >
                       <ShoppingCart class="w-4 h-4" />
                       Ver Carrito
@@ -172,17 +172,17 @@
           </div>
       
           <!-- Required Measurements -->
-          <div v-if="measurements.length > 0" class="space-y-4 border-t border-gray-800 pt-12 mt-12">
-            <h2 class="text-xl font-bold orbitron-variable" style="--orbitron-weight: 600;">
+          <div v-if="measurements.length > 0" class="space-y-4 border-t border-gray-800 pt-8 sm:pt-12 mt-8 sm:mt-12">
+            <h2 class="text-lg sm:text-xl font-bold " >
               Medidas Requeridas
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div 
                 v-for="measurement in measurements" 
                 :key="measurement.id"
                 class="px-4 py-3 bg-gray-800/50 rounded-lg border border-gray-700"
               >
-                <p class="font-semibold text-white orbitron-variable" style="--orbitron-weight: 500;">
+                <p class="font-semibold text-white " >
                   {{ measurement.measurementType?.name }}
                 </p>
                 <p v-if="measurement.measurementType?.description" class="text-sm text-gray-400 mt-1">
@@ -196,11 +196,11 @@
           </div>
 
           <!-- Action Buttons -->
-          <div class="space-y-4 pt-4">
+          <div class="space-y-3 sm:space-y-4 pt-4">
             <button
               @click="customizeDesign"
-              class="w-full px-8 py-4 bg-[#E3F450] text-black rounded-lg font-bold hover:bg-[#E3F45080] transition-colors orbitron-variable text-lg"
-              style="--orbitron-weight: 700;"
+              class="w-full px-6 sm:px-8 py-3 sm:py-4 bg-[#E3F450] text-black rounded-lg font-bold hover:bg-[#E3F45080] transition-colors text-base sm:text-lg"
+              
               :disabled="!design.is_active"
               :class="!design.is_active ? 'opacity-50 cursor-not-allowed' : ''"
             >
@@ -210,8 +210,8 @@
             <button
               v-if="design.is_active"
               @click="viewMeasurements"
-              class="w-full px-8 py-4 bg-transparent border-2 border-[#E3F450] text-[#E3F450] rounded-lg font-bold hover:bg-[#E3F450]/10 transition-colors orbitron-variable text-lg"
-              style="--orbitron-weight: 600;"
+              class="w-full px-6 sm:px-8 py-3 sm:py-4 bg-transparent border-2 border-[#E3F450] text-[#E3F450] rounded-lg font-bold hover:bg-[#E3F450]/10 transition-colors text-base sm:text-lg"
+              
             >
               VER MIS MEDIDAS
             </button>
@@ -219,7 +219,7 @@
 
           <!-- Status Info -->
           <div class="pt-4 border-t border-gray-800">
-            <p class="text-sm text-gray-500 orbitron-variable" style="--orbitron-weight: 400;">
+            <p class="text-sm text-gray-500 " >
               Cada prenda se fabrica a medida según tus medidas exactas.
             </p>
           </div>
@@ -227,20 +227,20 @@
       </motion.div>
       
       <!-- Additional Information Section -->
-      <div class="border-t border-gray-800 pt-12">
-        <h2 class="text-3xl font-black mb-8" style="font-family: 'Avenir Next', sans-serif;">
+      <div class="border-t border-gray-800 pt-8 sm:pt-12">
+        <h2 class="text-2xl sm:text-3xl font-black mb-6 sm:mb-8" >
           ¿CÓMO FUNCIONA?
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           <!-- Step 1 -->
           <div class="space-y-4">
             <div class="w-16 h-16 rounded-full bg-[#E3F450]/20 flex items-center justify-center">
-              <span class="text-[#E3F450] text-2xl font-bold orbitron-variable" style="--orbitron-weight: 700;">1</span>
+              <span class="text-[#E3F450] text-2xl font-bold " >1</span>
             </div>
-            <h3 class="text-xl font-bold orbitron-variable" style="--orbitron-weight: 600;">
+            <h3 class="text-xl font-bold " >
               Ingresa tus medidas
             </h3>
-            <p class="text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
+            <p class="text-gray-400 " >
               Proporciona tus medidas exactas o usa nuestra herramienta de medición asistida por IA.
             </p>
           </div>
@@ -248,12 +248,12 @@
           <!-- Step 2 -->
           <div class="space-y-4">
             <div class="w-16 h-16 rounded-full bg-[#E3F450]/20 flex items-center justify-center">
-              <span class="text-[#E3F450] text-2xl font-bold orbitron-variable" style="--orbitron-weight: 700;">2</span>
+              <span class="text-[#E3F450] text-2xl font-bold " >2</span>
             </div>
-            <h3 class="text-xl font-bold orbitron-variable" style="--orbitron-weight: 600;">
+            <h3 class="text-xl font-bold " >
               Personaliza el diseño
             </h3>
-            <p class="text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
+            <p class="text-gray-400 " >
               Elige tus opciones de personalización y visualiza el resultado.
             </p>
           </div>
@@ -261,12 +261,12 @@
           <!-- Step 3 -->
           <div class="space-y-4">
             <div class="w-16 h-16 rounded-full bg-[#E3F450]/20 flex items-center justify-center">
-              <span class="text-[#E3F450] text-2xl font-bold orbitron-variable" style="--orbitron-weight: 700;">3</span>
+              <span class="text-[#E3F450] text-2xl font-bold " >3</span>
             </div>
-            <h3 class="text-xl font-bold orbitron-variable" style="--orbitron-weight: 600;">
+            <h3 class="text-xl font-bold " >
               Recibe tu prenda
             </h3>
-            <p class="text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
+            <p class="text-gray-400 " >
               Tu prenda se fabrica a medida y se entrega directamente a tu puerta.
             </p>
           </div>
@@ -494,13 +494,9 @@ const viewCart = () => {
 }
 
 /* Apply Stack Sans Notch globally except for h1 */
-:deep(*) {
-  font-family: 'Stack Sans Notch', sans-serif !important;
-}
 
-:deep(h1) {
-  font-family: sans-serif !important;
-}
+
+
 
 /* Ensure cursor is a hand pointer on specific buttons */
 :deep(button.customize-design),

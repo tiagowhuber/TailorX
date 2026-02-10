@@ -20,7 +20,7 @@
               :animate="{ opacity: 1, y: 0 }"
               :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
             >
-              <div class="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider mb-4 orbitron-variable" style="--orbitron-weight: 700; background-color: #E3F450; color: black;">
+              <div class="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider mb-4 " style="background-color: #E3F450; color: black;">
                 Patrones de Diseños
               </div>
               <div class="flex items-center justify-between mb-2">
@@ -33,11 +33,11 @@
 
             <!-- Tabs for Pattern Status -->
             <div class="mb-6">
-              <div class="flex gap-2 overflow-x-auto pb-2">
+              <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
                 <button
                   @click="activeTab = 'all'"
                   :class="[
-                    'px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap border',
+                    'px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap border',
                     activeTab === 'all' 
                       ? 'bg-white text-black border-white' 
                       : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
@@ -48,7 +48,7 @@
                 <button
                   @click="activeTab = 'draft'"
                   :class="[
-                    'px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap border',
+                    'px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap border',
                     activeTab === 'draft' 
                       ? 'bg-white text-black border-white' 
                       : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
@@ -59,7 +59,7 @@
                 <button
                   @click="activeTab = 'finalized'"
                   :class="[
-                    'px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap border',
+                    'px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap border',
                     activeTab === 'finalized' 
                       ? 'bg-white text-black border-white' 
                       : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
@@ -70,7 +70,7 @@
                 <button
                   @click="activeTab = 'archived'"
                   :class="[
-                    'px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap border',
+                    'px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap border',
                     activeTab === 'archived' 
                       ? 'bg-white text-black border-white' 
                       : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
@@ -112,7 +112,7 @@
             </motion.div>
 
             <!-- Patterns Grid -->
-            <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               <motion.div
                 v-for="(pattern, index) in filteredPatterns"
                 :key="pattern.id"
@@ -525,11 +525,7 @@ onMounted(async () => {
 }
 
 /* Apply Stack Sans Notch globally except for h1 */
-:deep(*) {
-  font-family: 'Stack Sans Notch', sans-serif !important;
-}
 
-:deep(h1) {
-  font-family: sans-serif !important;
-}
+
+
 </style>

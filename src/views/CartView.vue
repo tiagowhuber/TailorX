@@ -4,8 +4,8 @@
     <NavigationBar />
 
     <!-- Main Content -->
-    <div class="relative pt-20 min-h-screen">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="relative sm:pt-12 lg:pt-20 min-h-screen">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="flex flex-col lg:flex-row gap-10">
           <!-- Sidebar -->
@@ -20,7 +20,7 @@
               :animate="{ opacity: 1, y: 0 }"
               :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
             >
-              <div class="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider mb-4 orbitron-variable" style="--orbitron-weight: 700; background-color: #E3F450; color: black;">
+              <div class="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider mb-4 " style="background-color: #E3F450; color: black;">
                   Confirmación de Compra
               </div>
               <div class="flex items-center justify-between mb-2">
@@ -82,10 +82,10 @@
                     class="bg-white/5 border-white/10 hover:border-white/20 transition-all"
                   >
                     <CardContent class="p-6">
-                      <div class="flex gap-6">
+                      <div class="flex flex-col sm:flex-row gap-4 sm:gap-6">
                         <!-- Image -->
                         <div class="flex-shrink-0">
-                          <div class="w-24 h-24 rounded-lg overflow-hidden bg-gray-800">
+                          <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden bg-gray-800">
                             <img
                               v-if="item.imageUrl"
                               :src="item.imageUrl"
@@ -127,27 +127,27 @@
                           </div>
 
                           <!-- Price and Quantity Controls -->
-                          <div class="flex items-center justify-between mt-4">
+                          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-4 gap-3 sm:gap-0">
                             <!-- Quantity Controls -->
-                            <div class="flex items-center gap-3">
-                              <span class="text-sm text-gray-400">Cantidad:</span>
-                              <div class="flex items-center gap-2 bg-white/10 rounded-lg">
+                            <div class="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                              <span class="text-xs sm:text-sm text-gray-400">Cantidad:</span>
+                              <div class="flex items-center gap-1 sm:gap-2 bg-white/10 rounded-lg">
                                 <Button
                                   @click="decrementQuantity(item)"
                                   variant="ghost"
                                   size="icon"
-                                  class="h-8 w-8 text-white hover:bg-white/10"
+                                  class="h-9 w-9 sm:h-8 sm:w-8 text-white hover:bg-white/10"
                                 >
                                   <Minus class="h-4 w-4" />
                                 </Button>
-                                <span class="text-white font-semibold min-w-[2rem] text-center">
+                                <span class="text-white font-semibold min-w-[2.5rem] sm:min-w-[2rem] text-center">
                                   {{ item.quantity }}
                                 </span>
                                 <Button
                                   @click="incrementQuantity(item)"
                                   variant="ghost"
                                   size="icon"
-                                  class="h-8 w-8 text-white hover:bg-white/10"
+                                  class="h-9 w-9 sm:h-8 sm:w-8 text-white hover:bg-white/10"
                                 >
                                   <Plus class="h-4 w-4" />
                                 </Button>
@@ -155,7 +155,7 @@
                             </div>
 
                             <!-- Price -->
-                            <div class="text-right">
+                            <div class="text-left sm:text-right w-full sm:w-auto">
                               <p class="text-sm text-gray-400">Precio unitario</p>
                               <p class="text-lg font-bold text-[#E3F450]">
                                 {{ cartStore.formatPrice(item.price) }}
@@ -178,13 +178,61 @@
                 :animate="{ opacity: 1, y: 0 }"
                 :transition="{ type: 'spring', stiffness: 200, damping: 25 }"
               >
+                <!-- Discount Code Input -->
+                <Card class="bg-white/5 border-white/10 mb-6">
+                  <CardContent class="p-6">
+                     <p class="text-sm font-medium text-gray-300 mb-2">Código de Descuento</p>
+                     <div class="flex gap-2">
+                       <input 
+                         v-model="discountCodeInput" 
+                         type="text" 
+                         placeholder="Ingresa tu código"
+                         class="flex-1 bg-black/40 border border-white/10 rounded-md px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-[#E3F450]"
+                         @keyup.enter="applyDiscount"
+                         :disabled="!!cartStore.discountCode"
+                       />
+                       <Button 
+                         v-if="!cartStore.discountCode"
+                         @click="applyDiscount"
+                         class="bg-white/10 hover:bg-white/20 text-white"
+                         :disabled="!discountCodeInput || applyingDiscount"
+                       >
+                         {{ applyingDiscount ? '...' : 'Aplicar' }}
+                       </Button>
+                       <Button 
+                         v-else
+                         @click="removeDiscount"
+                         variant="ghost" 
+                         class="text-red-400 hover:bg-red-500/10"
+                       >
+                         <Trash2 class="h-4 w-4" />
+                       </Button>
+                     </div>
+                     <p v-if="discountMessage" :class="['text-xs mt-2', discountSuccess ? 'text-[#E3F450]' : 'text-red-400']">
+                       {{ discountMessage }}
+                     </p>
+                  </CardContent>
+                </Card>
+
                 <Card class="bg-white/5 border-white/10 sticky bottom-4">
                   <CardContent class="p-6">
                     <div class="space-y-4">
+                      <div class="flex items-center justify-between text-base">
+                        <span class="text-gray-400">Subtotal:</span>
+                        <span class="text-white">{{ cartStore.formatPrice(cartStore.totalAmount) }}</span>
+                      </div>
+                      
+                      <div v-if="cartStore.discountCode" class="flex items-center justify-between text-base">
+                        <span class="text-[#E3F450]">Descuento ({{ cartStore.discountCode }}):</span>
+                        <span class="text-[#E3F450]">-{{ cartStore.formatPrice(cartStore.discountAmount) }}</span>
+                      </div>
+
+                      <Separator class="bg-white/10" />
+
                       <div class="flex items-center justify-between text-lg">
                         <span class="text-gray-400">Total:</span>
                         <span class="text-2xl font-bold text-[#E3F450]">
-                          {{ cartStore.formatPrice(cartStore.totalAmount) }}
+                          {{ cartStore.formatPrice(cartStore.finalTotal) }}
                         </span>
                       </div>
 
@@ -281,6 +329,7 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
 import { usePaymentStore } from '@/stores/payment'
+import { useDiscountCodesStore } from '@/stores/discountCodes'
 import { 
   ShoppingCart,
   FileText, 
@@ -313,16 +362,38 @@ const router = useRouter()
 const authStore = useAuthStore()
 const cartStore = useCartStore()
 const paymentStore = usePaymentStore()
+const discountStore = useDiscountCodesStore()
 
 const showRemoveDialog = ref(false)
 const showClearDialog = ref(false)
 const itemToRemove = ref<CartItem | null>(null)
+const discountCodeInput = ref('')
+const applyingDiscount = ref(false)
+const discountMessage = ref('')
+const discountSuccess = ref(false)
 const processingCheckout = ref(false)
 
 // Computed
 const hasArchivedItems = computed(() => {
   return cartStore.cartItems.some(item => item.status === 'archived')
 })
+
+const applyDiscount = async () => {
+    if (!discountCodeInput.value) return
+    applyingDiscount.value = true
+    discountMessage.value = ''
+    
+    const res = await cartStore.applyDiscount(discountCodeInput.value)
+    discountSuccess.value = res.success
+    discountMessage.value = res.message || ''
+    applyingDiscount.value = false
+}
+
+const removeDiscount = () => {
+    cartStore.removeDiscount()
+    discountCodeInput.value = ''
+    discountMessage.value = ''
+}
 
 // Methods
 const incrementQuantity = (item: CartItem) => {
@@ -378,7 +449,8 @@ const proceedToCheckout = async () => {
   try {
     const response = await paymentStore.createPayment(
       cartStore.cartItems,
-      authStore.user.id
+      authStore.user.id,
+      cartStore.discountCode
     )
 
     if (response.success && response.data) {
@@ -396,9 +468,28 @@ const proceedToCheckout = async () => {
 }
 
 // Lifecycle
-onMounted(() => {
+onMounted(async () => {
   if (!authStore.isAuthenticated) {
     router.push('/login')
+    return
+  }
+
+  // Auto-apply discount if available
+  if (!cartStore.discountCode && cartStore.itemCount > 0) {
+    await discountStore.fetchUserCodes()
+    const now = new Date()
+    // Find first valid code
+    const validCode = discountStore.codes.find(c => {
+      if (!c.is_active) return false
+      if (c.starts_at && new Date(c.starts_at) > now) return false
+      if (c.expires_at && new Date(c.expires_at) < now) return false
+      return true
+    })
+
+    if (validCode) {
+      discountCodeInput.value = validCode.code
+      await applyDiscount()
+    }
   }
 })
 </script>
@@ -406,11 +497,7 @@ onMounted(() => {
 <style scoped>
 /* Add any custom styles here */
 /* Apply Stack Sans Notch globally except for h1 */
-:deep(*) {
-  font-family: 'Stack Sans Notch', sans-serif !important;
-}
 
-:deep(h1) {
-  font-family: sans-serif !important;
-}
+
+
 </style>

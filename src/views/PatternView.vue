@@ -1,11 +1,11 @@
 <template>
   <div class="min-h-screen bg-black">
-    <div class="container mx-auto px-4 py-8">
+    <div class="container mx-auto px-4">
       <!-- Loading State -->
       <div v-if="loading" class="flex items-center justify-center min-h-[60vh]">
         <div class="text-center space-y-4">
           <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#E3F450] mx-auto"></div>
-          <p class="text-gray-300 orbitron-variable" style="--orbitron-weight: 400;">
+          <p class="text-gray-300 " >
             Cargando patrón...
           </p>
         </div>
@@ -19,14 +19,14 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </div>
-          <p class="text-xl text-white orbitron-variable" style="--orbitron-weight: 600;">
+          <p class="text-xl text-white " >
             Error al cargar el patrón
           </p>
           <p class="text-gray-400">{{ error }}</p>
           <button
             @click="router.push({ name: 'catalogo' })"
-            class="px-6 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F45080] transition-colors orbitron-variable"
-            style="--orbitron-weight: 600;"
+            class="px-6 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F45080] transition-colors "
+            
           >
             Volver al Catálogo
           </button>
@@ -40,18 +40,18 @@
           <div>
             <button
               @click="router.back()"
-              class="text-[#E3F450] hover:text-[#E3F45080] flex items-center gap-2 mb-4 orbitron-variable"
-              style="--orbitron-weight: 500;"
+              class="text-[#E3F450] hover:text-[#E3F45080] flex items-center gap-2 mb-4 "
+              
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
               </svg>
               Volver
             </button>
-            <h1 class="text-4xl font-bold text-white orbitron-variable mb-2" style="--orbitron-weight: 700;">
+            <h1 class="text-4xl font-bold text-white mb-2" >
               {{ pattern.name }}
             </h1>
-            <p class="text-gray-400 orbitron-variable" style="--orbitron-weight: 400;">
+            <p class="text-gray-400 " >
               Diseño: {{ pattern.design?.name }}
             </p>
           </div>
@@ -59,8 +59,8 @@
             <button
               v-if="!cartStore.isInCart(pattern.id)"
               @click="addToCart"
-              class="px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F450]/80 transition-colors orbitron-variable flex items-center gap-2"
-              style="--orbitron-weight: 600;"
+              class="px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F450]/80 transition-colors flex items-center gap-2"
+              
             >
               <ShoppingCart class="w-4 h-4" />
               Agregar al Carrito
@@ -68,16 +68,16 @@
             <button
               v-else-if="cartStore.isInCart(pattern.id)"
               @click="viewCart"
-              class="px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F450]/80 transition-colors orbitron-variable flex items-center gap-2"
-              style="--orbitron-weight: 600;"
+              class="px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F450]/80 transition-colors flex items-center gap-2"
+              
             >
               <ShoppingCart class="w-4 h-4" />
               Ver Carrito
             </button>
             <button
               @click="downloadSVG"
-              class="px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F45080] transition-colors orbitron-variable"
-              style="--orbitron-weight: 600;"
+              class="px-4 py-2 bg-[#E3F450] text-black rounded-lg hover:bg-[#E3F45080] transition-colors "
+              
             >
               Descargar SVG
             </button>
@@ -87,20 +87,20 @@
         <!-- Pattern Info -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4">
-            <p class="text-gray-400 text-sm orbitron-variable" style="--orbitron-weight: 400;">Estado</p>
-            <p class="text-white text-lg font-semibold orbitron-variable capitalize" style="--orbitron-weight: 600;">
+            <p class="text-gray-400 text-sm " >Estado</p>
+            <p class="text-white text-lg font-semibold capitalize" >
               {{ pattern.status }}
             </p>
           </div>
           <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4">
-            <p class="text-gray-400 text-sm orbitron-variable" style="--orbitron-weight: 400;">Tamaño</p>
-            <p class="text-white text-lg font-semibold orbitron-variable" style="--orbitron-weight: 600;">
+            <p class="text-gray-400 text-sm " >Tamaño</p>
+            <p class="text-white text-lg font-semibold " >
               {{ pattern.svg_size_kb }} KB
             </p>
           </div>
           <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4">
-            <p class="text-gray-400 text-sm orbitron-variable" style="--orbitron-weight: 400;">Creado</p>
-            <p class="text-white text-lg font-semibold orbitron-variable" style="--orbitron-weight: 600;">
+            <p class="text-gray-400 text-sm " >Creado</p>
+            <p class="text-white text-lg font-semibold " >
               {{ formatDate(pattern.created_at) }}
             </p>
           </div>

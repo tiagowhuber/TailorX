@@ -5,7 +5,7 @@
 
     <!-- Main Content -->
     <div class="relative pt-20 min-h-screen">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="flex flex-col lg:flex-row gap-10">
           <!-- Sidebar -->
@@ -33,37 +33,39 @@
               <Button 
                 @click="router.push({ name: 'ai-measurements' })"
                 variant="outline"
-                class="px-6 py-3 border-yellow-500/20 text-black hover:bg-white/30"
+                class="px-4 sm:px-6 py-2 sm:py-3 border-yellow-500/20 text-black hover:bg-white/30 text-sm sm:text-base"
               >
-                <Sparkles class="mr-2 h-5 w-5" />
-                Obtener con IA
+                <Sparkles class="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                <span class="hidden sm:inline">Obtener con IA</span>
+                <span class="sm:hidden">IA</span>
               </Button>
               <Button 
                 v-if="!isEditMode"
                 @click="enterEditMode"
                 variant="outline"
-                class="px-6 py-3 border-white/20 text-black hover:bg-white/30"
+                class="px-4 sm:px-6 py-2 sm:py-3 border-white/20 text-black hover:bg-white/30 text-sm sm:text-base"
               >
-                <Edit class="mr-2 h-5 w-5" />
+                <Edit class="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                 Editar
               </Button>
               <template v-else>
                 <Button 
                   @click="cancelEdit"
                   variant="outline"
-                  class="px-6 py-3 border-white/20 text-black hover:bg-white/30"
+                  class="px-3 sm:px-6 py-2 sm:py-3 border-white/20 text-black hover:bg-white/30 text-sm sm:text-base"
                 >
-                  <X class="mr-2 h-5 w-5" />
-                  Cancelar
+                  <X class="mr-0 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                  <span class="hidden sm:inline">Cancelar</span>
                 </Button>
                 <Button 
                   @click="handleSaveMeasurements"
                   :disabled="measurementsStore.loading || !hasChanges"
                   variant="outline"
-                  class="px-6 py-3 border-white/20 text-black hover:bg-white/30"
+                  class="px-3 sm:px-6 py-2 sm:py-3 border-white/20 text-black hover:bg-white/30 text-sm sm:text-base"
                 >
-                  <Save class="mr-2 h-5 w-5" />
-                  {{ measurementsStore.loading ? 'Guardando...' : 'Guardar Todo' }}
+                  <Save class="mr-0 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                  <span class="hidden sm:inline">{{ measurementsStore.loading ? 'Guardando...' : 'Guardar Todo' }}</span>
+                  <span class="sm:hidden">{{ measurementsStore.loading ? '...' : 'Guardar' }}</span>
                 </Button>
               </template>
                     </div>
@@ -161,7 +163,7 @@
                     </div>
 
                     <!-- Measurements Grid -->
-                    <div v-if="measurementsStore.userMeasurementsCount > 0 || isEditMode" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div v-if="measurementsStore.userMeasurementsCount > 0 || isEditMode" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                       <motion.div
                         v-for="(type, index) in measurementsStore.measurementTypes"
                         :key="type.id"
@@ -653,11 +655,7 @@ onMounted(() => {
 }
 
 /* Apply Stack Sans Notch globally except for h1 */
-:deep(*) {
-  font-family: 'Stack Sans Notch', sans-serif !important;
-}
 
-:deep(h1) {
-  font-family: sans-serif !important;
-}
+
+
 </style>

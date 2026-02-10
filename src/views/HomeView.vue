@@ -12,39 +12,39 @@
     <div class="absolute top-32 right-16 w-64 h-64 bg-gradient-radial from-[#E3F45080]/40 via-yellow-200/30 to-transparent rounded-full blur-2xl"></div>
     
     <!-- Main Content -->
-    <main class="relative z-10 flex items-center justify-center min-h-[calc(100vh-120px)] px-8">
+    <main class="relative z-10 flex items-center justify-center min-h-[calc(100vh-80px)] sm:min-h-[calc(100vh-120px)] px-4 sm:px-6 lg:px-8">
       <motion.div
-        class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+        class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center"
         :initial="{ opacity: 0, y: 20 }"
         :animate="{ opacity: 1, y: 0 }"
         :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
       >
         <!-- Left Content -->
-        <div class="space-y-8">
+        <div class="space-y-6 sm:space-y-8">
           
           <!-- Main Heading -->
-          <div class="space-y-4 flex items-center gap-8">
-            <img :src="elementoImg" alt="Elemento" class="w-32 h-32 md:w-45 md:h-60" />
-            <h2 class="text-5xl md:text-7xl font-black leading-tight" style="font-family: 'Avenir Next', sans-serif;">
+          <div class="space-y-4 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8">
+            <img :src="elementoImg" alt="Elemento" class="w-24 h-24 sm:w-32 sm:h-32 md:w-45 md:h-60" />
+            <h2 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight">
               DRESS<br>
               WITHOUT<br>
               WASTE
             </h2>
             
             <!-- CTA Button -->
-            <div class="pt-8">
+            <div class="pt-6 sm:pt-8">
               <router-link v-if="authStore.isAuthenticated" to="/catalogo">
                 <Button 
-                  class="px-8 py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity orbitron-variable"
-                  style="--orbitron-weight: 700; background-color: #E3F450; color: black;"
+                  class="w-full sm:w-auto px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity "
+                  style="background-color: #E3F450; color: black;"
                 >
                   VER CATÁLOGO
                 </Button>
               </router-link>
               <router-link v-else to="/crear-cuenta">
                 <Button 
-                  class="px-8 py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity orbitron-variable"
-                  style="--orbitron-weight: 700; background-color: #E3F450; color: black;"
+                  class="w-full sm:w-auto px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity "
+                  style="background-color: #E3F450; color: black;"
                 >
                   CREAR CUENTA
                 </Button>
@@ -65,30 +65,29 @@
     :style="{ backgroundImage: `url(${yellowDude})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }"
   >
     <div class="absolute inset-0 flex items-center justify-center">
-      <p class="text-4xl font-bold">video?</p>
     </div>
   </div>
 
   <!-- Dress as you Fit Section -->
-  <div class="min-h-screen bg-black text-white py-20 px-8">
+  <div class="min-h-screen bg-black text-white py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
     <div class="max-w-6xl mx-auto">
       <!-- Section Header -->
       <motion.div
-        class="text-left mb-16"
+        class="text-left mb-12 sm:mb-16"
         :initial="{ opacity: 0, y: 20 }"
         :animate="{ opacity: 1, y: 0 }"
         :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
       >
-        <h2 class="text-5xl md:text-6xl font-black mb-6" style="font-family: 'Avenir Next', sans-serif;">
+        <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4 sm:mb-6">
           VISTE A TU<br>MEDIDA
         </h2>
-        <p class="text-xl md:text-2xl orbitron-variable" style="--orbitron-weight: 400;">
+        <p class="text-lg sm:text-xl md:text-2xl " >
           PRODUCIMOS SOLO LO QUE SE USA. <span class="text-[#E3F450]">NADA MÁS.</span>
         </p>
       </motion.div>
 
       <!-- Icons Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12 orbitron-variable" style="--orbitron-weight: 400;">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-12 " >
         <motion.div
           v-for="(icon, index) in [
             { src: createAccountIcon, title: 'CREA TU\nCUENTA' },
@@ -112,19 +111,19 @@
       </div>
 
       <!-- CTA Button -->
-      <div class="text-left">
+      <div class="text-center sm:text-left">
         <router-link v-if="authStore.isAuthenticated" to="/catalogo">
           <Button 
-            class="px-8 py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity orbitron-variable"
-            style="--orbitron-weight: 700; background-color: #E3F450; color: black;"
+            class="w-full sm:w-auto px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity "
+            style="background-color: #E3F450; color: black;"
           >
             VER CATÁLOGO
           </Button>
         </router-link>
         <router-link v-else to="/crear-cuenta">
           <Button 
-            class="px-8 py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity orbitron-variable"
-            style="--orbitron-weight: 700; background-color: #E3F450; color: black;"
+            class="w-full sm:w-auto px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity "
+            style="background-color: #E3F450; color: black;"
           >
             CREAR CUENTA
           </Button>
@@ -135,7 +134,7 @@
 
   <!-- Models Carousel -->
   <motion.div
-    class="bg-black text-black px-8 -mt-15"
+    class="bg-black text-black px-4 sm:px-6 lg:px-8 -mt-15"
     :initial="{ opacity: 0, y: 20 }"
     :animate="{ opacity: 1, y: 0 }"
     :transition="{ type: 'spring', stiffness: 250, damping: 30 }"
@@ -143,7 +142,7 @@
     <div class="max-w-7xl mx-auto">
       <Carousel class="w-full">
         <CarouselContent>
-          <CarouselItem v-for="(image, index) in modelImages" :key="index" class="md:basis-1/2 lg:basis-1/3">
+          <CarouselItem v-for="(image, index) in modelImages" :key="index" class="basis-full sm:basis-1/2 lg:basis-1/3">
             <div class="p-1">
               <div class="relative overflow-hidden rounded-lg aspect-[3/4]">
                 <img 
@@ -158,11 +157,11 @@
         <CarouselPrevious />
         <CarouselNext />
       </Carousel>
-      <div class="text-right py-6">
+      <div class="text-center sm:text-right py-4 sm:py-6">
         <router-link to="/catalogo">
           <Button 
-            class="px-8 py-6 text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity orbitron-variable"
-            style="--orbitron-weight: 700; background-color: #E3F450; color: black;"
+            class="w-full sm:w-auto px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg font-bold uppercase tracking-wider hover:opacity-90 transition-opacity "
+            style="background-color: #E3F450; color: black;"
           >
             VER CATÁLOGO
           </Button>
@@ -173,28 +172,28 @@
 
   <!-- World Section -->
   <div 
-    class="min-h-screen bg-black text-white relative flex items-center justify-center py-120 px-8" 
+    class="min-h-screen bg-black text-white relative flex items-center justify-center py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8" 
     :style="{ backgroundImage: `url(${worldBg})`, backgroundSize: 'contain', backgroundPosition: 'right center', backgroundRepeat: 'no-repeat' }"
   >
     <div class="max-w-6xl mx-auto w-full text-center relative z-10">
       <div class="max-w-2xl mx-auto">
         <!-- Yellow Highlight Text -->
-        <div class="inline-block mb-6" style="background-color: #E3F450; color: black; padding: 0.5rem 1.5rem;">
-          <p class="text-lg md:text-xl font-bold uppercase orbitron-variable" style="--orbitron-weight: 600;">
+        <div class="inline-block mb-4 sm:mb-6 px-4 py-2 sm:px-6" style="background-color: #E3F450; color: black;">
+          <p class="text-sm sm:text-lg md:text-xl font-bold uppercase " >
             CADA AÑO SE FABRICAN MÁS DE
           </p>
         </div>
         
         <!-- Main Statistic -->
-        <h2 class="text-6xl md:text-8xl font-black mb-8" style="font-family: 'Avenir Next', sans-serif; line-height: 1.1;">
+        <h2 class="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black mb-6 sm:mb-8" style="line-height: 1.1;">
           100 MIL<br>
           MILLONES DE<br>
           PRENDAS
         </h2>
         
         <!-- Black Box with Secondary Stat -->
-        <div class="inline-block" style="background-color: rgba(0, 0, 0, 0.8); padding: 1rem 2rem;">
-          <p class="text-xl md:text-2xl font-bold uppercase" style="color: #E3F450;">
+        <div class="inline-block px-6 py-3 sm:px-8 sm:py-4" style="background-color: rgba(0, 0, 0, 0.8);">
+          <p class="text-base sm:text-xl md:text-2xl font-bold uppercase" style="color: #E3F450;">
             EL 40% TERMINA EN VERTEDEROS
           </p>
         </div>
@@ -204,7 +203,7 @@
 
   <!-- Last Section -->
   <div 
-    class="min-h-screen bg-black text-white relative z-200 flex flex-col items-center justify-center py-20 px-8" 
+    class="min-h-screen bg-black text-white relative z-200 flex flex-col items-center justify-center py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8" 
     :style="{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'top 300px center', backgroundRepeat: 'no-repeat' }"
   >
     <!-- Gradient spotlight effect at bottom -->
@@ -212,32 +211,32 @@
     
     <div class="max-w-6xl mx-auto text-center relative z-200">
       <!-- Main Heading -->
-      <h2 class="text-5xl md:text-7xl font-black mb-12 leading-tight relative top-[-140px]" style="font-family: 'Avenir Next', sans-serif;">
+      <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black mb-8 sm:mb-12 leading-tight relative sm:top-[-140px]">
         VISTE INTELIGENTE,<br>
         VISTE
       </h2>
       
       <!-- Logo Section -->
-      <div class="mb-16">
-        <img :src="logoWhiteYellow" alt="TailorX Logo" class="mx-auto w-64 md:w-80 relative top-[-150px]" />
+      <div class="mb-12 sm:mb-16">
+        <img :src="logoWhiteYellow" alt="TailorX Logo" class="mx-auto w-48 sm:w-64 md:w-80 relative sm:top-[-150px]" />
       </div>
       
       <!-- Footer Navigation -->
-      <nav class="mb-8">
-        <div class="flex flex-wrap justify-center items-center gap-4 text-sm md:text-base orbitron-variable" style="--orbitron-weight: 400;">
-          <a href="#" class="hover:text-[#E3F450] transition-colors uppercase">POLÍTICAS DE ENTREGA</a>
-          <span class="text-gray-500">|</span>
+      <nav class="mb-6 sm:mb-8">
+        <div class="flex flex-wrap justify-center items-center gap-3 sm:gap-4 text-xs sm:text-sm md:text-base " >
+          <a href="#" class="hover:text-[#E3F450] transition-colors uppercase whitespace-nowrap">POLÍTICAS DE ENTREGA</a>
+          <span class="text-gray-500 hidden sm:inline">|</span>
           <a href="#" class="hover:text-[#E3F450] transition-colors uppercase">AYUDA</a>
-          <span class="text-gray-500">|</span>
+          <span class="text-gray-500 hidden sm:inline">|</span>
           <a href="#" class="hover:text-[#E3F450] transition-colors uppercase">EXPERIENCIAS</a>
-          <span class="text-gray-500">|</span>
+          <span class="text-gray-500 hidden sm:inline">|</span>
           <a href="#" class="hover:text-[#E3F450] transition-colors uppercase">CONTACTO</a>
         </div>
       </nav>
       
       <!-- Social Media Icons -->
-      <div class="flex justify-center space-x-4">
-        <a href="#" class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-[#E3F450] transition-colors">
+      <div class="flex justify-center gap-3 sm:space-x-4">
+        <a href="#" class="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center hover:bg-[#E3F450] transition-colors">
           <FacebookIcon />
         </a>
         <a href="#" class="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-[#E3F450] transition-colors">
