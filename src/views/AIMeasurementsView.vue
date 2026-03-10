@@ -126,7 +126,6 @@
               <div>
                 <Label class="text-white font-medium mb-2 block">
                   Foto Brazos
-                  <span class="text-xs text-gray-400 ml-2 font-normal">Pose "Invisible Box" para mayor precisión</span>
                 </Label>
                 <div 
                   v-if="!armPhotoPreview"
