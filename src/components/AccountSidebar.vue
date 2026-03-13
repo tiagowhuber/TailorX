@@ -37,6 +37,17 @@
           Mis Patrones
         </button>
         <button
+          @click="router.push({ name: 'body-type-guide' })"
+          :class="[
+            'px-4 py-3 rounded-lg text-sm font-medium transition-all whitespace-nowrap border min-w-[2.75rem] active:scale-95',
+            activeSection === 'body-type-guide'
+              ? 'bg-white text-black border-white shadow-lg'
+              : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
+          ]"
+        >
+          Guía de Estilos
+        </button>
+        <button
           :key="1"
           @click="router.push({ name: 'orders' })"
           :class="[
@@ -115,7 +126,19 @@
           <ScissorsLineDashed :class="['inline-block mr-2 h-4 w-4', activeSection === 'patterns' ? 'text-black' : 'text-[#E3F450]']" />
           Mis Patrones
         </button>
-        
+
+        <button
+          @click="router.push({ name: 'body-type-guide' })"
+          :class="[
+            'w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-all border cursor-pointer',
+            activeSection === 'body-type-guide'
+              ? 'bg-white text-black border-white shadow-lg'
+              : 'text-white border-white/20 hover:border-white/40 hover:bg-white/5'
+          ]"
+        >
+          <BookOpen :class="['inline-block mr-2 h-4 w-4', activeSection === 'body-type-guide' ? 'text-black' : 'text-[#E3F450]']" />
+          Guía de Estilos
+        </button>
 
         <button
           @click="router.push({ name: 'discount-codes' })"
@@ -209,11 +232,11 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { RulerDimensionLine, ScissorsLineDashed, Settings, LogOut, BaggageClaim, Ticket, MapPin } from 'lucide-vue-next'
+import { BookOpen, RulerDimensionLine, ScissorsLineDashed, Settings, LogOut, BaggageClaim, Ticket, MapPin } from 'lucide-vue-next'
 import { Separator } from '@/components/ui/separator'
 
 interface Props {
-  activeSection: 'account' | 'measurements' | 'patterns' | 'cart' | 'orders' | 'discount-codes' | 'addresses' | 'admin_orders' | 'admin_patterns'
+  activeSection: 'account' | 'measurements' | 'patterns' | 'cart' | 'orders' | 'discount-codes' | 'addresses' | 'admin_orders' | 'admin_patterns' | 'body-type-guide'
 }
 
 defineProps<Props>()

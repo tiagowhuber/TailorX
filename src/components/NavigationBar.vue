@@ -126,6 +126,10 @@
                 <Scissors class="mr-2 h-4 w-4" />
                 <span>Mis Patrones</span>
               </DropdownMenuItem>
+              <DropdownMenuItem @click="router.push({ name: 'body-type-guide' })" class="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer">
+                <BookOpen class="mr-2 h-4 w-4" />
+                <span>Guía de Estilos</span>
+              </DropdownMenuItem>
               <DropdownMenuItem @click="router.push({ name: 'orders' })" class="text-white hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer">
                 <BaggageClaim class="mr-2 h-4 w-4" />
                 <span>Mis Pedidos</span>
@@ -323,7 +327,7 @@ import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
-import { User as UserIcon, LogOut, RulerDimensionLine, Scissors, ShoppingCart, BaggageClaim, Menu, X, LogIn, Ticket } from 'lucide-vue-next'
+import { BookOpen, User as UserIcon, LogOut, RulerDimensionLine, Scissors, ShoppingCart, BaggageClaim, Menu, X, LogIn, Ticket } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
