@@ -208,7 +208,7 @@
                 >
                 <div v-if="!isAnalyzing" class="mr-2 h-5 w-5"></div>
                 <div v-else class="inline-block h-5 w-5 mr-2 animate-spin rounded-full border-2 border-solid border-black border-r-transparent"></div>
-                {{ isAnalyzing ? 'Analizando...' : 'Analizar Medidas' }}
+                {{ isAnalyzing ? (retryAttempt > 0 ? `Reintentando... (${retryAttempt}/3)` : 'Analizando...') : 'Analizar Medidas' }}
                 </Button>
 
               <!-- Info Note -->
@@ -406,6 +406,7 @@ const errorMessage = ref('')
 const isAnalyzing = ref(false)
 const isSaving = ref(false)
 const showPreview = ref(false)
+const retryAttempt = ref(0)
 
 // Results state
 const detectedMeasurements = ref<Array<{ name: string; value: number; typeId?: number }>>([])
@@ -534,24 +535,40 @@ const removeArmPhoto = () => {
   }
 }
 
+const MAX_RETRIES = 3
+const RETRY_DELAY_MS = 3000
+const RETRYABLE_MESSAGES = ['conexión', 'timeout', 'network', 'econnaborted', 'cold']
+
+const isRetryableError = (message: string) =>
+  RETRYABLE_MESSAGES.some(keyword => message.toLowerCase().includes(keyword))
+
 const analyzePhotos = async () => {
   if (!canAnalyze.value || !height.value || !authStore.user?.id) return
 
   isAnalyzing.value = true
   errorMessage.value = ''
+  retryAttempt.value = 0
 
-  try {
-    const formData = new FormData()
-    formData.append('front_image', frontPhotoFile.value!)
-    formData.append('side_image', sidePhotoFile.value!)
-    if (armPhotoFile.value) {
-      formData.append('arm_image', armPhotoFile.value)
+  let lastMessage = ''
+
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    if (attempt > 0) {
+      retryAttempt.value = attempt
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY_MS))
     }
-    formData.append('height_cm', height.value!.toString()) // Height is now provided in cm
 
-    const result = await measurementsStore.generateMeasurements(authStore.user.id, formData)
+    try {
+      const formData = new FormData()
+      formData.append('front_image', frontPhotoFile.value!)
+      formData.append('side_image', sidePhotoFile.value!)
+      if (armPhotoFile.value) {
+        formData.append('arm_image', armPhotoFile.value)
+      }
+      formData.append('height_cm', height.value!.toString())
 
-    if (result.success && result.data) {
+      const result = await measurementsStore.generateMeasurements(authStore.user.id, formData)
+
+      if (result.success && result.data) {
       // Map the returned measurements to the view format
       // The API returns UserMeasurement[] which has measurementType included
       detectedMeasurements.value = result.data.measurements.map((m: any) => ({
@@ -560,14 +577,6 @@ const analyzePhotos = async () => {
         typeId: m.measurement_type_id
       }))
 
-      // Analyze body type (using the new measurements)
-      // We need to map the names back to what analyzeBodyType expects or update it
-      // analyzeBodyType expects: 'Contorno de pecho/tórax', 'Contorno de cintura', 'Contorno de cadera'
-      // The API returns names from DB. I should check what names are in DB.
-      // For now, I'll try to map based on common names or just pass the values if I can identify them.
-      
-      // Let's try to find chest, waist, hip from the result
-      // We can use the raw_measurements from result.data if available, or filter detectedMeasurements
       const raw = result.data.raw_measurements || {}
       
       // Helper to get value in mm
@@ -595,16 +604,24 @@ const analyzePhotos = async () => {
       debugMaskSide.value = result.data.debug_mask_side || null
       debugMaskArm.value = result.data.debug_mask_arm || null
 
-      showPreview.value = true
-    } else {
-      errorMessage.value = result.message || 'Error al analizar las fotos'
+        showPreview.value = true
+        isAnalyzing.value = false
+        retryAttempt.value = 0
+        return
+      } else {
+        lastMessage = result.message || 'Error al analizar las fotos'
+        if (!isRetryableError(lastMessage) || attempt === MAX_RETRIES) break
+      }
+    } catch (err) {
+      console.error(err)
+      lastMessage = 'Ocurrió un error inesperado'
+      if (attempt === MAX_RETRIES) break
     }
-  } catch (error) {
-    console.error(error)
-    errorMessage.value = 'Ocurrió un error inesperado'
-  } finally {
-    isAnalyzing.value = false
   }
+
+  errorMessage.value = lastMessage
+  isAnalyzing.value = false
+  retryAttempt.value = 0
 }
 
 const analyzeBodyType = (measurements: Array<{ name: string; value: number }>, genderValue: string) => {
