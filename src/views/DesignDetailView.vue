@@ -195,14 +195,21 @@
                   <p class="font-semibold text-white">
                     {{ measurement.measurementType?.name }}
                   </p>
-                  <!-- Saving feedback icon -->
-                  <span v-if="savingStates[measurement.measurement_type_id] === 'saving'" class="flex-shrink-0 mt-0.5">
-                    <Loader2 class="w-3.5 h-3.5 text-gray-400 animate-spin" />
-                  </span>
-                  <span v-else-if="savingStates[measurement.measurement_type_id] === 'saved'" class="flex-shrink-0 mt-0.5">
-                    <Check class="w-3.5 h-3.5 text-[#E3F450]" />
-                  </span>
-                  <span v-else-if="savingStates[measurement.measurement_type_id] === 'error'" class="flex-shrink-0 mt-0.5 text-xs text-red-400">!</span>
+                  <div class="flex items-center gap-1 flex-shrink-0">
+                    <!-- Guide icon -->
+                    <button
+                      v-if="measurement.measurementType?.guide_image_url"
+                      @click="openGuideDialog(measurement.measurementType!)"
+                      class="p-0.5 text-blue-400 hover:text-blue-300 transition-colors"
+                      title="Ver guía de medición"
+                    >
+                      <HelpCircle class="w-4 h-4" />
+                    </button>
+                    <!-- Saving feedback icon -->
+                    <Loader2 v-if="savingStates[measurement.measurement_type_id] === 'saving'" class="w-3.5 h-3.5 text-gray-400 animate-spin" />
+                    <Check v-else-if="savingStates[measurement.measurement_type_id] === 'saved'" class="w-3.5 h-3.5 text-[#E3F450]" />
+                    <span v-else-if="savingStates[measurement.measurement_type_id] === 'error'" class="text-xs text-red-400">!</span>
+                  </div>
                 </div>
                 <p v-if="measurement.measurementType?.description" class="text-sm text-gray-400 mt-1">
                   {{ measurement.measurementType.description }}
@@ -320,6 +327,35 @@
       :on-add-measurements="handleAddMeasurements"
       :allow-backdrop-close="false"
     />
+
+    <!-- Measurement Guide Dialog -->
+    <Dialog v-model:open="showGuideDialog">
+      <DialogContent class="bg-black/90 border-white/20 text-white max-w-3xl flex flex-col max-h-[90vh]">
+        <DialogHeader class="flex-shrink-0">
+          <DialogTitle class="text-2xl font-bold">{{ selectedGuideType?.name }}</DialogTitle>
+          <DialogDescription v-if="selectedGuideType?.description" class="text-gray-400">
+            {{ selectedGuideType.description }}
+          </DialogDescription>
+        </DialogHeader>
+        <div class="mt-4 overflow-y-auto flex-1 min-h-0 guide-scroll">
+          <img
+            v-if="selectedGuideType?.guide_image_url"
+            :src="selectedGuideType.guide_image_url"
+            :alt="`Guía de medición para ${selectedGuideType.name}`"
+            class="w-full h-auto rounded-lg border border-white/10 object-contain"
+          />
+        </div>
+        <DialogFooter class="flex-shrink-0 pt-4">
+          <Button
+            @click="showGuideDialog = false"
+            variant="outline"
+            class="border-white/20 text-black hover:bg-white/10"
+          >
+            Cerrar
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   </div>
 </template>
 
@@ -333,7 +369,16 @@ import { useAuthStore } from '@/stores/auth'
 import { usePatternsStore } from '@/stores/patterns'
 import { useCartStore } from '@/stores/cart'
 import { useMeasurementsStore } from '@/stores/measurements'
-import { ShoppingCart, Check, Loader2 } from 'lucide-vue-next'
+import { ShoppingCart, Check, Loader2, HelpCircle } from 'lucide-vue-next'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
 import { motion } from 'motion-v'
 import type { DesignMeasurement } from '@/types/design.types'
 
@@ -351,6 +396,15 @@ const userPatternsForDesign = ref<any[]>([])
 // Inline measurement editing
 const editingValues = ref<Record<number, string>>({}) // measurement_type_id -> string value
 const savingStates = ref<Record<number, 'idle' | 'saving' | 'saved' | 'error'>>({}) // measurement_type_id -> state
+
+// Guide image dialog
+const showGuideDialog = ref(false)
+const selectedGuideType = ref<{ name: string; description?: string; guide_image_url?: string } | null>(null)
+
+const openGuideDialog = (measurementType: { name: string; description?: string; guide_image_url?: string }) => {
+  selectedGuideType.value = measurementType
+  showGuideDialog.value = true
+}
 
 // Modal state
 const modalOpen = ref(false)
@@ -572,6 +626,23 @@ const viewCart = () => {
 /* Gradient radial utility */
 .bg-gradient-radial {
   background: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
+.guide-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.guide-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.guide-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+}
+
+.guide-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
 
 /* Apply Stack Sans Notch globally except for h1 */

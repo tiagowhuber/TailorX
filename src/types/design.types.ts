@@ -4,6 +4,7 @@ export interface MeasurementType {
   id: number
   name: string
   description?: string
+  guide_image_url?: string
   created_at?: string
   updated_at?: string
 }
