@@ -219,15 +219,15 @@
                   <input
                     type="number"
                     min="0"
-                    step="1"
+                    step="0.1"
                     v-model="editingValues[measurement.measurement_type_id]"
                     @blur="handleMeasurementBlur(measurement.measurement_type_id)"
                     placeholder="—"
                     class="w-24 bg-gray-700/60 border border-gray-600 rounded px-2 py-1 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#E3F450]/70 focus:bg-gray-700 transition-colors [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                   />
-                  <span class="text-xs text-[#E3F450]">mm</span>
+                  <span class="text-xs text-[#E3F450]">cm</span>
                 </div>
-                <p v-else class="text-xs text-[#E3F450] mt-1">mm</p>
+                <p v-else class="text-xs text-[#E3F450] mt-1">cm</p>
               </div>
             </div>
           </div>
@@ -440,7 +440,7 @@ const initEditingValues = () => {
   measurements.value.forEach(m => {
     const typeId = m.measurement_type_id
     const existing = measurementsStore.getMeasurementByTypeId(typeId)
-    editingValues.value[typeId] = existing ? String(existing.value) : ''
+    editingValues.value[typeId] = existing ? String(existing.value / 10) : ''
     if (!(typeId in savingStates.value)) {
       savingStates.value[typeId] = 'idle'
     }
@@ -449,24 +449,29 @@ const initEditingValues = () => {
 
 const handleMeasurementBlur = async (typeId: number) => {
   if (!authStore.user) return
-  const raw = (editingValues.value[typeId] ?? '').trim()
+  const raw = String(editingValues.value[typeId] ?? '').trim()
   if (raw === '') return // don't save empty
   const value = parseFloat(raw)
   if (isNaN(value) || value <= 0) return
 
   const existing = measurementsStore.getMeasurementByTypeId(typeId)
-  if (existing && existing.value === value) return // no change
+  if (existing && existing.value === value * 10) return // no change
 
   savingStates.value[typeId] = 'saving'
   const result = await measurementsStore.saveMeasurements(authStore.user.id, [
-    { measurement_type_id: typeId, value }
+    { measurement_type_id: typeId, value: value * 10 } // convert cm to mm for storage
   ])
 
-  if (result.success) {
+  const processed = result.data?.processed ?? 0
+  if (result.success && processed > 0) {
     savingStates.value[typeId] = 'saved'
     setTimeout(() => { savingStates.value[typeId] = 'idle' }, 2000)
   } else {
+    console.error('Measurement save failed:', result)
     savingStates.value[typeId] = 'error'
+    // Restore the displayed value to what's currently in DB (convert mm back to cm)
+    const restored = measurementsStore.getMeasurementByTypeId(typeId)
+    editingValues.value[typeId] = restored ? String(restored.value / 10) : ''
     setTimeout(() => { savingStates.value[typeId] = 'idle' }, 3000)
   }
 }

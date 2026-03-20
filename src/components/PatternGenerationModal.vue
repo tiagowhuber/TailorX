@@ -92,7 +92,7 @@
                   <p class="font-semibold text-white orbitron-variable" style="--orbitron-weight: 500;">
                     {{ measurement.name }}
                   </p>
-                  <p class="text-sm text-gray-400">mm</p>
+                  <p class="text-sm text-gray-400">cm</p>
                 </div>
               </li>
             </ul>

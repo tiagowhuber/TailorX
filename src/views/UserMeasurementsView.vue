@@ -133,7 +133,7 @@
                       <div class="flex items-start gap-3">
                         <AlertCircle class="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
                         <div class="text-sm text-gray-300">
-                          <p class="font-semibold mb-1">Todas las medidas deben ingresarse en milímetros (mm)</p>
+                          <p class="font-semibold mb-1">Todas las medidas deben ingresarse en centímetros (cm)</p>
                           <p>Tus medidas son utilizadas para generar patrones personalizados de confección.</p>
                         </div>
                       </div>
@@ -245,16 +245,16 @@
                           <CardContent class="space-y-2">
                             <div class="space-y-2">
                               <Label :for="`measure-${type.id}`" class="text-gray-300 text-sm">
-                                Valor (mm)
+                                Valor (cm)
                               </Label>
                               <div class="relative">
                                 <Input 
                                   :id="`measure-${type.id}`"
                                   v-model.number="editedMeasurements[type.id]"
                                   type="number"
-                                  step="0.01"
+                                  step="0.1"
                                   min="0"
-                                  max="9999.99"
+                                  max="999.99"
                                   placeholder="Ingrese medida"
                                   :class="[
                                     'bg-white/10 border-white/20 text-white placeholder:text-gray-500',
@@ -264,7 +264,7 @@
                                   @change="() => handleMeasurementChange(type.id)"
                                 />
                                 <span v-if="getMeasurementValue(type.id) !== null" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">
-                                  mm
+                                  cm
                                 </span>
                               </div>
                               
@@ -478,9 +478,10 @@ const loadData = async () => {
 const initializeEditedMeasurements = () => {
   measurementsStore.measurementTypes.forEach(type => {
     const measurement = measurementsStore.getMeasurementByTypeId(type.id)
-    const value = measurement?.value
-    editedMeasurements[type.id] = value
-    originalMeasurements[type.id] = value
+    const rawValue = measurement?.value
+    const cmValue = rawValue !== undefined ? rawValue / 10 : undefined
+    editedMeasurements[type.id] = cmValue
+    originalMeasurements[type.id] = cmValue
   })
 }
 
@@ -516,8 +517,8 @@ const validateMeasurement = (typeId: number) => {
     return false
   }
 
-  if (value > 9999.99) {
-    validationErrors[typeId] = 'El valor no puede superar 9999.99'
+  if (value > 999.99) {
+    validationErrors[typeId] = 'El valor no puede superar 999.99'
     return false
   }
 
@@ -583,7 +584,7 @@ const handleSaveMeasurements = async () => {
       if (value && value > 0 && hasValueChanged(typeId)) {
         return {
           measurement_type_id: typeId,
-          value: Number(value)
+          value: Number(value) * 10 // convert cm to mm for storage
         }
       }
       return null
@@ -634,7 +635,7 @@ const handleMeasurementChange = async (typeId: number) => {
     const result = await measurementsStore.saveMeasurements(authStore.user.id, [
       {
         measurement_type_id: typeId,
-        value: Number(value)
+        value: Number(value) * 10 // convert cm to mm for storage
       }
     ])
 

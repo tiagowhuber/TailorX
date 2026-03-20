@@ -214,7 +214,7 @@
               <!-- Info Note -->
               <div class="mb-6 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
                 <p class="text-sm text-gray-300">
-                  <strong>Precisión del sistema:</strong> Este sistema tiene un margen de error de aproximadamente ±30 mm. 
+                  <strong>Precisión del sistema:</strong> Este sistema tiene un margen de error de aproximadamente ±3 cm. 
                   Para resultados óptimos, siga las recomendaciones de fotografía.
                 </p>
               </div>
@@ -305,7 +305,7 @@
                     <CardTitle class="text-base text-white">{{ measurement.name }}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p class="text-3xl font-bold text-[#E3F450]">{{ measurement.value }} <span class="text-xl text-gray-400">mm</span></p>
+                    <p class="text-3xl font-bold text-[#E3F450]">{{ (measurement.value / 10).toFixed(1) }} <span class="text-xl text-gray-400">cm</span></p>
                   </CardContent>
                 </Card>
               </div>
@@ -353,7 +353,7 @@
             <!-- Precision Warning -->
             <div class="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
               <p class="text-sm text-gray-300">
-                <strong>Precisión del sistema:</strong> Este sistema tiene un margen de error de aproximadamente ±30 mm. 
+                <strong>Precisión del sistema:</strong> Este sistema tiene un margen de error de aproximadamente ±3 cm. 
                 Para patrones de costura profesionales, se recomienda validar con medidas manuales.
               </p>
             </div>
