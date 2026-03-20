@@ -75,6 +75,39 @@
                 <Separator class="bg-white/20 mb-8" />
 
                 <CardContent class="space-y-6">
+                  <!-- Filters Row -->
+                  <div class="flex flex-col sm:flex-row gap-3">
+                    <!-- Search Bar -->
+                    <div class="relative flex-1">
+                      <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+                      <Input
+                        v-model="searchQuery"
+                        type="text"
+                        placeholder="Buscar medida..."
+                        class="pl-9 bg-white/5 border-white/20 text-white placeholder:text-gray-500"
+                      />
+                    </div>
+                    <!-- Design Dropdown -->
+                    <div class="relative sm:w-64">
+                      <select
+                        v-model="selectedDesignId"
+                        @change="onDesignChange"
+                        class="w-full h-9 rounded-md border border-white/20 bg-white/5 px-3 py-1 text-sm text-white appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/20"
+                      >
+                        <option :value="null" class="bg-neutral-900">Todos los diseños</option>
+                        <option
+                          v-for="design in catalogStore.filteredDesigns"
+                          :key="design.id"
+                          :value="design.id"
+                          class="bg-neutral-900"
+                        >
+                          {{ design.name }}
+                        </option>
+                      </select>
+                      <ChevronDown class="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+                    </div>
+                  </div>
+
                   <!-- Loading State -->
                   <div v-if="measurementsStore.loading && !measurementsStore.measurementTypes.length" class="text-center py-12">
                     <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-white border-r-transparent"></div>
@@ -154,7 +187,7 @@
                     <!-- Measurements Stats -->
                     <div v-if="measurementsStore.userMeasurementsCount > 0 || isEditMode" class="mb-6 flex items-center justify-between">
                       <p class="text-gray-400">
-                        {{ measurementsStore.userMeasurementsCount }} de {{ measurementsStore.measurementTypesCount }} medidas guardadas
+                        {{ measurementsStore.userMeasurementsCount }} de {{ measurementsStore.measurementTypesCount }} medidas guardadas{{ filteredMeasurementTypes.length !== measurementsStore.measurementTypesCount ? ` (mostrando ${filteredMeasurementTypes.length})` : '' }}
                       </p>
                       <div v-if="hasChanges && isEditMode" class="text-yellow-400 text-sm flex items-center gap-2">
                         <AlertCircle class="h-4 w-4" />
@@ -162,10 +195,16 @@
                       </div>
                     </div>
 
+                    <!-- No filter results -->
+                    <div v-if="(measurementsStore.userMeasurementsCount > 0 || isEditMode) && filteredMeasurementTypes.length === 0" class="text-center py-8 text-gray-400">
+                      <Search class="h-10 w-10 mx-auto mb-3 text-gray-600" />
+                      <p>No se encontraron medidas con los filtros actuales.</p>
+                    </div>
+
                     <!-- Measurements Grid -->
-                    <div v-if="measurementsStore.userMeasurementsCount > 0 || isEditMode" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                    <div v-if="(measurementsStore.userMeasurementsCount > 0 || isEditMode) && filteredMeasurementTypes.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                       <motion.div
-                        v-for="(type, index) in measurementsStore.measurementTypes"
+                        v-for="(type, index) in filteredMeasurementTypes"
                         :key="type.id"
                         :initial="{ opacity: 0, y: 20 }"
                         :animate="{ opacity: 1, y: 0 }"
@@ -326,9 +365,10 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useMeasurementsStore } from '@/stores/measurements'
+import { useCatalogStore } from '@/stores/catalog'
 import { motion } from 'motion-v' // Added motion-v import
 import type { MeasurementType } from '@/types/measurements.types'
-import { Edit, Save, X, Trash2, Ruler, CheckCircle, AlertCircle, Sparkles, HelpCircle } from 'lucide-vue-next'
+import { Edit, Save, X, Trash2, Ruler, CheckCircle, AlertCircle, Sparkles, HelpCircle, Search, ChevronDown } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -354,6 +394,40 @@ import AccountSidebar from '@/components/AccountSidebar.vue'
 const router = useRouter()
 const authStore = useAuthStore()
 const measurementsStore = useMeasurementsStore()
+const catalogStore = useCatalogStore()
+
+const searchQuery = ref('')
+const selectedDesignId = ref<number | null>(null)
+const designMeasurementTypeIds = ref<Set<number> | null>(null)
+const isLoadingDesignFilter = ref(false)
+
+const filteredMeasurementTypes = computed(() => {
+  let types = measurementsStore.measurementTypes
+
+  if (designMeasurementTypeIds.value !== null) {
+    types = types.filter(t => designMeasurementTypeIds.value!.has(t.id))
+  }
+
+  if (searchQuery.value.trim()) {
+    const q = searchQuery.value.trim().toLowerCase()
+    types = types.filter(t => t.name.toLowerCase().includes(q))
+  }
+
+  return types
+})
+
+const onDesignChange = async () => {
+  if (selectedDesignId.value === null) {
+    designMeasurementTypeIds.value = null
+    return
+  }
+  isLoadingDesignFilter.value = true
+  const result = await catalogStore.fetchDesignMeasurements(selectedDesignId.value)
+  if (result.success && result.data) {
+    designMeasurementTypeIds.value = new Set(result.data.map((dm: { measurement_type_id: number }) => dm.measurement_type_id))
+  }
+  isLoadingDesignFilter.value = false
+}
 
 const isEditMode = ref(false)
 const editedMeasurements = reactive<Record<number, number | undefined>>({})
@@ -624,6 +698,7 @@ onMounted(() => {
     return
   }
   loadData()
+  catalogStore.fetchActiveDesigns()
 })
 </script>
 

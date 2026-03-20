@@ -173,24 +173,54 @@
       
           <!-- Required Measurements -->
           <div v-if="measurements.length > 0" class="space-y-4 border-t border-gray-800 pt-8 sm:pt-12 mt-8 sm:mt-12">
-            <h2 class="text-lg sm:text-xl font-bold " >
-              Medidas Requeridas
-            </h2>
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg sm:text-xl font-bold">
+                Medidas Requeridas
+              </h2>
+              <span v-if="!authStore.user" class="text-xs text-gray-500">
+                Inicia sesión para ver y editar tus medidas
+              </span>
+            </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div 
                 v-for="measurement in measurements" 
                 :key="measurement.id"
-                class="px-4 py-3 bg-gray-800/50 rounded-lg border border-gray-700"
+                class="px-4 py-3 bg-gray-800/50 rounded-lg border border-gray-700 transition-colors"
+                :class="{
+                  'border-[#E3F450]/50': savingStates[measurement.measurement_type_id] === 'saved',
+                  'border-red-500/50': savingStates[measurement.measurement_type_id] === 'error'
+                }"
               >
-                <p class="font-semibold text-white " >
-                  {{ measurement.measurementType?.name }}
-                </p>
+                <div class="flex items-start justify-between gap-2">
+                  <p class="font-semibold text-white">
+                    {{ measurement.measurementType?.name }}
+                  </p>
+                  <!-- Saving feedback icon -->
+                  <span v-if="savingStates[measurement.measurement_type_id] === 'saving'" class="flex-shrink-0 mt-0.5">
+                    <Loader2 class="w-3.5 h-3.5 text-gray-400 animate-spin" />
+                  </span>
+                  <span v-else-if="savingStates[measurement.measurement_type_id] === 'saved'" class="flex-shrink-0 mt-0.5">
+                    <Check class="w-3.5 h-3.5 text-[#E3F450]" />
+                  </span>
+                  <span v-else-if="savingStates[measurement.measurement_type_id] === 'error'" class="flex-shrink-0 mt-0.5 text-xs text-red-400">!</span>
+                </div>
                 <p v-if="measurement.measurementType?.description" class="text-sm text-gray-400 mt-1">
                   {{ measurement.measurementType.description }}
                 </p>
-                <p class="text-xs text-[#E3F450] mt-1">
-                  mm
-                </p>
+                <!-- Editable input when logged in -->
+                <div v-if="authStore.user" class="mt-2 flex items-center gap-1.5">
+                  <input
+                    type="number"
+                    min="0"
+                    step="1"
+                    v-model="editingValues[measurement.measurement_type_id]"
+                    @blur="handleMeasurementBlur(measurement.measurement_type_id)"
+                    placeholder="—"
+                    class="w-24 bg-gray-700/60 border border-gray-600 rounded px-2 py-1 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#E3F450]/70 focus:bg-gray-700 transition-colors [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                  />
+                  <span class="text-xs text-[#E3F450]">mm</span>
+                </div>
+                <p v-else class="text-xs text-[#E3F450] mt-1">mm</p>
               </div>
             </div>
           </div>
@@ -294,7 +324,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import NavigationBar from '@/components/NavigationBar.vue'
 import PatternGenerationModal from '@/components/PatternGenerationModal.vue'
@@ -302,19 +332,25 @@ import { useCatalogStore } from '@/stores/catalog'
 import { useAuthStore } from '@/stores/auth'
 import { usePatternsStore } from '@/stores/patterns'
 import { useCartStore } from '@/stores/cart'
-import { ShoppingCart } from 'lucide-vue-next'
-import { motion } from 'motion-v' // Added motion-v import
+import { useMeasurementsStore } from '@/stores/measurements'
+import { ShoppingCart, Check, Loader2 } from 'lucide-vue-next'
+import { motion } from 'motion-v'
 import type { DesignMeasurement } from '@/types/design.types'
 
 const catalogStore = useCatalogStore()
 const authStore = useAuthStore()
 const patternsStore = usePatternsStore()
 const cartStore = useCartStore()
+const measurementsStore = useMeasurementsStore()
 const router = useRouter()
 const route = useRoute()
 
 const measurements = ref<DesignMeasurement[]>([])
 const userPatternsForDesign = ref<any[]>([])
+
+// Inline measurement editing
+const editingValues = ref<Record<number, string>>({}) // measurement_type_id -> string value
+const savingStates = ref<Record<number, 'idle' | 'saving' | 'saved' | 'error'>>({}) // measurement_type_id -> state
 
 // Modal state
 const modalOpen = ref(false)
@@ -334,7 +370,52 @@ const design = computed(() => catalogStore.selectedDesign)
 onMounted(async () => {
   await loadDesign()
   await loadUserPatterns()
+  if (authStore.user) {
+    await measurementsStore.fetchUserMeasurements(authStore.user.id)
+    initEditingValues()
+  }
 })
+
+watch(
+  () => measurementsStore.userMeasurements,
+  () => initEditingValues(),
+  { deep: true }
+)
+
+const initEditingValues = () => {
+  measurements.value.forEach(m => {
+    const typeId = m.measurement_type_id
+    const existing = measurementsStore.getMeasurementByTypeId(typeId)
+    editingValues.value[typeId] = existing ? String(existing.value) : ''
+    if (!(typeId in savingStates.value)) {
+      savingStates.value[typeId] = 'idle'
+    }
+  })
+}
+
+const handleMeasurementBlur = async (typeId: number) => {
+  if (!authStore.user) return
+  const raw = (editingValues.value[typeId] ?? '').trim()
+  if (raw === '') return // don't save empty
+  const value = parseFloat(raw)
+  if (isNaN(value) || value <= 0) return
+
+  const existing = measurementsStore.getMeasurementByTypeId(typeId)
+  if (existing && existing.value === value) return // no change
+
+  savingStates.value[typeId] = 'saving'
+  const result = await measurementsStore.saveMeasurements(authStore.user.id, [
+    { measurement_type_id: typeId, value }
+  ])
+
+  if (result.success) {
+    savingStates.value[typeId] = 'saved'
+    setTimeout(() => { savingStates.value[typeId] = 'idle' }, 2000)
+  } else {
+    savingStates.value[typeId] = 'error'
+    setTimeout(() => { savingStates.value[typeId] = 'idle' }, 3000)
+  }
+}
 
 const loadDesign = async () => {
   const designId = parseInt(route.params.id as string)
