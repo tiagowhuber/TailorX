@@ -219,7 +219,7 @@
                               {{ type.name }}
                               <div class="flex items-center gap-1">
                                 <Button
-                                  v-if="hasGuideImage(type.id)"
+                                  v-if="type.guide_image_url"
                                   @click="() => openImageDialog(type)"
                                   variant="ghost"
                                   size="icon"
@@ -300,22 +300,22 @@
 
     <!-- Measurement Guide Image Dialog -->
     <Dialog v-model:open="showImageDialog">
-      <DialogContent class="bg-black/90 border-white/20 text-white max-w-3xl">
-        <DialogHeader>
+      <DialogContent class="bg-black/90 border-white/20 text-white max-w-3xl flex flex-col max-h-[90vh]">
+        <DialogHeader class="flex-shrink-0">
           <DialogTitle class="text-2xl font-bold">{{ selectedMeasurementType?.name }}</DialogTitle>
           <DialogDescription v-if="selectedMeasurementType?.description" class="text-gray-400">
             {{ selectedMeasurementType.description }}
           </DialogDescription>
         </DialogHeader>
-        <div class="mt-4">
+        <div class="mt-4 overflow-y-auto flex-1 min-h-0 guide-image-scroll">
           <img 
-            v-if="selectedMeasurementType"
-            :src="getGuideImagePath(selectedMeasurementType.id)" 
+            v-if="selectedMeasurementType?.guide_image_url"
+            :src="selectedMeasurementType.guide_image_url" 
             :alt="`Guía de medición para ${selectedMeasurementType.name}`"
-            class="w-full h-auto rounded-lg border border-white/10"
+            class="w-full h-auto rounded-lg border border-white/10 object-contain"
           />
         </div>
-        <DialogFooter>
+        <DialogFooter class="flex-shrink-0 pt-4">
           <Button
             @click="showImageDialog = false"
             variant="outline"
@@ -453,17 +453,6 @@ const hasChanges = computed(() => {
     return editedValue !== originalValue
   })
 })
-
-// Helper functions for measurement guide images
-const availableGuideImages = [1, 2, 3, 4, 5, 6, 7, 8, 10] // Image 9 is missing
-
-const hasGuideImage = (measurementTypeId: number): boolean => {
-  return availableGuideImages.includes(measurementTypeId)
-}
-
-const getGuideImagePath = (measurementTypeId: number): string => {
-  return new URL(`../assets/measurement-guides/${measurementTypeId}.png`, import.meta.url).href
-}
 
 const openImageDialog = (type: MeasurementType) => {
   selectedMeasurementType.value = type
@@ -731,6 +720,21 @@ onMounted(() => {
 
 /* Apply Stack Sans Notch globally except for h1 */
 
+/* Custom scrollbar for the measurement guide image dialog */
+.guide-image-scroll::-webkit-scrollbar {
+  width: 6px;
+}
 
+.guide-image-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
 
+.guide-image-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+}
+
+.guide-image-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
 </style>

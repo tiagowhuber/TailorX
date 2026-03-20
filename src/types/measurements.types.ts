@@ -3,6 +3,7 @@ export interface MeasurementType {
   name: string
   description?: string
   freesewing_key?: string
+  guide_image_url?: string
   created_at?: string
 }
 
