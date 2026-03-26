@@ -110,6 +110,7 @@ export const measurementsApi = {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
+      timeout: 120000, // 2 min — allows time for serverless cold start
     })
     return response.data
   },

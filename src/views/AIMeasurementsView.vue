@@ -14,7 +14,7 @@
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
             <div>
               <CardTitle class="text-3xl sm:text-4xl font-black text-white mb-1">
-                MEDIDAS CON IA
+                TailorVision - Medidas Corporales
               </CardTitle>
               <CardDescription class="text-gray-400 font-normal text-sm sm:text-base">
                 Análisis preciso de medidas a partir de fotografías
@@ -35,13 +35,34 @@
 
         <CardContent v-if="!showPreview">
           <!-- Warning Banner -->
-          <div class="mb-6 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+          <div class="mb-4 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
             <div class="flex items-start gap-3">
               <AlertCircle class="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
               <div class="text-sm text-gray-300">
                 <p class="font-semibold mb-1">IMPORTANTE: Para obtener medidas precisas</p>
                 <p>Use ropa ajustada, mantenga postura natural, y tome fotos con buena iluminación y fondo claro.</p>
               </div>
+            </div>
+          </div>
+
+          <!-- Photo Guidelines Collapsible -->
+          <div class="mb-6 border border-white/20 rounded-lg overflow-hidden">
+            <button
+              @click="showPhotoGuide = !showPhotoGuide"
+              class="w-full flex items-center justify-between px-4 py-3 bg-white/5 hover:bg-white/10 transition-colors text-left"
+            >
+              <span class="font-semibold text-white text-sm sm:text-base">Indicaciones para la toma de fotografías</span>
+              <ChevronDown
+                class="h-5 w-5 text-[#E3F450] flex-shrink-0 transition-transform duration-300"
+                :class="{ 'rotate-180': showPhotoGuide }"
+              />
+            </button>
+            <div v-show="showPhotoGuide" class="p-4 bg-black/30">
+              <img
+                src="/GuíaTécnicadeMedidasCorporales.png"
+                alt="Indicaciones para la toma de fotografías"
+                class="w-full rounded-lg object-contain max-h-[600px]"
+              />
             </div>
           </div>
 
@@ -125,7 +146,7 @@
               <!-- Arm Photo (Optional) -->
               <div>
                 <Label class="text-white font-medium mb-2 block">
-                  Foto Brazos
+                  Foto Brazo
                 </Label>
                 <div 
                   v-if="!armPhotoPreview"
@@ -252,7 +273,7 @@
                 <div>
                   <p class="font-semibold text-orange-300 mb-1">Advertencias de consistencia:</p>
                   <ul class="list-disc list-inside text-sm text-orange-200 space-y-1">
-                    <li v-for="(warning, idx) in analysisWarnings" :key="idx">{{ warning }}</li>
+                    <li v-for="(warning, idx) in analysisWarnings" :key="idx">{{ translateWarning(warning) }}</li>
                   </ul>
                 </div>
               </div>
@@ -369,7 +390,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useMeasurementsStore } from '@/stores/measurements'
-import { Camera, AlertCircle, CheckCircle, Save, ArrowLeft, RotateCcw, Trash2 } from 'lucide-vue-next'
+import { Camera, AlertCircle, CheckCircle, Save, ArrowLeft, RotateCcw, Trash2, ChevronDown } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -407,6 +428,7 @@ const isAnalyzing = ref(false)
 const isSaving = ref(false)
 const showPreview = ref(false)
 const retryAttempt = ref(0)
+const showPhotoGuide = ref(true)
 
 // Results state
 const detectedMeasurements = ref<Array<{ name: string; value: number; typeId?: number }>>([])
@@ -535,9 +557,9 @@ const removeArmPhoto = () => {
   }
 }
 
-const MAX_RETRIES = 3
-const RETRY_DELAY_MS = 3000
-const RETRYABLE_MESSAGES = ['conexión', 'timeout', 'network', 'econnaborted', 'cold']
+const MAX_RETRIES = 5
+const RETRY_DELAY_MS = 10000
+const RETRYABLE_MESSAGES = ['conexión', 'timeout', 'network', 'econnaborted', 'cold', 'internal server', '500', 'server error', 'tailor']
 
 const isRetryableError = (message: string) =>
   RETRYABLE_MESSAGES.some(keyword => message.toLowerCase().includes(keyword))
@@ -776,6 +798,34 @@ const analyzeMaleBodyType = (chest: number, waist: number, hip: number, ratio: s
 const confirmAndSave = async () => {
   // Measurements are already saved by the backend during analysis
   router.push({ name: 'measurements' })
+}
+
+const MEASUREMENT_NAME_TRANSLATIONS: Record<string, string> = {
+  'wrist circumference': 'Circunferencia de muñeca',
+  'knee circumference': 'Circunferencia de rodilla',
+  'neck circumference': 'Circunferencia de cuello',
+  'chest circumference': 'Circunferencia de pecho',
+  'waist circumference': 'Circunferencia de cintura',
+  'hip circumference': 'Circunferencia de cadera',
+  'hips circumference': 'Circunferencia de cadera',
+  'biceps circumference': 'Circunferencia de bíceps',
+  'shoulder to shoulder': 'Hombro a hombro',
+  'shoulder to wrist': 'Hombro a muñeca',
+  'shoulder to elbow': 'Hombro a codo',
+  'waist to floor': 'Cintura al piso',
+  'waist to knee': 'Cintura a rodilla',
+  'inseam': 'Entrepierna',
+  'height': 'Altura',
+}
+
+const translateWarning = (warning: string): string => {
+  // Pattern: "{Measurement Name} ({value} mm) seems unusual (expected {range}mm)"
+  const match = warning.match(/^(.+?)\s*\((.+?)\)\s*seems unusual\s*\(expected\s*(.+?)\)$/i)
+  if (!match) return warning
+
+  const [, measurementName = 'Medida desconocida', valueStr, expectedRange] = match
+  const translatedName = MEASUREMENT_NAME_TRANSLATIONS[measurementName.toLowerCase()] || measurementName
+  return `${translatedName} (${valueStr}) parece inusual (esperado ${expectedRange})`
 }
 
 const resetAnalysis = () => {
