@@ -221,7 +221,7 @@ const goToOrders = () => {
 }
 
 const goToCart = () => {
-  router.push('/cart')
+  router.push('/carrito')
 }
 
 const goToHome = () => {

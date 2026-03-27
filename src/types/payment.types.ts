@@ -4,6 +4,9 @@ export interface PaymentRequest {
   return_url: string;
   subtotal: number;
   discountCode?: string;
+  shipping_address_id: number;
+  contact_phone: string;
+  rut: string;
 }
 
 export interface CartItemForPayment {

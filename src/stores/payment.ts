@@ -31,7 +31,8 @@ export const usePaymentStore = defineStore('payment', () => {
     cart: CartItem[],
     userId: number,
     discountCode?: string | null,
-    returnUrl?: string
+    returnUrl?: string,
+    checkoutData?: { shipping_address_id: number; contact_phone: string; rut: string }
   ): Promise<PaymentResponse> => {
     loading.value = true
     error.value = null
@@ -56,7 +57,10 @@ export const usePaymentStore = defineStore('payment', () => {
         user_id: userId,
         return_url: returnUrl || `${window.location.origin}/payment/confirmation`,
         subtotal: subtotal,
-        discountCode: discountCode || undefined // Send code if exists
+        discountCode: discountCode || undefined,
+        shipping_address_id: checkoutData!.shipping_address_id,
+        contact_phone: checkoutData!.contact_phone,
+        rut: checkoutData!.rut
       }
 
       const response = await paymentsApi.createPayment(paymentRequest)

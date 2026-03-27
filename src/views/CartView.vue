@@ -242,10 +242,9 @@
                         <Button
                           @click="proceedToCheckout"
                           class="w-full max-w-md bg-[#E3F450] text-black hover:bg-[#E3F450]/80"
-                          :disabled="hasArchivedItems || processingCheckout"
+                          :disabled="hasArchivedItems"
                         >
-                          <span v-if="processingCheckout">Procesando...</span>
-                          <span v-else>Proceder al Checkout</span>
+                          Proceder al Checkout
                         </Button>
                       </div>
 
@@ -328,7 +327,6 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
-import { usePaymentStore } from '@/stores/payment'
 import { useDiscountCodesStore } from '@/stores/discountCodes'
 import { 
   ShoppingCart,
@@ -361,7 +359,6 @@ import type { CartItem } from '@/types/cart.types'
 const router = useRouter()
 const authStore = useAuthStore()
 const cartStore = useCartStore()
-const paymentStore = usePaymentStore()
 const discountStore = useDiscountCodesStore()
 
 const showRemoveDialog = ref(false)
@@ -371,7 +368,6 @@ const discountCodeInput = ref('')
 const applyingDiscount = ref(false)
 const discountMessage = ref('')
 const discountSuccess = ref(false)
-const processingCheckout = ref(false)
 
 // Computed
 const hasArchivedItems = computed(() => {
@@ -428,7 +424,7 @@ const confirmClearCart = () => {
   showClearDialog.value = false
 }
 
-const proceedToCheckout = async () => {
+const proceedToCheckout = () => {
   if (!authStore.user || !authStore.user.id) {
     alert('Por favor inicia sesión para continuar')
     router.push('/login')
@@ -444,27 +440,7 @@ const proceedToCheckout = async () => {
     return
   }
 
-  processingCheckout.value = true
-
-  try {
-    const response = await paymentStore.createPayment(
-      cartStore.cartItems,
-      authStore.user.id,
-      cartStore.discountCode
-    )
-
-    if (response.success && response.data) {
-      // Redirect to Webpay
-      paymentStore.redirectToPayment(response.data.url, response.data.token)
-    } else {
-      alert(response.message || 'Error al crear el pago. Por favor intenta nuevamente.')
-    }
-  } catch (error: any) {
-    console.error('Checkout error:', error)
-    alert('Error al procesar el pago. Por favor intenta nuevamente.')
-  } finally {
-    processingCheckout.value = false
-  }
+  router.push('/checkout')
 }
 
 // Lifecycle

@@ -4,6 +4,8 @@ export interface User {
   first_name?: string
   last_name?: string
   profile_picture_url?: string
+  phone?: string
+  rut?: string
   role: 'user' | 'admin'
   created_at?: string
   updated_at?: string

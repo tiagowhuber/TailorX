@@ -6,6 +6,7 @@ import PatternView from '@/views/PatternView.vue'
 import PatternExportView from '@/views/PatternExportView.vue'
 import PatternListView from '@/views/PatternListView.vue'
 import CartView from '@/views/CartView.vue'
+import CheckoutView from '@/views/CheckoutView.vue'
 import CreateAccountView from '@/views/CreateAccountView.vue'
 import LoginView from '@/views/LoginView.vue'
 import AccountView from '@/views/AccountView.vue'
@@ -65,6 +66,12 @@ const router = createRouter({
       path: '/carrito',
       name: 'cart',
       component: CartView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/checkout',
+      name: 'checkout',
+      component: CheckoutView,
       meta: { requiresAuth: true }
     },
     {

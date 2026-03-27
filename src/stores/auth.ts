@@ -168,7 +168,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const updateProfile = async (data: { first_name?: string; last_name?: string }) => {
+  const updateProfile = async (data: { first_name?: string; last_name?: string; phone?: string; rut?: string }) => {
     if (!user.value) {
       return { success: false, message: 'Usuario no autenticado' }
     }
